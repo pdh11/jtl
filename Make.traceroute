@@ -1,0 +1,4 @@
+## Make.traceroute
+
+traceroute:
+	$(MAKE) PROG=traceroute _gnu

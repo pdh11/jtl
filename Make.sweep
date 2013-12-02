@@ -1,0 +1,4 @@
+## Make.sweep
+
+sweep: glib gtk+ libsndfile libmad
+	$(MAKE) PROG=sweep _gnu

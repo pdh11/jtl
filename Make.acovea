@@ -1,0 +1,4 @@
+## Make.acovea
+
+acovea: libevocosm libcoyotl
+	$(MAKE) PROG=acovea _gnu

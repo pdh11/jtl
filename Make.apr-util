@@ -1,0 +1,6 @@
+## Make.apr-util
+
+apr-util: postgresql expat apr pkgconfig sqlite
+	$(MAKE) PROG=apr-util JTL_CONFIG="--enable-layout=GNU $(JTL_CONFIG) --with-apr=$(PREFIX)/bin/apr-1-config --with-pgsql=$(PREFIX)/pgsql" _gnu \
+		JTL_TESTS_BOGUS=bogus
+

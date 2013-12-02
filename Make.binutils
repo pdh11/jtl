@@ -1,0 +1,19 @@
+## Make.binutils
+#
+
+binutils:
+	@echo Making binutils
+	rm -rf $(BUILD)/binutils
+	mkdir -p $(BUILD)/binutils
+	tar x -C $(BUILD)/binutils -f $(ARCHIVE)/binutils-*
+	( cd $(BUILD)/binutils/* \
+		&& CFLAGS="$(JTL_CFLAGS)" ./configure --prefix=$(PREFIX) \
+			--enable-shared --disable-static \
+			--disable-werror $(JTL_ARCH)-linux \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+			--enable-gold=yes --enable-bfd=default \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) $(MAKE) -j1 DESTDIR=$(JTL_ROOT) install )
+	du -hs $(BUILD)/binutils > $(MADE)/binutils
+	rm -rf $(BUILD)/binutils

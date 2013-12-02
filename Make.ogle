@@ -1,0 +1,4 @@
+## Make.ogle
+
+ogle: x libdvdread a52dec libxml2 libdvdcss alsa-lib alsa-utils
+	$(MAKE) PROG=ogle -j1 _gnu

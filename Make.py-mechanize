@@ -1,0 +1,4 @@
+## Make.py-mechanize
+
+py-mechanize: python
+	$(MAKE) PROG=py-mechanize _pythonstyle

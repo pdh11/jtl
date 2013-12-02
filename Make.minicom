@@ -1,0 +1,6 @@
+## Make.minicom
+
+minicom:
+	$(REALLY) mkdir -p /var/lock
+	$(MAKE) PROG=minicom _gnu \
+		JTL_PATCH=minicom-2.3-jtl1.diff

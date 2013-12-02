@@ -1,0 +1,16 @@
+## Make.db3
+#
+# Both dynamic and static builds (of, in fact, Berkeley DB 4)
+
+db3:
+	@echo Compiling db3
+	rm -rf $(BUILD)/db3
+	mkdir -p $(BUILD)/db3
+	tar xjf $(ARCHIVE)/db-4* -C $(BUILD)/db3
+	( cd $(BUILD)/db3/*/build_unix \
+		&& ../dist/configure --prefix=$(PREFIX) \
+			--enable-shared --enable-static \
+		&& $(MAKE) \
+		&& $(REALLY) make install )
+	du -hs $(BUILD)/db3 > $(MADE)/db3
+	rm -rf $(BUILD)/db3

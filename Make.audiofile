@@ -1,0 +1,5 @@
+## Make.audiofile
+
+audiofile:
+	$(MAKE) PROG=audiofile JTL_CONFIG="--enable-shared --disable-static" _gnu \
+                JTL_TESTS_BOGUS=0.3.6

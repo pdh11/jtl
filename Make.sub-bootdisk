@@ -1,0 +1,48 @@
+## Make.sub-bootdisk
+#
+# In order to succeed as a non-root user, we must faff about a lot. The three
+# dd's in stage 3 duplicate the functionality of the syslinux installer.
+
+sub-bootdisk: sub-kernel dosfstools mtools
+	@echo Making bootdisk
+	@#
+	@# 1. Create empty dosfs image
+	@#	
+	mkdir -p $(SUB_ROOT)/boot
+	dd if=/dev/zero of=$(SUB_ROOT)/boot/disk bs=1024 count=1440
+	mkdosfs $(SUB_ROOT)/boot/disk
+	@#
+	@# 2. Set up mtools to treat it as j:, and copy in the syslinux 2ndary
+	@#    bootloader
+	@#
+	echo "drive j: file=\"$(SUB_ROOT)/boot/disk\"" > $(BUILD)/mtools.cfg
+	mkdir -p $(BUILD)/syslinux
+	tar xzf $(ARCHIVE)/syslinux-* -C $(BUILD)/syslinux
+	MTOOLSRC=$(BUILD)/mtools.cfg mcopy $(BUILD)/syslinux/*/ldlinux.sys j:ldlinux.sys
+	@#
+	@# 3. Copy over superblock (see syslinux.c)
+	@#
+	dd if=$(SUB_ROOT)/boot/disk of=$(BUILD)/bootsect.tmp bs=512 count=1
+	cp $(BUILD)/syslinux/*/ldlinux.bin $(BUILD)/bootsect.new
+	dd if=$(BUILD)/bootsect.new of=$(SUB_ROOT)/boot/disk bs=512 count=1 conv=notrunc
+	dd if=$(BUILD)/bootsect.tmp of=$(SUB_ROOT)/boot/disk bs=1 skip=11 seek=11 count=51 conv=notrunc
+	@#
+	@# 4. Set up the file that tells the 2ndary loader what to boot
+	@#
+	echo "DEFAULT JTL"            > $(BUILD)/syslinux.cfg
+	echo "PROMPT 1"              >> $(BUILD)/syslinux.cfg
+	echo "LABEL JTL"             >> $(BUILD)/syslinux.cfg
+	echo "KERNEL vmlinux"        >> $(BUILD)/syslinux.cfg
+	echo "APPEND root=/dev/scd0" >> $(BUILD)/syslinux.cfg
+	echo "TIMEOUT 100"           >> $(BUILD)/syslinux.cfg
+	MTOOLSRC=$(BUILD)/mtools.cfg mcopy $(BUILD)/syslinux.cfg j:syslinux.cfg
+	@#
+	@# 5. Copy in the kernel
+	@#
+	MTOOLSRC=$(BUILD)/mtools.cfg mcopy $(SUB_ROOT)/boot/vmlinux j:vmlinux
+	@#
+	@# 6. Tidy up
+	@#
+	rm -rf $(BUILD)/syslinux $(BUILD)/syslinux.cfg $(BUILD)/mtools.cfg \
+		$(BUILD)/bootsect.*
+	touch $(MADE)/sub-bootdisk

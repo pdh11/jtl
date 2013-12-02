@@ -1,0 +1,15 @@
+## Make.p7zip
+
+p7zip:
+	@echo Making p7zip
+	rm -rf $(BUILD)/p7zip
+	mkdir -p $(BUILD)/p7zip
+	tar xjf $(ARCHIVE)/p7zip-*bz2 -C $(BUILD)/p7zip
+	# patch -d $(BUILD)/p7zip -p0 < patches/p7zip-0.16.17-jtl1.diff
+	( cd $(BUILD)/p7zip/* \
+		&& $(MAKE) \
+		&& $(REALLY) ./install.sh \
+			$(PREFIX)/bin $(PREFIX)/share $(PREFIX)/man \
+			"" $(PREFIX)/share/doc )
+	du -hs $(BUILD)/p7zip > $(MADE)/p7zip
+	rm -rf $(BUILD)/p7zip

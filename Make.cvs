@@ -1,0 +1,6 @@
+## Make.cvs
+
+cvs: openssl krb5 openssh xemacs zlib
+	$(MAKE) PROG=cvs JTL_CONFIG="$(JTL_CONFIG) --with-editor=xemacs" _gnu \
+		JTL_TESTS_BOGUS=reallybogus
+

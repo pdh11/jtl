@@ -1,0 +1,14 @@
+## Make.sub-findutils
+
+sub-findutils: sub-glibc
+	@echo Compiling findutils for image
+	rm -rf $(BUILD)/sub-findutils
+	mkdir -p $(BUILD)/sub-findutils
+	tar xzf $(ARCHIVE)/findutils-* -C $(BUILD)/sub-findutils
+	( cd $(BUILD)/sub-findutils/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ./configure --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-findutils > $(MADE)/sub-findutils
+	rm -rf $(BUILD)/sub-findutils
+

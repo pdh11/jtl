@@ -1,0 +1,23 @@
+## Make.krb5
+#
+# Suffers from a nasty rsh unless we delete it
+#
+# krb5 1.11 doesn't like tcl8.6
+
+krb5: openssl tcl perl python
+	@echo Compiling krb5
+	rm -rf $(BUILD)/krb5
+	mkdir -p $(BUILD)/krb5
+	tar xjf $(ARCHIVE)/krb5-*.tar.bz2 -C $(BUILD)/krb5
+	patch -d $(BUILD)/krb5/* -p1 < patches/krb5-1.11-jtl1.diff
+	rm -rf $(BUILD)/krb5/*/src/appl/bsd
+	( cd $(BUILD)/krb5/*/src \
+		&& CFLAGS="$(JTL_CFLAGS)" ./configure --prefix=$(PREFIX) \
+			--enable-shared --disable-static \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+                        --with-system-et --without-tcl \
+		&& $(MAKE)  \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/krb5 > $(MADE)/krb5
+	rm -rf $(BUILD)/krb5

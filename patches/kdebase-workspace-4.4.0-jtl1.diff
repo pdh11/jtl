@@ -1,0 +1,10 @@
+--- kdebase-workspace-4.3.2/kcontrol/kxkb/CMakeLists.txt~	2009-07-21 16:18:42.000000000 +0100
++++ kdebase-workspace-4.3.2/kcontrol/kxkb/CMakeLists.txt	2009-10-13 16:37:41.000000000 +0100
+@@ -61,6 +61,7 @@ if( X11_Xinput_FOUND AND XiGetDevicePres
+     set(XiGetDevicePresence_FOUND 1)
+ else( X11_Xinput_FOUND AND XiGetDevicePresenceNotifyEvent_EXISTS )
+     MESSAGE(STATUS "_XiGetDevicePresenceNotifyEvent is not found, libXi version 1.2.0 or later is required to keep layouts with keyboard hotplugging")
++    set(XiGetDevicePresence_FOUND 1)
+ endif( X11_Xinput_FOUND AND XiGetDevicePresenceNotifyEvent_EXISTS )
+ 
+ macro_bool_to_01(XiGetDevicePresence_FOUND HAVE_XINPUT)

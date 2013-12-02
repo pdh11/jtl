@@ -1,0 +1,5 @@
+## Make.gobject-introspection
+
+gobject-introspection: glib libffi python cairo
+	$(MAKE) PROG=gobject-introspection _gnu \
+		JTL_TESTS_BOGUS=0.9.6

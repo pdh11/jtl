@@ -1,0 +1,9 @@
+## Make.poppler
+#
+# Tests rely on test PDFs that aren't shipped
+
+poppler: glib qt lcms gtk+ cairo fontconfig freetype libpng libjpeg pkgconfig \
+		libxml2
+	$(MAKE) PROG=poppler _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-xpdf-headers" \
+		JTL_TESTS_BOGUS=0.12.0

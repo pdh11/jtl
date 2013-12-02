@@ -1,0 +1,5 @@
+## Make.libgnomecups
+
+libgnomecups: glib cups intltool perl perl_xml_parser pkgconfig
+	$(MAKE) PROG=libgnomecups _gnu \
+                JTL_PATCH=libgnomecups-0.2.3-jtl1.diff

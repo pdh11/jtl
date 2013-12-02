@@ -1,0 +1,33 @@
+--- dev86-0.16.17/makefile.in~	2004-10-02 14:00:53.000000000 +0100
++++ dev86-0.16.17/makefile.in	2007-03-04 20:30:03.000000000 +0000
+@@ -89,10 +89,10 @@ EXE=
+ 
+ #ifdef GNUMAKE
+ all: check_config bcc86 cpp unproto copt as86 ar86 ld86 objdump86 \
+-     library lib-bsd alt-libs elksemu
++     library lib-bsd alt-libs
+ 
+ install: check_config install-bcc install-man \
+-     install-lib install-emu
++     install-lib
+ 
+ install-all: install install-other
+ 
+--- dev86-0.16.18/copt/copt.c~	2003-10-07 20:46:35.000000000 +0100
++++ dev86-0.16.18/copt/copt.c	2012-07-15 17:27:48.000000000 +0100
+@@ -173,8 +173,13 @@ static char *readline(FILE *fp)
+ 
+   /* Delete leading white spaces */
+   for (cp = buf; *cp && isspace(*cp); cp++) ;
+-  if (cp != buf && *cp)
+-	strcpy(buf, cp);
++  if (cp != buf && *cp) {
++      char *bp = buf;
++      while (*cp)
++          *bp++ = *cp++;
++      *bp = *cp;
++//      strcpy(buf, cp);
++  }
+ 
+   return(buf);
+ }

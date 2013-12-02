@@ -1,0 +1,4 @@
+## Make.x2x
+
+x2x: x
+	$(MAKE) PROG=x2x _xstyle

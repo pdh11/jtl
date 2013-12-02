@@ -1,0 +1,19 @@
+--- openquicktime-1.0-src/audioplugin/MP3/audioencoder/lame3.70/quantize-pvt.c~	2001-07-27 13:53:35.000000000 +0100
++++ openquicktime-1.0-src/audioplugin/MP3/audioencoder/lame3.70/quantize-pvt.c	2005-12-06 20:29:59.000000000 +0000
+@@ -972,6 +972,7 @@ void quantize_xrpow(FLOAT8 xr[576], int 
+   /* quantize on xr^(3/4) instead of xr */
+   const FLOAT8 istep = IPOW20(cod_info->global_gain);
+ 
++  const int pairs = 576/4;
+ #if defined (USE_GNUC_ASM) 
+   {
+       int rx[4];
+@@ -1029,7 +1030,7 @@ void quantize_xrpow(FLOAT8 xr[576], int 
+ 
+         "jnz loop1\n\n"
+         : /* no outputs */
+-        : "t" (istep), "r" (xr), "r" (adj43asm), "r" (ix), "r" (576 / 4), "m" (rx)
++        : "t" (istep), "r" (xr), "r" (adj43asm), "r" (ix), "r" (pairs), "m" (rx)
+         : "%eax", "%ebx", "memory", "cc"
+       );
+   }

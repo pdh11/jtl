@@ -1,0 +1,20 @@
+## Make.qtscriptgenerator
+
+qtscriptgenerator: qt
+	@echo Making qtscriptgenerator
+	rm -rf $(BUILD)/qtscriptgenerator
+	mkdir -p $(BUILD)/qtscriptgenerator
+	tar xjf $(ARCHIVE)/qtscriptgenerator-*bz2 -C $(BUILD)/qtscriptgenerator
+	patch -d $(BUILD)/qtscriptgenerator/* -p1 -F5 < patches/qtscriptgenerator-0.1.0-jtl1.diff
+	( cd $(BUILD)/qtscriptgenerator/*/generator \
+		&& qmake \
+		&& $(MAKE) \
+		&& ./generator \
+		&& cd ../qtbindings \
+		&& qmake \
+		&& $(MAKE) )
+	$(REALLY) cp -dp $(BUILD)/qtscriptgenerator/*/plugins/script/* \
+		$(PREFIX)/qt/plugins/script/
+	du -hs $(BUILD)/qtscriptgenerator > $(MADE)/qtscriptgenerator
+	rm -rf $(BUILD)/qtscriptgenerator
+	sync

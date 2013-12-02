@@ -1,0 +1,28 @@
+## Make.libmng
+#
+# libmng 1.0.7 ships no ./configure -- we must regenerate using
+# autotools
+#
+# By 1.0.9 they'd shuffled autogen.sh off to an "unmaintained" directory, and
+# given it DOS line endings.
+
+libmng: zlib libjpeg lcms autoconf automake
+	@echo Making libmng
+	rm -rf $(BUILD)/libmng
+	mkdir -p $(BUILD)/libmng
+	( [ -f $(ARCHIVE)/libmng-*gz ] \
+		&& tar xzf $(ARCHIVE)/libmng-*gz -C $(BUILD)/libmng ) \
+	    || ( [ -f $(ARCHIVE)/libmng-*bz2 ] \
+		&& tar xjf $(ARCHIVE)/libmng-*bz2 -C $(BUILD)/libmng ) \
+	    || ( echo No archive found for libmng ; exit 1 )
+	# patch -d $(BUILD)/libmng/* -p1 -F5 -z.old < patches/libmng-1.0.10-jtl1.diff
+	( cd $(BUILD)/libmng/* \
+		&& ( [ -f configure ] || chmod a+x ./autogen.sh ) \
+		&& ( [ -f configure ] || ./autogen.sh ) \
+		&& chmod a+x configure \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) \
+		&& $(MAKE) $(JTL_MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/libmng > $(MADE)/libmng
+	rm -rf $(BUILD)/libmng

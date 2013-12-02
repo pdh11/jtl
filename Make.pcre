@@ -1,0 +1,8 @@
+## Make.pcre
+#
+# 8.30 install rule fails if man pages already installed :-S
+
+pcre:
+	$(REALLY) rm -f $(PREFIX)/share/man/man3/pcre16*
+	$(MAKE) PROG=pcre _gnu \
+		JTL_CONFIG="--enable-static --enable-unicode-properties --enable-utf8"

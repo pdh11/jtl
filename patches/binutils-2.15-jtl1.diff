@@ -1,0 +1,47 @@
+--- binutils-2.14/bfd/config.bfd~	2003-06-02 21:35:20.000000000 +0100
++++ binutils-2.14/bfd/config.bfd	2004-03-02 17:33:02.000000000 +0000
+@@ -252,7 +252,7 @@ case "${targ}" in
+     targ_selvecs=armcoff_big_vec
+     targ_underscore=yes
+     ;;
+-  xscale-*-elf)
++  xscale-*-elf | xscale-*-freebsd* | xscale*-*-linux-gnu* | xscale*-*-conix* | xscale*-*-uclinux*)
+     targ_defvec=bfd_elf32_littlearm_vec
+     targ_selvecs=bfd_elf32_bigarm_vec
+     ;;
+--- binutils-2.14/gas/read.c.~1.78.~	2004-04-23 08:58:23.000000000 +0200
++++ binutils-2.14/gas/read.c	2004-04-23 21:49:01.000000000 +0200
+@@ -1,6 +1,6 @@
+ /* read.c - read a source file -
+    Copyright 1986, 1987, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997,
+-   1998, 1999, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
++   1998, 1999, 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+ 
+ This file is part of GAS, the GNU Assembler.
+ 
+@@ -950,10 +950,14 @@ read_a_source_file (char *name)
+ 	      unsigned int new_length;
+ 	      char *tmp_buf = 0;
+ 
+-	      bump_line_counters ();
+ 	      s = input_line_pointer;
+ 	      if (strncmp (s, "APP\n", 4))
+-		continue;	/* We ignore it */
++		{
++		  /* We ignore it */
++		  ignore_rest_of_line ();
++		  continue;
++		}
++	      bump_line_counters ();
+ 	      s += 4;
+ 
+ 	      sb_new (&sbuf);
+@@ -1052,7 +1056,7 @@ read_a_source_file (char *name)
+ 	    continue;
+ #endif
+ 	  input_line_pointer--;
+-	  /* Report unknown char as ignored.  */
++	  /* Report unknown char as error.  */
+ 	  demand_empty_rest_of_line ();
+ 	}
+ 

@@ -1,0 +1,32 @@
+## Make.sub-kernel
+#
+# Native Linux kernel suitable for CD boot
+
+sub-kernel:
+	@echo Making sub-kernel
+	rm -rf $(BUILD)/sub-kernel
+	mkdir -p $(BUILD)/sub-kernel
+	tar xzf $(ARCHIVE)/linux-2.4*.tar.gz -C $(BUILD)/sub-kernel
+	#gunzip -c $(ARCHIVE)/linux-2.4.*pre*diff.gz \
+	#	| patch -p1 -s -d $(BUILD)/sub-kernel/*
+	#gunzip -c $(ARCHIVE)/linux-2.4.*aic7xxx*diff.gz \
+	#	| patch -p1 -s -d $(BUILD)/sub-kernel/*
+	cp patches/linux-2.4*-config-bootable-cd \
+		$(BUILD)/sub-kernel/linux-2.4.26/.config
+	yes "" | $(MAKE) -C $(BUILD)/sub-kernel/* oldconfig
+	$(MAKE) -C $(BUILD)/sub-kernel/* dep
+	$(MAKE) -C $(BUILD)/sub-kernel/* bzImage
+	mkdir -p $(SUB_ROOT)/boot
+	cp $(BUILD)/sub-kernel/linux*/arch/i386/boot/bzImage \
+		$(SUB_ROOT)/boot/vmlinux
+	/usr/sbin/rdev $(SUB_ROOT)/boot/vmlinux /dev/scd0
+	cp $(BUILD)/sub-kernel/linux*/System.map $(SUB_ROOT)/boot
+	$(MAKE) -C $(BUILD)/sub-kernel/* modules
+	$(MAKE) -C $(BUILD)/sub-kernel/* modules_install \
+		INSTALL_MOD_PATH=$(SUB_ROOT)
+	mkdir -p $(SUB_ROOT)/usr/include
+	rm -rf $(SUB_ROOT)/usr/include/linux $(SUB_ROOT)/usr/include/asm
+	cp -R $(BUILD)/sub-kernel/*/include/linux $(SUB_ROOT)/usr/include
+	cp -R $(BUILD)/sub-kernel/*/include/asm-i386 $(SUB_ROOT)/usr/include/asm
+	du -hs $(BUILD)/sub-kernel > $(MADE)/sub-kernel
+	rm -rf $(BUILD)/sub-kernel

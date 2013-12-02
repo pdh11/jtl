@@ -1,0 +1,22 @@
+## Make.mjpegtools
+#
+# 2.0.0rc1 uses libpng internal variable that disappeared in libpng 1.5.0
+
+mjpegtools: sdl libdv libpng x glib pango cairo gdk-pixbuf atk gtk+2
+	@echo Making mjpegtools
+	rm -rf $(BUILD)/mjpegtools
+	mkdir -p $(BUILD)/mjpegtools
+	tar xjf $(ARCHIVE)/jpeg-mmx*.tar.bz2 -C $(BUILD)/mjpegtools
+	tar xjf $(ARCHIVE)/mjpegtools-*bz2 -C $(BUILD)/mjpegtools
+	patch -d $(BUILD)/mjpegtools/mj* -p1 < patches/mjpegtools-2.0.0-jtl1.diff
+	( cd $(BUILD)/mjpegtools/mj* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) --without-libquicktime \
+			--enable-simd-accel \
+			--without-libpng \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/mjpegtools > $(MADE)/mjpegtools
+	rm -rf $(BUILD)/mjpegtools

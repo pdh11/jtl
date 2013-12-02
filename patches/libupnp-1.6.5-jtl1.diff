@@ -1,0 +1,115 @@
+--- libupnp-1.6.5/upnp/src/genlib/miniserver/miniserver.c~	2007-12-10 22:07:25.000000000 +0000
++++ libupnp-1.6.5/upnp/src/genlib/miniserver/miniserver.c	2008-04-17 14:28:18.000000000 +0100
+@@ -42,11 +42,6 @@
+ 	#include <sys/wait.h>
+ 	#include <unistd.h>
+ 	#include <sys/time.h>
+-#else /* WIN32 */
+-	#include <winsock2.h>
+-
+-	typedef int socklen_t;
+-	#define EAFNOSUPPORT 97
+ #endif /* WIN32 */
+ #include "unixutil.h"
+ #include "ithread.h"
+--- libupnp-1.6.5/upnp/inc/upnp.h~	2008-01-27 01:16:10.000000000 +0000
++++ libupnp-1.6.5/upnp/inc/upnp.h	2008-04-17 14:30:36.000000000 +0100
+@@ -81,6 +81,10 @@
+ 		#define PRId64 "I64d"
+ 		#define PRIzu "zu"
+ 	#endif
++        #ifdef __GNUC__
++               #define UPNP_INLINE inline
++	        #define PRIzu "lu"
++        #endif
+ #else
+ 	#define EXPORT_SPEC
+ 	#define UPNP_INLINE inline
+--- libupnp-1.6.5/configure.ac~	2008-02-03 00:07:50.000000000 +0000
++++ libupnp-1.6.5/configure.ac	2008-04-23 21:52:59.000000000 +0100
+@@ -308,11 +308,26 @@ AC_TYPE_OFF_T
+ AC_DEFINE([_LARGE_FILE_SOURCE], [], [Large files support])
+ AC_DEFINE([_FILE_OFFSET_BITS], [64], [File Offset size])
+ 
++#
++# Are we targetting Win32?
++#
++AC_MSG_CHECKING([for Win32])
++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
++#ifdef WIN32
++#error Yup
++#endif
++],[])], [ac_cv_win32="no"], [ac_cv_win32="yes"])
++if test "$ac_cv_win32" = "yes"; then
++  AC_MSG_RESULT([yes])
++else
++  AC_MSG_RESULT([no])
++fi
+ 
+ #
+-# Checks for header files
++# Checks for header files (which aren't needed on Win32)
+ #
+ AC_HEADER_STDC
++if test "$ac_cv_win32" = "no"; then
+ # libupnp code doesn't use autoconf variables yet,
+ # so just abort if a header file is not found.
+ AC_CHECK_HEADERS(
+@@ -334,14 +349,34 @@ AC_CHECK_HEADERS(
+ 	],
+ 	[],
+ 	[AC_MSG_ERROR([required header file missing])])
+-
++fi
+ 
+ #
+ # Checks for typedefs, structures, and compiler characteristics
+ #	
+ AC_C_CONST
+-TYPE_SOCKLEN_T
+ 
++AC_CHECK_HEADERS([sys/types.h sys/socket.h ws2tcpip.h])
++AC_MSG_CHECKING(for socklen_t)
++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
++#ifdef HAVE_SYS_TYPES_H
++#include <sys/types.h>
++#endif
++#ifdef HAVE_SYS_SOCKET_H
++#include <sys/socket.h>
++#endif
++#ifdef HAVE_WS2TCPIP_H
++#include <ws2tcpip.h>
++#endif
++
++],[ socklen_t t = 0; return t; ])
++],[ac_cv_socklen_t="yes"],[ac_cv_socklen_t="no"])
++if test "$ac_cv_socklen_t" = "yes"; then
++  AC_MSG_RESULT([yes])
++else
++  AC_MSG_RESULT([no, using int])
++  AC_DEFINE(socklen_t, int, [Type for storing the length of struct sockaddr])
++fi
+ 
+ #
+ # Checks for library functions
+--- libupnp-1.6.5/upnp/Makefile.am~	2007-12-25 18:10:01.000000000 +0000
++++ libupnp-1.6.5/upnp/Makefile.am	2008-05-25 13:32:00.000000000 +0100
+@@ -130,6 +130,10 @@ libupnp_la_SOURCES += \
+ libupnp_la_SOURCES += src/urlconfig/urlconfig.c
+ 
+ 
++# inet_pton (needed on Win32, compiles to nothing elsewhere)
++libupnp_la_SOURCES += src/inet_pton.c
++
++
+ # check / distcheck tests
+ check_PROGRAMS = test_init
+ TESTS = test_init
+@@ -139,7 +143,6 @@ test_init_SOURCES = test/test_init.c
+ EXTRA_DIST = \
+ 	LICENSE \
+ 	src/inc/inet_pton.h \
+-	src/inet_pton.c \
+ 	src/win_dll.c
+ 
+ 

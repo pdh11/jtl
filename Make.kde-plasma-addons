@@ -1,0 +1,4 @@
+## Make.kde-plasma-addons
+
+kde-plasma-addons: kde-libs kde-runtime qt kde-workspace marble
+	$(MAKE) PROG=kdeplasma-addons JTL_TOUCH=kde-plasma-addons PREFIX=$(PREFIX)/kde _gnucmake

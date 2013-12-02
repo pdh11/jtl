@@ -1,0 +1,22 @@
+## Make.zlib
+#
+# Overriding CFLAGS overrides the setting of -fPIC, which is not ideal.
+#
+# If we don't do the two-stage install, it crashes KDE for some reason.
+#
+# 1.2.5 causes Mozilla crashes; 1.2.3 doesn't
+
+zlib:
+	@echo Making GNU zlib
+	$(REALLY) rm -rf $(BUILD)/zlib
+	mkdir -p $(BUILD)/zlib
+	tar xjf $(ARCHIVE)/zlib-*bz2 -C $(BUILD)/zlib
+	( cd $(BUILD)/zlib/* \
+		&& CFLAGS="$(JTL_CFLAGS) -fPIC -fno-tree-vectorize" CXXFLAGS="$(JTL_CXXFLAGS) -fno-tree-vectorize" \
+			./configure --prefix=$(PREFIX) --shared \
+		&& $(MAKE) $(JTL_MAKE) \
+		&& $(REALLY) $(MAKE) install prefix=$(BUILD)/zlib/install0 \
+		&& tar cf - -C $(BUILD)/zlib/install0 . | $(REALLY) tar xvf - -C $(JTL_ROOT)$(PREFIX) )
+	$(REALLY) /sbin/ldconfig
+	du -hs $(BUILD)/zlib > $(MADE)/zlib
+	( $(REALLY) rm -rf $(BUILD)/zlib ; sync ) &

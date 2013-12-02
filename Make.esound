@@ -1,0 +1,5 @@
+## Make.esound
+
+esound: audiofile alsa-lib pkgconfig
+	$(MAKE) PROG=esound JTL_CONFIG="--enable-shared --disable-static --sysconfdir=/etc" _gnu
+

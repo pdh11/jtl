@@ -1,0 +1,144 @@
+--- libxklavier-2.0/libxklavier/xklavier_config.c~	2005-12-01 21:02:50.000000000 +0000
++++ libxklavier-2.0/libxklavier/xklavier_config.c	2005-12-01 21:03:03.000000000 +0000
+@@ -29,9 +29,9 @@ static xmlXPathCompExprPtr optionGroupsX
+ static xmlChar *_XklNodeGetXmlLangAttr( xmlNodePtr nptr )
+ {
+   if( nptr->properties != NULL &&
+-      !strcmp( "lang", nptr->properties[0].name ) &&
++      !strcmp( "lang", (char *)nptr->properties[0].name ) &&
+       nptr->properties[0].ns != NULL &&
+-      !strcmp( "xml", nptr->properties[0].ns->prefix ) &&
++      !strcmp( "xml", (char *)nptr->properties[0].ns->prefix ) &&
+       nptr->properties[0].children != NULL )
+     return nptr->properties[0].children->content;
+   else
+@@ -56,7 +56,7 @@ static Bool _XklReadConfigItem( xmlNodeP
+     switch ( ptr->type )
+     {
+       case XML_ELEMENT_NODE:
+-        if( !strcmp( ptr->name, "configItem" ) )
++        if( !strcmp( (char *)ptr->name, "configItem" ) )
+           break;
+         return False;
+       case XML_TEXT_NODE:
+@@ -85,21 +85,21 @@ static Bool _XklReadConfigItem( xmlNodeP
+ 
+       if( lang != NULL )
+       {
+-        int priority = _XklGetLanguagePriority( lang );
+-        if( !strcmp( nptr->name, "description" ) && ( priority > maxDescPriority ) )    /* higher priority */
++        int priority = _XklGetLanguagePriority( (const char *)lang );
++        if( !strcmp( (char *)nptr->name, "description" ) && ( priority > maxDescPriority ) )    /* higher priority */
+         {
+           descElement = nptr;
+           maxDescPriority = priority;
+-        } else if( !strcmp( nptr->name, "shortDescription" ) && ( priority > maxShortDescPriority ) )   /* higher priority */
++        } else if( !strcmp( (char *)nptr->name, "shortDescription" ) && ( priority > maxShortDescPriority ) )   /* higher priority */
+         {
+           shortDescElement = nptr;
+           maxShortDescPriority = priority;
+         }
+       } else
+       {
+-        if( !strcmp( nptr->name, "description" ) )
++        if( !strcmp( (char *)nptr->name, "description" ) )
+           ntDescElement = nptr;
+-        else if( !strcmp( nptr->name, "shortDescription" ) )
++        else if( !strcmp( (char *)nptr->name, "shortDescription" ) )
+           ntShortDescElement = nptr;
+       }
+     }
+@@ -118,12 +118,12 @@ static Bool _XklReadConfigItem( xmlNodeP
+    */ 
+ 
+   if( nameElement != NULL && nameElement->children != NULL )
+-    strncat( pci->name, nameElement->children->content,
++    strncat( pci->name, (char *)nameElement->children->content,
+              XKL_MAX_CI_NAME_LENGTH - 1 );
+ 
+   if( shortDescElement != NULL && shortDescElement->children != NULL )
+   {
+-    char * lsd = _XklLocaleFromUtf8( shortDescElement->children->content );
++    char * lsd = _XklLocaleFromUtf8( (const char *)shortDescElement->children->content );
+     strncat( pci->shortDescription,
+              lsd,
+              XKL_MAX_CI_SHORT_DESC_LENGTH - 1 );
+@@ -132,7 +132,7 @@ static Bool _XklReadConfigItem( xmlNodeP
+ 
+   if( descElement != NULL && descElement->children != NULL )
+   {
+-    char * ld = _XklLocaleFromUtf8( descElement->children->content );
++    char * ld = _XklLocaleFromUtf8( (const char *)descElement->children->content );
+     strncat( pci->description,
+              ld,
+              XKL_MAX_CI_DESC_LENGTH - 1 );
+@@ -185,7 +185,7 @@ static void _XklConfigEnumDirect( const 
+   if( !_XklConfigRegistryIsInitialized(  ) )
+     return;
+   snprintf( xpathExpr, sizeof xpathExpr, format, value );
+-  xpathObj = xmlXPathEval( xpathExpr, theRegistry.xpathContext );
++  xpathObj = xmlXPathEval( (unsigned char *)xpathExpr, theRegistry.xpathContext );
+   if( xpathObj != NULL )
+   {
+     _XklConfigEnumFromNodeSet( xpathObj->nodesetval, func, userData );
+@@ -207,7 +207,7 @@ static Bool _XklConfigFindObject( const 
+     return False;
+ 
+   snprintf( xpathExpr, sizeof xpathExpr, format, arg1, ptr->name );
+-  xpathObj = xmlXPathEval( xpathExpr, theRegistry.xpathContext );
++  xpathObj = xmlXPathEval( (unsigned char *)xpathExpr, theRegistry.xpathContext );
+   if( xpathObj == NULL )
+     return False;
+ 
+@@ -364,10 +364,10 @@ char* _XklGetRulesSetName( const char de
+ void XklConfigInit( void )
+ {
+   xmlXPathInit(  );
+-  modelsXPath = xmlXPathCompile( "/xkbConfigRegistry/modelList/model" );
+-  layoutsXPath = xmlXPathCompile( "/xkbConfigRegistry/layoutList/layout" );
++  modelsXPath = xmlXPathCompile( (unsigned char *)"/xkbConfigRegistry/modelList/model" );
++  layoutsXPath = xmlXPathCompile( (unsigned char *)"/xkbConfigRegistry/layoutList/layout" );
+   optionGroupsXPath =
+-    xmlXPathCompile( "/xkbConfigRegistry/optionList/group" );
++    xmlXPathCompile( (unsigned char *)"/xkbConfigRegistry/optionList/group" );
+   _XklI18NInit(  );
+ 
+   _XklEnsureVTableInited();
+@@ -455,10 +455,10 @@ void XklConfigEnumOptionGroups( GroupPro
+       {
+         Bool allowMC = True;
+         xmlChar *allowMCS =
+-          xmlGetProp( *theNodePtr, "allowMultipleSelection" );
++          xmlGetProp( *theNodePtr, (unsigned char *)"allowMultipleSelection" );
+         if( allowMCS != NULL )
+         {
+-          allowMC = strcmp( "false", allowMCS );
++          allowMC = strcmp( "false", (char *)allowMCS );
+           xmlFree( allowMCS );
+         }
+ 
+@@ -516,11 +516,11 @@ Bool XklConfigFindOptionGroup( XklConfig
+ 
+   if( rv && allowMultipleSelection != NULL )
+   {
+-    xmlChar *val = xmlGetProp( node, "allowMultipleSelection" );
++    xmlChar *val = xmlGetProp( node, (unsigned char *)"allowMultipleSelection" );
+     *allowMultipleSelection = False;
+     if( val != NULL )
+     {
+-      *allowMultipleSelection = !strcmp( val, "true" );
++      *allowMultipleSelection = !strcmp( (char *)val, "true" );
+       xmlFree( val );
+     }
+   }
+--- libxklavier-2.0/libxklavier/xklavier_config.c~	2005-12-01 21:05:23.000000000 +0000
++++ libxklavier-2.0/libxklavier/xklavier_config.c	2005-12-01 21:07:51.000000000 +0000
+@@ -508,7 +508,7 @@ Bool XklConfigFindVariant( const char *l
+ Bool XklConfigFindOptionGroup( XklConfigItemPtr ptr /* in/out */ ,
+                                Bool * allowMultipleSelection /* out */  )
+ {
+-  xmlNodePtr node;
++  xmlNodePtr node = NULL;
+   Bool rv =
+     _XklConfigFindObject
+     ( "/xkbConfigRegistry/optionList/group[configItem/name = '%s%s']", "",

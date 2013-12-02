@@ -1,0 +1,76 @@
+--- rarpd-0.981107.orig/rarpd.c~	1998-11-07 14:48:40.000000000 +0000
++++ rarpd-0.981107.orig/rarpd.c	2004-05-10 14:08:53.000000000 +0100
+@@ -26,6 +26,8 @@
+ #include <net/if.h>
+ #include <net/if_arp.h>
+ #include <netinet/in.h>
++#include <linux/types.h>
++#include <linux/if_ether.h>
+ #include <linux/if_packet.h>
+ #include <linux/filter.h>
+ 
+@@ -51,12 +53,12 @@ struct iflink
+ 	int		hatype;
+ 	unsigned char	lladdr[16];
+ 	unsigned char	name[IFNAMSIZ];
+-	struct ifaddr 	*ifa_list;
++	struct my_ifaddr 	*ifa_list;
+ } *ifl_list;
+ 
+-struct ifaddr
++struct my_ifaddr
+ {
+-	struct ifaddr 	*next;
++	struct my_ifaddr 	*next;
+ 	__u32		prefix;
+ 	__u32		mask;
+ 	__u32		local;
+@@ -88,7 +90,7 @@ void load_if()
+ 	int fd;
+ 	struct ifreq *ifrp, *ifend;
+ 	struct iflink *ifl;
+-	struct ifaddr *ifa;
++	struct my_ifaddr *ifa;
+ 	struct ifconf ifc;
+ 	struct ifreq ibuf[256];
+ 
+@@ -179,7 +181,7 @@ void load_if()
+ 		if (ifa == NULL) {
+ 			if (mask == 0 || prefix == 0)
+ 				continue;
+-			ifa = (struct ifaddr*)malloc(sizeof(*ifa));
++			ifa = (struct my_ifaddr*)malloc(sizeof(*ifa));
+ 			memset(ifa, 0, sizeof(*ifa));
+ 			ifa->local = addr;
+ 			ifa->prefix = prefix;
+@@ -235,10 +237,10 @@ int bootable(__u32 addr)
+ 	return dent != NULL;
+ }
+ 
+-struct ifaddr *select_ipaddr(int ifindex, __u32 *sel_addr, __u32 **alist)
++struct my_ifaddr *select_ipaddr(int ifindex, __u32 *sel_addr, __u32 **alist)
+ {
+ 	struct iflink *ifl;
+-	struct ifaddr *ifa;
++	struct my_ifaddr *ifa;
+ 	int retry = 0;
+ 	int i;
+ 
+@@ -294,7 +296,7 @@ struct rarp_map *rarp_lookup(int ifindex
+ 
+ 	if (r == NULL) {
+ 		if (hatype == ARPHRD_ETHER && halen == 6) {
+-			struct ifaddr *ifa;
++			struct my_ifaddr *ifa;
+ 			struct hostent *hp;
+ 			char ename[256];
+ 			static struct rarp_map emap = {
+@@ -363,7 +365,7 @@ int put_myipaddr(unsigned char **ptr_p, 
+ {
+ 	__u32 laddr = 0;
+ 	struct iflink *ifl;
+-	struct ifaddr *ifa;
++	struct my_ifaddr *ifa;
+ 
+ 	for (ifl=ifl_list; ifl; ifl = ifl->next)
+ 		if (ifl->index == ifindex)

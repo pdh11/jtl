@@ -1,0 +1,4 @@
+## Make.eigen
+
+eigen: cmake
+	$(MAKE) PROG=eigen _gnucmake

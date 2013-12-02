@@ -1,0 +1,5 @@
+## Make.musicbrainz
+
+musicbrainz: libtool
+	$(MAKE) PROG=musicbrainz _gnu
+

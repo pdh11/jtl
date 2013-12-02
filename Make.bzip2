@@ -1,0 +1,20 @@
+## Make.bzip2
+#
+# Build once without -fpic, once with
+
+bzip2:
+	@echo Compiling bzip2
+	rm -rf $(BUILD)/bzip2
+	mkdir -p $(BUILD)/bzip2
+	tar xzf $(ARCHIVE)/bzip2-* -C $(BUILD)/bzip2
+	patch -d $(BUILD)/bzip2/* -p1 -F5 < patches/bzip2-1.0.5-jtl1.diff
+	( cd $(BUILD)/bzip2/* \
+		&& $(MAKE) PREFIX=$(PREFIX) bzip2 bzip2recover \
+		&& $(REALLY) rm -f $(JTL_ROOT)$(PREFIX)/bin/{bzegrep,bzfgrep,bzless,bzcmp} \
+		&& $(REALLY) make PREFIX=$(JTL_ROOT)$(PREFIX) install \
+		&& $(MAKE) clean \
+		&& $(MAKE) PREFIX=$(PREFIX) -f Makefile-libbz2_so \
+		&& $(REALLY) cp -df libbz2.so* $(JTL_ROOT)$(PREFIX)/lib \
+		&& $(REALLY) /sbin/ldconfig )
+	du -hs $(BUILD)/bzip2 > $(MADE)/bzip2
+	rm -rf $(BUILD)/bzip2

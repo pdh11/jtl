@@ -1,0 +1,4 @@
+## Make.simplejson
+
+simplejson: python
+	$(MAKE) PROG=simplejson _pythonstyle

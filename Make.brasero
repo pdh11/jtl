@@ -1,0 +1,8 @@
+## Make.brasero
+
+brasero: glib gtk+ gconf gstreamer gst-plugins-base libxml2 hal dbus \
+		totem dbus-glib intltool
+	$(MAKE) PROG=brasero _gnu \
+		JTL_CFLAGS="$(JTL_CFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+		JTL_CXXFLAGS="$(JTL_CXXFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+		JTL_TESTS_BOGUS=bogus

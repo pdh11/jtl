@@ -1,0 +1,4 @@
+## Make.rlog
+
+rlog:
+	$(MAKE) PROG=rlog _gnu

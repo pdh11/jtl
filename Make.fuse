@@ -1,0 +1,4 @@
+## Make.fuse
+
+fuse:
+	$(MAKE) PROG=fuse _gnu

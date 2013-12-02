@@ -1,0 +1,6 @@
+## Make.nepomuk-core
+
+nepomuk-core: kde-libs openldap gpgme boost akonadi cyrus-sasl \
+                shared-mime-info shared-desktop-ontologies soprano \
+                libical libxslt
+	$(MAKE) PROG=nepomuk-core PREFIX=$(PREFIX)/kde _gnucmake

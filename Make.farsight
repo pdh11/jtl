@@ -1,0 +1,7 @@
+## Make.farsight
+#
+# Changed its name to farstream at some point
+
+farsight: valgrind pkgconfig gstreamer libnice python glib gupnp
+	$(MAKE) PROG=farstream JTL_TOUCH=farsight _gnu \
+		JTL_TESTS_BOGUS=0.0.15-msn-test-fails

@@ -1,0 +1,4 @@
+## Make.babl
+
+babl:
+	$(MAKE) PROG=babl _gnu

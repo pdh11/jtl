@@ -1,0 +1,4 @@
+## Make.evocosm
+
+libevocosm: libcoyotl
+	$(MAKE) PROG=libevocosm _gnu

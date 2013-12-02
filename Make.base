@@ -1,0 +1,15 @@
+## Make.base
+#
+# Rebuild all the packages from a binary installation CD
+
+BASE_PACKAGES:= bash binutils bison bzip2 coreutils dev86 dhcpcd \
+diffutils e2fsprogs findutils flex gawk gcc gettext glibc gmp grep \
+gzip init kernel-headers lilo m4 make module-init-tools mpfr nano \
+nasm ncurses net-tools netkit-combo patch pcre procps sed sysklogd tar \
+tcp_wrappers texinfo util-linux zlib mpc readline
+
+base: $(BASE_PACKAGES)
+	touch $(MADE)/base
+
+baseclean:
+	@rm -f .foo $(filter-out $(BASE_PACKAGES:%=$(MADE)/%), $(wildcard $(MADE)/*))

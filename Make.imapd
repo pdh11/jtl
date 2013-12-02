@@ -1,0 +1,16 @@
+## Make.imapd
+
+imapd: openssl
+	@echo Making imapd
+	rm -rf $(BUILD)/imapd
+	mkdir -p $(BUILD)/imapd
+	tar xjf $(ARCHIVE)/imap-* -C $(BUILD)/imapd
+	patch -d $(BUILD)/imapd/* -p1 -F5 < patches/imap-2006c-jtl1.diff
+	( cd $(BUILD)/imapd/* \
+		&& $(MAKE) slx SSLTYPE=unix.nopwd SSLINCLUDE=/usr/include/openssl SSLDIR=/usr/ssl \
+		&& strip imapd/imapd \
+		&& $(REALLY) mkdir -p $(PREFIX)/bin \
+		&& $(REALLY) install imapd/imapd $(PREFIX)/bin/imapd \
+		&& $(REALLY) ln -sf imapd $(PREFIX)/bin/simapd )
+	du -hs $(BUILD)/imapd > $(MADE)/imapd
+	rm -rf $(BUILD)/imapd

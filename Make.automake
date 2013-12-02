@@ -1,0 +1,5 @@
+## Make.automake
+
+automake: autoconf
+	$(MAKE) PROG=automake _gnu \
+		JTL_TESTS_BOGUS=2.11-bogus-assumptions-about-date-format

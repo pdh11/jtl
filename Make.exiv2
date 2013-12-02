@@ -1,0 +1,4 @@
+## Make.exiv2
+
+exiv2: expat
+	$(MAKE) PROG=exiv2 _gnu

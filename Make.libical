@@ -1,0 +1,6 @@
+## Make.libical
+
+libical: perl python
+	$(MAKE) PROG=libical _gnu \
+		JTL_TESTS_BOGUS=bogus
+

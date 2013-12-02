@@ -1,0 +1,55 @@
+--- net-tools-1.60/lib/inet_sr.c~	2000-02-20 21:46:45.000000000 +0000
++++ net-tools-1.60/lib/inet_sr.c	2005-11-27 22:17:35.000000000 +0000
+@@ -105,6 +105,7 @@ static int INET_setroute(int action, int
+     case 2:
+        isnet = 0; break;
+     default:
++	break;
+     }
+ 
+     /* Fill in the other fields. */
+--- net-tools-1.60/lib/x25_sr.c~	2000-05-20 13:38:10.000000000 +0000
++++ net-tools-1.60/lib/x25_sr.c	2005-11-27 22:23:25.000000000 +0000
+@@ -77,7 +77,7 @@ static int X25_setroute(int action, int 
+   rt.sigdigits=sigdigits;
+ 
+   /* x25_route_struct.address isn't type struct sockaddr_x25, Why? */
+-  memcpy(&rt.address, &sx25.sx25_addr, sizeof(x25_address));
++  memcpy(&rt.address, &sx25.sx25_addr, sizeof(struct x25_address));
+ 
+   while (*args) {
+ 	if (!strcmp(*args,"device") || !strcmp(*args,"dev")) {
+--- net-tools-1.60/hostname.c~	2001-04-08 17:04:23.000000000 +0000
++++ net-tools-1.60/hostname.c	2005-11-27 22:25:12.000000000 +0000
+@@ -36,6 +36,7 @@
+ #include <string.h>
+ #include <netdb.h>
+ #include <errno.h>
++#include <stdlib.h>
+ #include <sys/param.h>
+ #include <netinet/in.h>
+ #include <arpa/inet.h>
+@@ -98,6 +99,7 @@ static void sethname(char *hname)
+ 	    fprintf(stderr, _("%s: name too long\n"), program_name);
+ 	    break;
+ 	default:
++	    break;
+ 	}
+ 	exit(1);
+     };
+@@ -117,6 +119,7 @@ static void setdname(char *dname)
+ 	    fprintf(stderr, _("%s: name too long\n"), program_name);
+ 	    break;
+ 	default:
++	    break;
+ 	}
+ 	exit(1);
+     };
+@@ -174,6 +177,7 @@ static void showhname(char *hname, int c
+ 	printf("%s\n", hp->h_name);
+ 	break;
+     default:
++	break;
+     }
+ }
+ 

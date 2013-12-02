@@ -1,0 +1,48 @@
+## Make.ncurses
+#
+# ncurses is nasty because, when compiling-in fallbacks, it
+# takes them from your INSTALLED ncurses, not the tarball;
+# and worse, it fails if your installed ncurses used fallbacks.
+# So we build it once normally, then again against that copy
+# with the fallbacks. Grrr. But it's worth it to avoid having
+# all that /usr/share/terminfo/<antique> junk.
+#
+# The 5.6 build system goes 'gcc -o /usr/lib/libncurses.so.5.6', which
+# deletes the existing libncurses.so.5.6 too early. So we must install the
+# second ncurses to a DESTDIR and move it into place atomically with tar.
+
+ncurses:
+	@echo Compiling ncurses
+	rm -rf $(BUILD)/ncurses
+	mkdir -p $(BUILD)/ncurses/{build,install0}
+	tar xzf $(ARCHIVE)/ncurses-* -C $(BUILD)/ncurses
+	( cd $(BUILD)/ncurses/build \
+		&& CFLAGS="$(JTL_CFLAGS)" ../n*/configure --with-shared \
+			--without-normal --without-debug --without-termcap \
+			--prefix=$(BUILD)/ncurses/install0 --disable-cxx \
+			--disable-cxx-binding \
+		&& $(MAKE) -j1 \
+		&& $(MAKE) install \
+		&& $(MAKE) distclean \
+		&& CFLAGS="$(JTL_CFLAGS)" \
+			PATH=$(BUILD)/ncurses/install0/bin:$(PATH) \
+			../n*/configure --with-shared --without-normal \
+			--without-debug --without-termcap --disable-database \
+			--with-fallbacks=linux,vt100,xterm,dumb,eterm,Eterm,screen --without-database \
+			--disable-cxx --disable-cxx-binding \
+			--prefix=$(PREFIX) \
+			--with-install-prefix=$(BUILD)/ncurses/install1 \
+		&& PATH=$(BUILD)/ncurses/install0/bin:$(PATH) \
+			LD_LIBRARY_PATH=$(BUILD)/ncurses/install0/lib \
+			$(MAKE) -j1 \
+		&& PATH=$(BUILD)/ncurses/install0/bin:$(PATH) \
+			LD_LIBRARY_PATH=$(BUILD)/ncurses/install0/lib \
+			$(MAKE) -j1 install.libs install.includes \
+		&& echo Installing \
+		&& tar cf - -C $(BUILD)/ncurses/install1 . | \
+			$(REALLY) tar xvf - -C $(JTL_ROOT) --no-same-owner \
+		&& echo Installed \
+		&& $(REALLY) /sbin/ldconfig )
+	du -hs $(BUILD)/ncurses > $(MADE)/ncurses
+	rm -rf $(BUILD)/ncurses
+	touch $(MADE)/ncurses

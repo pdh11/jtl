@@ -1,0 +1,5 @@
+## Make.ibus
+
+ibus: python dbus gtk+ x pkgconfig gtk+2 perl_xml_parser
+	$(MAKE) PROG=ibus _gnu \
+                JTL_TESTS_BOGUS=1.5.1-enoent

@@ -1,0 +1,14 @@
+## Make.totem
+
+totem: glib gtk+ libglade gnome-vfs gnome-desktop \
+		gnome-icon-theme iso-codes xine-lib gconf mozilla nautilus \
+		intltool perl perl_xml_parser gst-plugins-good \
+		shared-mime-info totem-pl-parser dbus-glib python pygtk \
+		gst-plugins-bad gst-plugins-ugly gst-plugins-base gst-libav \
+		libgdata libunique libpeas clutter clutter-gtk clutter-gst \
+                mx libsoup grilo
+	$(MAKE) PROG=totem _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-browser-plugins" \
+		JTL_CFLAGS="$(JTL_CFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+		JTL_CXXFLAGS="$(JTL_CXXFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+		JTL_TESTS_BOGUS=bogus

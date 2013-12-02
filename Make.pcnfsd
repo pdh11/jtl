@@ -1,0 +1,13 @@
+## Make.pcnfsd
+
+pcnfsd: libtirpc
+	@echo Making pcnfsd
+	rm -rf build/pcnfsd
+	mkdir -p build/pcnfsd
+	tar xjf $(ARCHIVE)/linux_pcnfsd* -C build/pcnfsd
+	( cd build/pcnfsd/* \
+		&& make -f Makefile.linux LFLAGS="-ltirpc -lcrypto -lcrypt" \
+		&& $(REALLY) cp linux/rpc.pcnfsd $(PREFIX)/sbin \
+		&& $(REALLY) cp pcnfsd.8c $(PREFIX)/share/man/man8 )
+	rm -rf build/pcnfsd
+	touch $(MADE)/pcnfsd

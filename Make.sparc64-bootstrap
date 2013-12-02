@@ -1,0 +1,14 @@
+## Make.sparc64-bootstrap
+#
+# Care here because some thing like installing to /lib64
+#
+
+sparc64-bootstrap: sparc64-toolchain
+	mkdir -p sparc64-root/{lib,usr/lib}
+	rm -rf sparc64-root/lib64 sparc64-root/usr/lib64
+	ln -sf lib sparc64-root/lib64
+	ln -sf lib sparc64-root/usr/lib64
+	$(MAKE) JTL_CROSS=sparc64 JTL_CROSSCFLAGS="-mcpu=ultrasparc -m64 -O2" \
+		JTL_CROSSGCCFLAGS=--disable-multilib \
+		sparc64-do-bootstrap
+	@echo done

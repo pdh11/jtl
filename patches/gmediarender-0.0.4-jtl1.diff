@@ -1,0 +1,96 @@
+--- gmediarender-0.0.4/configure.in~	2006-03-27 13:01:39.000000000 +0100
++++ gmediarender-0.0.4/configure.in	2007-07-29 21:03:38.000000000 +0100
+@@ -17,11 +17,11 @@ AC_PROG_MAKE_SET
+ 
+ GST_REQS=0.8.7
+ GSTPLUG_REQS=0.8.5
+-GST_MAJORMINOR=0.8
++GST_MAJORMINOR=0.10
+ PKG_CHECK_MODULES(GST, \
+   gstreamer-$GST_MAJORMINOR >= $GST_REQS \
+-  gstreamer-gconf-$GST_MAJORMINOR >= $GSTPLUG_REQS \
+-  gstreamer-interfaces-$GST_MAJORMINOR >= $GSTPLUG_REQS,
++  gstreamer-net-$GST_MAJORMINOR >= $GSTPLUG_REQS \
++  gstreamer-plugins-base-$GST_MAJORMINOR >= $GSTPLUG_REQS,
+   HAVE_GSTREAMER=yes, HAVE_GSTREAMER=no)
+ 
+ AC_LIB_UPNP([], [AC_MSG_ERROR([the upnp library is required to build and run this program])])
+--- gmediarender-0.0.4/src/output_gstreamer.c~	2005-09-02 15:02:16.000000000 +0100
++++ gmediarender-0.0.4/src/output_gstreamer.c	2007-07-29 21:15:52.000000000 +0100
+@@ -39,8 +39,8 @@ GList *gst_factories_at_most_templates(G
+ 
+ 	while (factories) {
+ 		guint count = 0;
+-		GList *templs =
+-		    ((GstElementFactory *) factories->data)->padtemplates;
++		const GList *templs =
++		    gst_element_factory_get_static_pad_templates((GstElementFactory *) factories->data);
+ 
+ 		while (templs) {
+ 			if (GST_PAD_TEMPLATE_DIRECTION(templs->data) ==
+@@ -90,7 +90,7 @@ static void scan_pad_templates_info(GstE
+ 		return;
+ 	}
+ 
+-	pads = factory->padtemplates;
++	pads = gst_element_factory_get_static_pad_templates(factory);
+ 	while (pads) {
+ 		padtemplate = (GstPadTemplate *) (pads->data);
+ 		pads = g_list_next(pads);
+@@ -121,7 +121,7 @@ static void scan_mime_list(void)
+ 	GList *plugins;
+ 
+ 	printf("%s:ENTER\n", __FUNCTION__);
+-	plugins = gst_registry_pool_plugin_list();
++	plugins = gst_default_registry_get_plugin_list();
+ 
+ 	while (plugins) {
+ 		GList *features;
+@@ -130,8 +130,9 @@ static void scan_mime_list(void)
+ 		plugin = (GstPlugin *) (plugins->data);
+ 		plugins = g_list_next(plugins);
+ 
+-		features = gst_plugin_get_feature_list(plugin);
+-
++		features = gst_registry_get_feature_list_by_plugin(gst_registry_get_default(),
++								   gst_plugin_get_name(plugin));
++		
+ 		while (features) {
+ 			GstPluginFeature *feature;
+ 
+@@ -165,7 +166,7 @@ void output_set_uri(const char *uri)
+ int output_play(void)
+ {
+ 	if (gst_element_set_state(play, GST_STATE_PLAYING) ==
+-	    GST_STATE_FAILURE) {
++	    GST_STATE_CHANGE_FAILURE) {
+ 		return -1;
+ 	} else {
+ 		return 0;
+@@ -176,7 +177,7 @@ int output_play(void)
+ int output_stop(void)
+ {
+ 	if (gst_element_set_state(play, GST_STATE_READY) ==
+-	    GST_STATE_FAILURE) {
++	    GST_STATE_CHANGE_FAILURE) {
+ 		return -1;
+ 	} else {
+ 		return 0;
+@@ -187,7 +188,7 @@ int output_stop(void)
+ int output_pause(void)
+ {
+ 	if (gst_element_set_state(play, GST_STATE_PAUSED) ==
+-	    GST_STATE_FAILURE) {
++	    GST_STATE_CHANGE_FAILURE) {
+ 		return -1;
+ 	} else {
+ 		return 0;
+@@ -205,7 +206,7 @@ int output_gstreamer_init(int *argc, cha
+ 	play = gst_element_factory_make("playbin", "play");
+ 	g_signal_connect(play, "error", G_CALLBACK(error_cb), NULL);
+ 	if (gst_element_set_state(play, GST_STATE_READY) ==
+-	    GST_STATE_FAILURE) {
++	    GST_STATE_CHANGE_FAILURE) {
+ 		fprintf(stderr,
+ 			"Error: pipeline doesn't want to get ready.\n");
+ 	}

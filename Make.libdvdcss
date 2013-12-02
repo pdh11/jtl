@@ -1,0 +1,4 @@
+## Make.libdvdcss
+
+libdvdcss:
+	$(MAKE) PROG=libdvdcss _gnu

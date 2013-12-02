@@ -1,0 +1,4 @@
+## Make.gmediarender
+
+gmediarender: glib libupnp pkgconfig gstreamer
+	$(MAKE) PROG=gmediarender _gnu

@@ -1,0 +1,4 @@
+## Make.mythtv
+
+mythtv: jack alsa-utils x lame libmng glib
+	$(MAKE) PROG=mythtv JTL_CONFIG="--enable-dvb --enable-proc-opt" _gnu

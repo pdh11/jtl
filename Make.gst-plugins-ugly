@@ -1,0 +1,9 @@
+## Make.gst-plugins-ugly
+
+gst-plugins-ugly: glib gst-plugins-base libmad mpeg2dec lame libdvdread \
+		a52dec
+	$(MAKE) PROG=gst-plugins-ugly _gnu \
+		JTL_TESTS_BOGUS=0.10.17
+
+# \
+#		JTL_PATCH=gst-plugins-ugly-0.10.13-jtl1.diff \

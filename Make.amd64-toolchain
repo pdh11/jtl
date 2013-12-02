@@ -1,0 +1,10 @@
+## Make.amd64-toolchain
+#
+# "Cross-compiling is not supported", says Ulrich Drepper, rather worryingly
+
+amd64-toolchain:
+	libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes $(MAKE) JTL_CROSS=x86_64 JTL_CROSSCFLAGS="-O2" \
+		JTL_CROSSGCCFLAGS=--disable-multilib \
+		JTL_CROSSCONFIGMAKE="" \
+		x86_64-do-toolchain
+	touch $(MADE)/amd64-toolchain

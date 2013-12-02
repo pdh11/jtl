@@ -1,0 +1,39 @@
+## Make.openoffice
+#
+
+openoffice: python mozilla zlib libjpeg libxml2 neon \
+		curl openldap dbus cairo boost sane-backends expat kde-base
+	@echo Making GNU openoffice
+	rm -rf $(BUILD)/openoffice
+	mkdir -p $(BUILD)/openoffice
+	tar xjf $(ARCHIVE)/openoffice-[0-9]*bz2 -C $(BUILD)/openoffice
+	if [ x$(JTL_PATCH) != x ] ; then patch -d $(BUILD)/openoffice/* -p1 -F5 < patches/$(JTL_PATCH) ; fi
+	( cd $(BUILD)/openoffice/*/config_office \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			PYTHON=/usr/bin/python \
+			./configure --prefix=/usr/openoffice --disable-pam \
+				--disable-java --without-java \
+				--with-package-format=portable \
+				--disable-mozilla --with-system-zlib \
+				--with-system-jpeg --with-system-libxml \
+				--with-system-python --with-system-neon \
+				--with-system-curl --without-fonts \
+				--without-dict --with-use-shell=bash \
+				--enable-cairo --enable-dbus --enable-gio \
+				--enable-kde --enable-xrender-link \
+				--with-system-stdlibs --with-system-cairo \
+				--with-system-openssl --with-system-expat \
+				--with-system-sane-header \
+				--with-system-xrender-headers \
+				--with-system-boost \
+				--with-vendor=JTL --with-x \
+		&& cd .. \
+		&& . LinuxX86-64Env.Set.sh \
+		&& ./bootstrap \
+		&& ./dmake \
+		&& $(REALLY) ./solenv/bin/installoffice -t /usr/openoffice )
+	$(REALLY) /sbin/ldconfig
+	du -hs $(BUILD)/openoffice > $(MADE)/openoffice
+	# ( rm -rf $(BUILD)/openoffice ; sync ) &
+
+openoffice: perl_archive_zip

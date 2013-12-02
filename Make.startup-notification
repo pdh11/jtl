@@ -1,0 +1,4 @@
+## Make.startup-notification
+
+startup-notification: x
+	$(MAKE) PROG=startup-notification _gnu

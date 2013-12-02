@@ -1,0 +1,4 @@
+## Make.python-oauth2
+
+python-oauth2: pyhttplib2
+	$(MAKE) PROG=python-oauth2 _pythonstyle

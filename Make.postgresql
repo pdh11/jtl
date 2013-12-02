@@ -1,0 +1,15 @@
+## Make.postgresql
+#
+# 9.0.4 doesn't compile against Perl 5.14
+
+postgresql: perl openssl bison python readline
+	@echo Making postgresql
+	rm -rf $(BUILD)/postgresql
+	mkdir -p $(BUILD)/postgresql
+	tar xjf $(ARCHIVE)/postgresql-*bz2 -C $(BUILD)/postgresql
+	( cd $(BUILD)/postgresql/* \
+		&& CXXFLAGS="$(JTL_CXXFLAGS)" CFLAGS="$(JTL_CFLAGS)" ./configure --prefix=$(PREFIX) --sysconfdir=/etc --with-odbc --without-perl --with-openssl --with-CXX --with-python \
+		&& $(MAKE) COPT="$(JTL_CFLAGS)" \
+		&& $(REALLY) $(MAKE) -j1 install )
+	du -hs $(BUILD)/postgresql > $(MADE)/postgresql
+	$(REALLY) rm -rf $(BUILD)/postgresql

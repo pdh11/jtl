@@ -1,0 +1,7 @@
+## Make.chorale
+
+chorale: flac lame cdparanoia libcddb qt gstreamer gst-plugins-base \
+		gst-plugins-good gst-plugins-ugly dbus hal inkscape \
+		taglib boost libxslt mpg123
+	$(MAKE) PROG=chorale JTL_MAKE="DEBUG=0 VERBOSE=1" JTL_INSTALL="DEBUG=0 install" _gnu \
+		JTL_TESTS_BOGUS=0.18

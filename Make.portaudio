@@ -1,0 +1,4 @@
+## Make.portaudio
+
+portaudio: jack alsa-lib
+	$(MAKE) PROG=portaudio _gnu

@@ -1,0 +1,4 @@
+## Make.lzma
+
+lzma:
+	$(MAKE) PROG=lzma _gnu

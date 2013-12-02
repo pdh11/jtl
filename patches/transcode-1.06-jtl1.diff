@@ -1,0 +1,11 @@
+--- transcode-1.0.6/filter/pp/filter_pp.c~	2005-07-04 08:23:01.000000000 +0100
++++ transcode-1.0.6/filter/pp/filter_pp.c	2008-11-10 20:03:59.000000000 +0000
+@@ -35,7 +35,7 @@
+ #include <ctype.h>
+ #include <inttypes.h>
+ 
+-#include "postprocess.h"
++#include "libpostproc/postprocess.h"
+ 
+ static pp_mode_t *mode[MAX_FILTER];
+ static pp_context_t *context[MAX_FILTER];

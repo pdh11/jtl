@@ -1,0 +1,9 @@
+## Make.alpha-bootstrap
+#
+
+alpha-bootstrap: alpha-toolchain
+	mkdir -p alpha-root/{lib,usr/lib}
+	$(MAKE) JTL_CROSS=alpha JTL_CROSSCFLAGS="-O2" \
+		JTL_CROSSGCCFLAGS=--disable-multilib \
+		alpha-do-bootstrap
+	@echo done

@@ -1,0 +1,22 @@
+## Make.sub-glibc
+#
+# Doesn't like fakeroot
+
+sub-glibc:
+	@echo Compiling glibc for image
+	rm -rf $(BUILD)/sub-glibc
+	mkdir -p $(BUILD)/sub-glibc
+	tar xzf $(ARCHIVE)/glibc-2*.tar.gz  -C $(BUILD)/sub-glibc
+	#tar xzf $(ARCHIVE)/glibc-li*.tar.gz -C $(BUILD)/sub-glibc/*
+	patch -d $(BUILD)/sub-glibc/* -p1 < patches/glibc-2.17-jtl1.diff
+	mkdir -p $(SUB_ROOT)/etc
+	mkdir -p $(SUB_ROOT)/usr/sbin
+	touch $(SUB_ROOT)/etc/ld.so.conf
+	mkdir -p $(BUILD)/sub-glibc/build
+	( cd $(BUILD)/sub-glibc/build \
+		&& CC=gcc CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ../g*/configure $(JTL_ARCH)-linux --prefix=/usr --enable-add-ons --disable-profile --disable-static \
+		&& LD_PRELOAD="" $(MAKE) \
+		&& LD_PRELOAD="" $(MAKE) install_root=$(SUB_ROOT) install )
+	cd $(SUB_ROOT)/etc && ln -sf ../usr/share/zoneinfo/Europe/London localtime
+	du -hs $(BUILD)/sub-glibc > $(MADE)/sub-glibc
+	rm -rf $(BUILD)/sub-glibc

@@ -1,0 +1,4 @@
+## Make.libpcap
+
+libpcap:
+	$(MAKE) PROG=libpcap _gnu

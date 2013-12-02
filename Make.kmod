@@ -1,0 +1,5 @@
+## Make.kmod
+
+kmod:
+	$(MAKE) PROG=kmod _gnu \
+                JTL_TESTS_BOGUS=15

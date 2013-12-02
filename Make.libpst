@@ -1,0 +1,5 @@
+## Make.libpst
+
+libpst: python imagemagick gd
+	$(MAKE) PROG=libpst _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-libpst-shared"

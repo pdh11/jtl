@@ -1,0 +1,8 @@
+## Make.openldap
+
+openldap: openssl cyrus-sasl
+	$(MAKE) PROG=openldap JTL_CONFIG="$(JTL_CONFIG) --sysconfdir=/etc --disable-bdb --enable-bdb=no --enable-hdb=no --enable-ldbm" \
+		JTL_CFLAGS="$(JTL_CFLAGS) -D_GNU_SOURCE" \
+		-j1 _gnu
+
+# JTL_PATCH=openldap-ntlm.diff

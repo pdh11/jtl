@@ -1,0 +1,12 @@
+## Make.duplicity
+
+duplicity: librsync python gnupg
+	@echo Compiling duplicity
+	rm -rf $(BUILD)/duplicity
+	mkdir -p $(BUILD)/duplicity
+	tar xjf $(ARCHIVE)/duplicity-*bz2 -C $(BUILD)/duplicity
+	( cd $(BUILD)/duplicity/* \
+		&& python setup.py build \
+		&& $(REALLY) python setup.py install )
+	du -hs $(BUILD)/duplicity > $(MADE)/duplicity
+	rm -rf $(BUILD)/duplicity

@@ -1,0 +1,11 @@
+--- mjpegtools-1.9.0/mplex/lpcmstrm_in.cpp~	2005-10-13 17:43:10.000000000 +0100
++++ mjpegtools-1.9.0/mplex/lpcmstrm_in.cpp	2009-10-12 20:45:27.000000000 +0100
+@@ -53,7 +53,7 @@ LPCMStream::LPCMStream(IBitStream &ibs, 
+ 
+ bool LPCMStream::Probe(IBitStream &bs )
+ {
+-    char *last_dot = strrchr( bs.StreamName(), '.' );
++    const char *last_dot = strrchr( bs.StreamName(), '.' );
+     return 
+         last_dot != NULL 
+         && strcmp( last_dot+1, "lpcm") == 0;

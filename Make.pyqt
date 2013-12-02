@@ -1,0 +1,14 @@
+## Make.pyqt
+
+pyqt: qt sip python pkgconfig
+	@echo Making pyqt
+	$(REALLY) rm -rf $(BUILD)/pyqt
+	mkdir -p $(BUILD)/pyqt
+	tar xf $(ARCHIVE)/pyqt-*bz2 -C $(BUILD)/pyqt --use-compress-program bzip2
+	( cd $(BUILD)/pyqt/* \
+		&& echo "yes" | python configure.py -c \
+	        && $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/pyqt > $(MADE)/pyqt
+	$(REALLY) rm -rf $(BUILD)/pyqt
+

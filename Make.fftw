@@ -1,0 +1,9 @@
+## Make.fftw
+
+fftw:
+
+fftw: fftwf
+	$(MAKE) PROG=fftw _gnu
+
+fftwf:
+	$(MAKE) PROG=fftw JTL_TOUCH=fftwf JTL_BUILD=fftwf JTL_CONFIG="$(JTL_CONFIG) --enable-float" _gnu

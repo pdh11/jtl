@@ -1,0 +1,4 @@
+## Make.liboauth
+
+liboauth: glib gobject-introspection
+	$(MAKE) PROG=liboauth _gnu

@@ -1,0 +1,12 @@
+## Make.procmail
+
+procmail: exim
+	@echo Making procmail
+	rm -rf $(BUILD)/procmail
+	mkdir -p $(BUILD)/procmail
+	tar xjf $(ARCHIVE)/procmail-*bz2 -C $(BUILD)/procmail
+	patch -d $(BUILD)/procmail/* -p1 -F5 -z.old < patches/procmail-3.22-jtl1.diff
+	( cd $(BUILD)/procmail/* \
+		&& echo exim | $(REALLY) $(MAKE) install LOCKINGTEST=/tmp MANDIR=$(PREFIX)/share/man )
+	du -hs $(BUILD)/procmail > $(MADE)/procmail
+	rm -rf $(BUILD)/procmail

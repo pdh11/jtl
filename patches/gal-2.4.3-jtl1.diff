@@ -1,0 +1,21 @@
+--- gal-2.4.3/gal/widgets/e-unicode.h~	2003-04-08 20:48:41.000000000 +0100
++++ gal-2.4.3/gal/widgets/e-unicode.h	2008-10-13 18:28:25.000000000 +0100
+@@ -26,6 +26,7 @@
+ 
+ #include <sys/types.h>
+ #include <glib.h>
++#include <gtk/gtk.h>
+ #include <gtk/gtkclist.h>
+ #include <gtk/gtkentry.h>
+ #include <gtk/gtkmenu.h>
+--- gal-2.4.3/gal/util/e-text-event-processor-types.h~	2002-10-31 21:30:55.000000000 +0000
++++ gal-2.4.3/gal/util/e-text-event-processor-types.h	2012-03-28 20:38:52.000000000 +0100
+@@ -24,7 +24,7 @@
+ #ifndef __E_TEXT_EVENT_PROCESSOR_TYPES_H__
+ #define __E_TEXT_EVENT_PROCESSOR_TYPES_H__
+ 
+-#include <glib/gmacros.h>
++#include <glib.h>
+ 
+ G_BEGIN_DECLS
+ 

@@ -1,0 +1,4 @@
+## Make.pysqlite
+
+pysqlite: python sqlite
+	$(MAKE) PROG=pysqlite _pythonstyle

@@ -1,0 +1,4 @@
+## Make.libksba
+
+libksba: libgpg-error
+	$(MAKE) PROG=libksba _gnu

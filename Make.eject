@@ -1,0 +1,7 @@
+## Make.eject
+
+eject: autoconf
+	$(MAKE) PROG=eject _gnu \
+		JTL_TESTS_BOGUS=bogus \
+                JTL_PATCH=eject-2.1.5-jtl1.diff \
+                SUBDIRS=

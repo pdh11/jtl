@@ -1,0 +1,10 @@
+## Make.really
+#
+# Only does TRT if running as root, or if really has already been built
+
+really:
+	$(CC) patches/really.c -o build/really
+	$(REALLY) sh -c 'chown `id -u`.`id -g` build/really'
+	$(REALLY) chmod 4755 build/really
+	$(REALLY) mv build/really $(PREFIX)/bin/really
+	touch $(MADE)/really

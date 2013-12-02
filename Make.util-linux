@@ -1,0 +1,17 @@
+## Make.util-linux
+#
+# Copy in passwd.c from an old version, as it vanished between 2.12 and 2.13
+
+util-linux:
+	mkdir -p $(BUILD)/passwd
+	tar xf $(ARCHIVE)/util-linux*.gz -C $(BUILD)/passwd
+	cd $(BUILD)/passwd/util-linux-*/login-utils \
+		&& cp ../../../../patches/util-linux-*-passwd.c . \
+		&& gcc -O9 *-passwd.c -I../include -Dutil_linux_version="0" \
+			-o passwd -lcrypt islocal.c setpwnam.c ../lib/env.c \
+                        ../lib/fileutils.c -DHAVE_USLEEP -DHAVE_MKSTEMP \
+                        -D_PATH_TMP=\"/tmp\" -DOPEN_MAX=4096 -DHAVE_FSYNC \
+		&& $(REALLY) install -m4711 -s passwd $(JTL_ROOT)/usr/bin
+	rm -rf $(BUILD)/passwd &
+	$(MAKE) PROG=$@ JTL_CONFIG="$(JTL_CONFIG) --enable-login-utils --disable-cramfs --with-fsprobe=builtin --disable-fallocate" _gnu \
+                JTL_TESTS_BOGUS=2.23.1

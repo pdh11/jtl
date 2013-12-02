@@ -1,0 +1,7 @@
+## Make.clutter
+
+clutter: glib gobject-introspection x atk pango cairo json-glib cogl
+	$(MAKE) PROG=clutter _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --x-libraries=/usr/X11/lib --x-includes=/usr/X11/include" \
+                LIBS=-L/usr/X11/lib \
+                JTL_TESTS_BOGUS=1.8.0

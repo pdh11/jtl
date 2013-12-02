@@ -1,0 +1,4 @@
+## Make.gnupg
+
+gnupg: openldap zlib libgpg-error pth libassuan libksba
+	$(MAKE) PROG=gnupg JTL_INSTALL="install mkinstalldirs=$(BUILD)/gnupg/*/scripts/mkinstalldirs" _gnu

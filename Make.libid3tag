@@ -1,0 +1,4 @@
+## Make.libid3tag
+
+libid3tag:
+	$(MAKE) PROG=libid3tag _gnu

@@ -1,0 +1,5 @@
+## Make.wine
+
+wine: x flex bison fontconfig giflib jack libjpeg openldap lcms openssl \
+		valgrind ncurses freetype alsa-lib
+	$(MAKE) PROG=wine _gnu

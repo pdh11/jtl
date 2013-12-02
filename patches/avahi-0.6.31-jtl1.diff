@@ -1,0 +1,10 @@
+--- avahi-0.6.31/py-compile~	2012-07-15 22:54:45.000000000 +0100
++++ avahi-0.6.31/py-compile	2012-07-15 22:54:53.000000000 +0100
+@@ -48,7 +48,6 @@ while test $# -ne 0; do
+       destdir=$2
+       if test -z "$destdir"; then
+         echo "$0: Missing argument to --destdir." 1>&2
+-        exit 1
+       fi
+       shift
+       ;;

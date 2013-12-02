@@ -1,0 +1,4 @@
+## Make.enchant
+
+enchant: dbus-glib pkgconfig glib
+	$(MAKE) PROG=enchant _gnu

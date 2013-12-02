@@ -1,0 +1,8 @@
+--- netpbm-10.27/converter/other/Makefile~	2005-03-25 21:53:04.000000000 +0000
++++ netpbm-10.27/converter/other/Makefile	2005-05-30 17:18:19.000000000 +0100
+@@ -182,4 +182,4 @@ install.bin.local: $(PKGDIR)/bin
+ 	$(SYMLINK) pamtouil$(EXE) ppmtouil
+ # In March 2005, we realized that pamtopnm obviates pnmtopnm
+ 	cd $(PKGDIR)/bin ; \
+-	$(SYMLINK) pnmtopnm$(EXE) pamtopnm
++	$(SYMLINK) pamtopnm$(EXE) pnmtopnm

@@ -1,0 +1,73 @@
+--- gmediaserver-0.11.0/src/connectmgr.c~	2005-09-15 15:32:24.000000000 +0100
++++ gmediaserver-0.11.0/src/connectmgr.c	2006-05-05 13:37:57.000000000 +0100
+@@ -20,8 +20,8 @@
+ 
+ #include <config.h>
+ #include <stdbool.h>		/* Gnulib/C99 */
+-#include <upnp.h>		/* libupnp */
+-#include <upnptools.h>		/* libupnp */
++#include <upnp/upnp.h>		/* libupnp */
++#include <upnp/upnptools.h>		/* libupnp */
+ #include "gmediaserver.h"
+ 
+ static bool
+--- gmediaserver-0.11.0/src/upnp.c~	2006-04-06 09:45:57.000000000 +0100
++++ gmediaserver-0.11.0/src/upnp.c	2006-05-05 14:00:37.000000000 +0100
+@@ -20,8 +20,8 @@
+ 
+ #include <config.h>
+ #include <stdbool.h>		/* Gnulib, C99 */
+-#include <upnp.h>		/* libupnp */
+-#include <upnptools.h>		/* libupnp */
++#include <upnp/upnp.h>		/* libupnp */
++#include <upnp/upnptools.h>	/* libupnp */
+ #include <assert.h>		/* C89 */
+ #include <netinet/in.h>		/* ?; inet_ntoa */
+ #include <arpa/inet.h>		/* ?; inet_ntoa */
+--- gmediaserver-0.11.0/src/gmediaserver.h~	2006-03-04 09:26:15.000000000 +0000
++++ gmediaserver-0.11.0/src/gmediaserver.h	2006-05-05 14:03:16.000000000 +0100
+@@ -27,7 +27,8 @@
+ #include <string.h>		/* C89 */
+ #include <stdbool.h>		/* Gnulib, C99; bool */
+ #include <sys/types.h>		/* POSIX: time_t */
+-#include <upnp.h>		/* libupnp */
++#include <upnp/upnp.h>		/* libupnp */
++#include <upnp/ithread.h>
+ #include "hmap.h"
+ #include "strbuf.h"
+ 
+--- gmediaserver-0.11.0/src/webclient.c~	2005-09-16 15:31:12.000000000 +0100
++++ gmediaserver-0.11.0/src/webclient.c	2006-05-05 14:01:12.000000000 +0100
+@@ -24,6 +24,8 @@
+ #include <netdb.h>		/* POSIX */
+ #include <inttypes.h>		/* POSIX */
+ #include <stdio.h>		/* C89 */
++#include <unistd.h>
++#include <time.h>
+ #include "gettext.h"            /* Gnulib/gettext */
+ #define _(s) gettext(s)
+ #define N_(s) gettext_noop(s)
+--- gmediaserver-0.11.0/src/webserver.c~	2006-03-04 18:58:47.000000000 +0000
++++ gmediaserver-0.11.0/src/webserver.c	2006-05-05 14:04:08.000000000 +0100
+@@ -282,7 +282,7 @@ webserver_read(UpnpWebFileHandle fh, cha
+ 	len = read(file->detail.local.fd, buf, buflen);
+ 	break;
+     case FILE_MEMORY:
+-	len = min(buflen, file->detail.memory.len - file->pos);
++	len = MIN(buflen, file->detail.memory.len - file->pos);
+ 	memcpy(buf, file->detail.memory.contents + file->pos, len);
+ 	break;
+     case FILE_URL:
+--- gmediaserver-0.11.0/src/main.c~	2006-03-08 19:59:12.000000000 +0000
++++ gmediaserver-0.11.0/src/main.c	2006-05-05 14:01:30.000000000 +0100
+@@ -19,8 +19,8 @@
+  */
+ 
+ #include <config.h>
+-#include <upnp.h>		/* libupnp */
+-#include <upnptools.h>		/* libupnp */
++#include <upnp/upnp.h>		/* libupnp */
++#include <upnp/upnptools.h>	/* libupnp */
+ #include <unistd.h>		/* POSIX */
+ #include <fcntl.h>		/* ? */
+ #include <getopt.h>		/* Gnulib, GNU */

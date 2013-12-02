@@ -1,0 +1,5 @@
+## Make.atk
+
+libunique: glib gtk+ dbus-glib x
+	$(MAKE) PROG=libunique _gnu \
+		JTL_CFLAGS="$(JTL_CFLAGS) -Wno-error"

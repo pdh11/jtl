@@ -1,0 +1,4 @@
+## Make.json-c
+
+json-c: 
+	$(MAKE) PROG=json-c _gnu

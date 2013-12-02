@@ -1,0 +1,14 @@
+## Make.arm-toolchain
+#
+
+arm-toolchain:
+	ac_cv_search_strerror="none required" \
+		libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
+		$(MAKE) JTL_CROSS=arm-linux-gnueabi JTL_CROSS2=arm \
+		JTL_CROSSGCCFLAGS="--with-float=soft --disable-libmudflap --disable-libssp" \
+		JTL_CROSSGLIBCFLAGS=--without-fp arm-linux-gnueabi-do-toolchain \
+		JTL_CROSSCONFIGMAKE="biarch = 32" \
+		JTL_CROSSCFLAGS="-O3" \
+		JTL_CROSSCPPFLAGS="" \
+		JTL_CONFIGPATH=configs/rpc_
+	touch $(MADE)/arm-toolchain

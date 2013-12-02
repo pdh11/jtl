@@ -1,0 +1,8 @@
+## Make.smokekde
+#
+# disable-attica w/smokegen 4.8.0 + attica 0.3.0
+# http://comments.gmane.org/gmane.comp.kde.devel.bindings/6560
+
+smokekde: smokeqt smokegen cmake kate kde-libs kde-runtime okular kde-pimlibs
+	$(MAKE) PROG=smokekde PREFIX=$(PREFIX)/kde _gnucmake \
+		JTL_CMAKE=-DDISABLE_Attica=TRUE

@@ -1,0 +1,19 @@
+## Make.prelink
+#
+# Needs #defines from glibc 2.3.4 et seq, so we patch
+
+prelink: libelf
+	@echo Making prelink
+	rm -rf $(BUILD)/prelink
+	mkdir -p $(BUILD)/prelink
+	tar xjf $(ARCHIVE)/prelink-*bz2 -C $(BUILD)/prelink
+	patch -d $(BUILD)/prelink/p* -p0 < patches/prelink-20050610-jtl1.diff
+	( cd $(BUILD)/prelink/* \
+		&& rm -f config.cache \
+		&& chmod a+x configure \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/prelink > $(MADE)/prelink
+	rm -rf $(BUILD)/prelink

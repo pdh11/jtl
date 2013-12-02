@@ -1,0 +1,15 @@
+## Make.e2fsimage
+#
+# Deep left field wonky invented configure effort
+
+e2fsimage:
+	@echo Compiling e2fsimage
+	rm -rf $(BUILD)/e2fsimage
+	mkdir -p $(BUILD)/e2fsimage
+	tar xjf $(ARCHIVE)/e2fsimage* -C $(BUILD)/e2fsimage
+	( cd $(BUILD)/e2fsimage/* \
+		&& prefix=$(PREFIX) ./configure -L /lib \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/e2fsimage > $(MADE)/e2fsimage
+	rm -rf $(BUILD)/e2fsimage

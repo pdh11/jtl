@@ -1,0 +1,17 @@
+## Make.openssl
+#
+# install_sw as Perl 5.18 broke the pod2man docs in 1.0.1e
+
+openssl: bc perl pkgconfig
+	@echo Making OpenSSL
+	rm -rf $(BUILD)/openssl
+	mkdir -p $(BUILD)/openssl
+	tar xjf $(ARCHIVE)/openssl-*bz2 -C $(BUILD)/openssl
+	#patch -d $(BUILD)/openssl/* -p1 < patches/openssl-1.0.0b-jtl1.diff
+	( cd $(BUILD)/openssl/* \
+		&& ./config shared --prefix=$(PREFIX) --openssldir=$(PREFIX)/ssl -mmmx -msse -msse2 \
+		&& $(MAKE) -j1 \
+		&& $(MAKE) -j1 test \
+		&& $(REALLY) $(MAKE) -j1 install_sw )
+	du -hs $(BUILD)/openssl > $(MADE)/openssl
+	rm -rf $(BUILD)/openssl

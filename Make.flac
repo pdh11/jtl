@@ -1,0 +1,6 @@
+## Make.flac
+
+flac: pkgconfig libogg
+	$(MAKE) PROG=flac JTL_PATCH=flac-1.2.1-jtl1.diff \
+		JTL_CONFIG="$(JTL_CONFIG) --disable-thorough-tests" \
+		_gnu

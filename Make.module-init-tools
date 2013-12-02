@@ -1,0 +1,17 @@
+## Make.module-init-tools
+
+module-init-tools:
+	@echo Making module-init-tools
+	rm -rf $(BUILD)/module-init-tools
+	mkdir -p $(BUILD)/module-init-tools
+	tar xzf $(ARCHIVE)/module-init-tools-*gz -C $(BUILD)/module-init-tools
+	# patch -d $(BUILD)/module-init-tools -p0 < patches/module-init-tools-2.4.27-jtl1.diff
+	( cd $(BUILD)/module-init-tools/* \
+		&& ./configure --prefix=$(PREFIX) \
+		&& $(MAKE) DOCBOOKTOMAN=: \
+		&& $(REALLY) $(MAKE) DESTDIR=$(JTL_ROOT) install )
+	if [ "$(PREFIX)" = "/usr" ]; then \
+		$(REALLY) mv -f $(JTL_ROOT)/usr/sbin/{depmod,insmod,rmmod,modinfo,modprobe} $(JTL_ROOT)/sbin ; \
+	fi
+	du -hs $(BUILD)/module-init-tools > $(MADE)/module-init-tools
+	rm -rf $(BUILD)/module-init-tools

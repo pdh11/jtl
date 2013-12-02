@@ -1,0 +1,151 @@
+--- mjpegtools-1.9.0rc3/mplex/inputstrm.cpp~	2006-08-25 15:37:37.000000000 +0100
++++ mjpegtools-1.9.0rc3/mplex/inputstrm.cpp	2008-03-12 21:36:47.000000000 +0000
+@@ -23,6 +23,7 @@
+ 
+ #include <config.h>
+ #include <assert.h>
++#include <limits.h>
+ 
+ #include "mjpeg_types.h"
+ #include "inputstrm.hpp"
+--- mjpegtools-1.9.0rc3/mplex/main.cpp~	2006-07-01 05:46:13.000000000 +0100
++++ mjpegtools-1.9.0rc3/mplex/main.cpp	2008-03-12 21:37:43.000000000 +0000
+@@ -31,6 +31,7 @@
+ #include <getopt.h>
+ #endif
+ #include <string>
++#include <string.h>
+ #include <memory>
+ #include <sys/stat.h>
+ #ifndef _WIN32
+--- mjpegtools-1.9.0rc3/mplex/multiplexor.cpp~	2007-04-02 16:43:34.000000000 +0100
++++ mjpegtools-1.9.0rc3/mplex/multiplexor.cpp	2008-03-12 21:37:09.000000000 +0000
+@@ -22,6 +22,7 @@
+ #include <config.h>
+ #include <math.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ #include <mjpeg_types.h>
+ #include <mjpeg_logging.h>
+--- mjpegtools-1.9.0rc3/mplex/padstrm.cpp~	2004-03-15 18:47:43.000000000 +0000
++++ mjpegtools-1.9.0rc3/mplex/padstrm.cpp	2008-03-12 21:37:23.000000000 +0000
+@@ -23,7 +23,7 @@
+ #ifdef HAVE_CONFIG_H
+ #include "config.h"
+ #endif
+-
++#include <string.h>
+ #include "padstrm.hpp"
+ 
+ 
+--- mjpegtools-1.9.0rc3/y4mdenoise/SkipList.hh~	2004-07-18 07:43:01.000000000 +0100
++++ mjpegtools-1.9.0rc3/y4mdenoise/SkipList.hh	2008-03-12 21:40:32.000000000 +0000
+@@ -57,19 +57,19 @@ private:
+ 		// Will give good sorting for up to e^10 items.
+ 	
+ public:
+-	typedef Allocator<Node,HEADERCHUNK> Allocator;
++	typedef Allocator<Node,HEADERCHUNK> AllocatorT;
+ 		// The type of node allocator to use.
+ 
+-	static Allocator sm_oNodeAllocator;
++	static AllocatorT sm_oNodeAllocator;
+ 		// The default node allocator.
+ 
+ 	SkipList (const PRED &a_rPred = PRED(),
+-			Allocator &a_rAlloc = sm_oNodeAllocator);
++			AllocatorT &a_rAlloc = sm_oNodeAllocator);
+ 		// Default constructor.  Must be followed by Init().
+ 
+ 	SkipList (Status_t &a_reStatus, bool a_bAllowDuplicates,
+ 			uint32_t a_nRandSeed, const PRED &a_rPred = PRED(),
+-			Allocator &a_rAlloc = sm_oNodeAllocator);
++			AllocatorT &a_rAlloc = sm_oNodeAllocator);
+ 		// Constructor.  Specify whether or not duplicates are allowed,
+ 		// and provide a random number seed.
+ 
+@@ -255,7 +255,7 @@ public:
+ 
+ private:
+ 	
+-	Allocator &m_rNodeAllocator;
++	AllocatorT &m_rNodeAllocator;
+ 		// Where we get memory to allocate nodes.
+ 
+ 	bool m_bAllowDuplicates;
+@@ -337,7 +337,7 @@ private:
+ 
+ // The default node allocator.  Allocates 64K at a time.
+ template <class KEY, class VALUE, class KEYFN, class PRED>
+-typename SkipList<KEY,VALUE,KEYFN,PRED>::Allocator
++typename SkipList<KEY,VALUE,KEYFN,PRED>::AllocatorT
+ 	SkipList<KEY,VALUE,KEYFN,PRED>::sm_oNodeAllocator (65536);
+ 
+ 
+@@ -345,7 +345,7 @@ typename SkipList<KEY,VALUE,KEYFN,PRED>:
+ // Default constructor.  Must be followed by Init().
+ template <class KEY, class VALUE, class KEYFN, class PRED>
+ SkipList<KEY,VALUE,KEYFN,PRED>::SkipList (const PRED &a_rPred,
+-		Allocator &a_rAlloc)
++		AllocatorT &a_rAlloc)
+ 	: m_rNodeAllocator (a_rAlloc), m_oPred (a_rPred)
+ {
+ 	// Set up some defaults.
+@@ -371,7 +371,7 @@ SkipList<KEY,VALUE,KEYFN,PRED>::SkipList
+ template <class KEY, class VALUE, class KEYFN, class PRED>
+ SkipList<KEY,VALUE,KEYFN,PRED>::SkipList (Status_t &a_reStatus,
+ 		bool a_bAllowDuplicates, uint32_t a_nRandSeed,
+-		const PRED &a_rPred, Allocator &a_rAlloc)
++		const PRED &a_rPred, AllocatorT &a_rAlloc)
+ 	: m_rNodeAllocator (a_rAlloc), m_oPred (a_rPred)
+ {
+ 	// Make sure they didn't start us off with an error.
+--- mjpegtools-1.9.0rc3/y4mdenoise/Set.hh~	2004-04-27 21:45:56.000000000 +0100
++++ mjpegtools-1.9.0rc3/y4mdenoise/Set.hh	2008-03-12 21:41:40.000000000 +0000
+@@ -23,7 +23,7 @@ private:
+ 		// How we implement ourselves.
+ 	
+ public:
+-	typedef typename Imp::Allocator Allocator;
++	typedef typename Imp::AllocatorT Allocator;
+ 		// The type of allocator to use to allocate items in the set.
+ 
+ 	Set (const PRED &a_rPred = PRED(),
+--- mjpegtools-1.9.0rc3/mpeg2enc/macroblock.cc~	2006-08-25 15:37:37.000000000 +0100
++++ mjpegtools-1.9.0rc3/mpeg2enc/macroblock.cc	2008-03-12 21:33:56.000000000 +0000
+@@ -21,6 +21,9 @@
+ 
+ #include <stdio.h>
+ #include <cassert>
++#include <limits.h>
++#include <stdlib.h>
++#include <math.h>
+ 
+ #include "macroblock.hh"
+ #include "mpeg2syntaxcodes.h"
+--- mjpegtools-1.9.0rc3/mpeg2enc/picturereader.cc~	2007-02-26 17:05:48.000000000 +0000
++++ mjpegtools-1.9.0rc3/mpeg2enc/picturereader.cc	2008-03-12 21:34:35.000000000 +0000
+@@ -20,6 +20,9 @@
+  */
+ 
+ 
++#include <limits.h>
++#include <stdlib.h>
++#include <math.h>
+ #include "picturereader.hh"
+ #include "mpeg2encoder.hh"
+ #include "imageplanes.hh"
+--- mjpegtools-1.9.0rc3/mpeg2enc/encodertypes.h~	2006-07-01 05:46:12.000000000 +0100
++++ mjpegtools-1.9.0rc3/mpeg2enc/encodertypes.h	2008-03-12 21:35:03.000000000 +0000
+@@ -25,6 +25,10 @@
+  */
+ 
+ 
++#include <limits.h>
++#include <stdlib.h>
++#include <math.h>
++
+ class Parity
+ {
+ public:

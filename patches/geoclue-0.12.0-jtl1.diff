@@ -1,0 +1,11 @@
+--- geoclue-0.12.0/configure~	2010-03-25 21:41:36.000000000 +0000
++++ geoclue-0.12.0/configure	2012-03-29 11:52:42.000000000 +0100
+@@ -11314,7 +11314,7 @@ cat >>confdefs.h <<_ACEOF
+ _ACEOF
+ 
+ 
+-CFLAGS="$CFLAGS -g -Wall -Werror -Wno-format"
++CFLAGS="$CFLAGS -g -Wall -Wno-format"
+ 
+ # -----------------------------------------------------------
+ # gtk+

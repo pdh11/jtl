@@ -1,0 +1,6 @@
+## Make.icon-naming-utils
+
+icon-naming-utils: glib perl
+	$(MAKE) PROG=icon-naming-utils _gnu
+
+icon-naming-utils: perl_xml_simple

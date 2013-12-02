@@ -1,0 +1,25 @@
+## Make.evolution
+#
+# 3.4.0 install rule hits "too many args" if we install all the locales
+
+evolution: glib gtk+ libsoup evolution-data-server gtkhtml gnome-desktop \
+                gnome-icon-theme gsettings-desktop-schemas webkit-gtk \
+                libgdata libxml2 shared-mime-info libpst clutter-gtk geoclue \
+                gnome-online-accounts libgweather libcanberra libnotify cairo \
+                openldap mozilla spamassassin gstreamer
+	@echo Compiling evolution
+	rm -rf $(BUILD)/evolution
+	mkdir -p $(BUILD)/evolution
+	tar xjf $(ARCHIVE)/evolution-[0-9]* -C $(BUILD)/evolution
+	( cd $(BUILD)/evolution/* \
+		&& LDFLAGS=-Wl,-rpath,/usr/lib/mozilla \
+			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+			--with-openldap --enable-nss=yes --with-libiconv=no \
+			--disable-nm --disable-image-inline \
+			--disable-bogofilter --disable-text-highlight \
+		&& LDFLAGS=-Wl,-rpath,/usr/lib/mozilla \
+			$(MAKE) \
+		&& LDFLAGS=-Wl,-rpath,/usr/lib/mozilla \
+			$(REALLY) make DOC_LINGUAS=en_GB install )
+	du -hs $(BUILD)/evolution > $(MADE)/evolution
+	rm -rf $(BUILD)/evolution

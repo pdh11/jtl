@@ -1,0 +1,51 @@
+--- libgnomecups-0.2.3/libgnomecups/gnome-cups-init.h~	2007-01-02 00:18:51.000000000 +0000
++++ libgnomecups-0.2.3/libgnomecups/gnome-cups-init.h	2012-03-27 15:47:33.000000000 +0100
+@@ -1,8 +1,7 @@
+ #ifndef GNOME_CUPS_INIT
+ #define GNOME_CUPS_INIT
+ 
+-#include <glib/gtypes.h>
+-#include <glib/gmacros.h>
++#include <glib.h>
+ 
+ G_BEGIN_DECLS
+ 
+--- libgnomecups-0.2.3/libgnomecups/gnome-cups-i18n.c~	2007-01-02 00:18:51.000000000 +0000
++++ libgnomecups-0.2.3/libgnomecups/gnome-cups-i18n.c	2012-03-27 15:47:10.000000000 +0100
+@@ -1,5 +1,5 @@
+ #include <config.h>
+-#include <glib/gmacros.h>
++#include <glib.h>
+ #include "gnome-cups-i18n.h"
+ 
+ #ifdef ENABLE_NLS
+--- libgnomecups-0.2.3/libgnomecups/gnome-cups-queue.c~	2007-01-02 00:18:51.000000000 +0000
++++ libgnomecups-0.2.3/libgnomecups/gnome-cups-queue.c	2013-03-24 20:07:04.000000000 +0000
+@@ -1,6 +1,8 @@
+ /* vim: set sw=8: -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+ /* FIXME: gone printers that come back to life */
+ 
++
++#define _IPP_PRIVATE_STRUCTURES 1
+ #include <config.h>
+ 
+ #include "gnome-cups-queue.h"
+--- libgnomecups-0.2.3/libgnomecups/gnome-cups-request.c~	2007-01-31 18:49:17.000000000 +0000
++++ libgnomecups-0.2.3/libgnomecups/gnome-cups-request.c	2013-03-24 20:07:19.000000000 +0000
+@@ -1,4 +1,6 @@
+ /* vim: set sw=8: -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
++
++#define _IPP_PRIVATE_STRUCTURES 1
+ #include <config.h>
+ #include "gnome-cups-request.h"
+ #include <glib.h>
+--- libgnomecups-0.2.3/libgnomecups/gnome-cups-printer.c~	2007-01-02 00:18:51.000000000 +0000
++++ libgnomecups-0.2.3/libgnomecups/gnome-cups-printer.c	2013-03-24 20:06:34.000000000 +0000
+@@ -21,6 +21,7 @@
+  * Boston, MA 02111-1307, USA.
+  **/
+ 
++#define _IPP_PRIVATE_STRUCTURES 1
+ #include <config.h>
+ 
+ #include "gnome-cups-printer.h"

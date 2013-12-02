@@ -1,0 +1,4 @@
+## Make.gnome-menus
+
+gnome-menus: glib perl_xml_parser gnome-vfs
+	$(MAKE) PROG=gnome-menus _gnu

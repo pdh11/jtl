@@ -1,0 +1,4 @@
+## Make.x2vnc
+
+x2vnc: x
+	make PROG=x2vnc _gnu

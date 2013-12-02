@@ -1,0 +1,4 @@
+## Make.vcdimager
+
+vcdimager: libxml2 libcdio pkgconfig
+	$(MAKE) PROG=vcdimager _gnu

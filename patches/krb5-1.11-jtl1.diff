@@ -1,0 +1,11 @@
+--- krb5-1.11/src/tests/asn.1/trval.c~	2012-12-18 02:47:05.000000000 +0000
++++ krb5-1.11/src/tests/asn.1/trval.c	2013-03-23 21:41:40.000000000 +0000
+@@ -404,7 +404,7 @@ int do_cons(fp, enc, len, lev, rlen)
+ {
+     int n;
+     int r = 0;
+-    int rlen2;
++    int rlen2 = 0;
+     int rlent;
+     int save_appl;
+ 

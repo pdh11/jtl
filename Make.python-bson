@@ -1,0 +1,4 @@
+## Make.python-bson
+
+python-bson: python pytz
+	$(MAKE) PROG=python-bson _pythonstyle

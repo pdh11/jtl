@@ -1,0 +1,8 @@
+## Make.gst-plugins-bad
+
+gst-plugins-bad: gstreamer faac faad2 alsa-lib jack jasper xvidcore x264 \
+		gst-plugins-base mjpegtools openal-soft
+	$(MAKE) PROG=gst-plugins-bad _gnu \
+		JTL_PATCH=gst-plugins-bad-0.10.22-jtl1.diff \
+                JTL_CONFIG="$(JTL_CONFIG) --disable-cdaudio" \
+		JTL_TESTS_BOGUS=0.10.22

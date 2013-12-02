@@ -1,0 +1,14 @@
+## Make.lilo
+#
+
+lilo:
+	@echo Compiling lilo
+	rm -rf $(BUILD)/lilo
+	mkdir -p $(BUILD)/lilo
+	tar xzf $(ARCHIVE)/lilo-* -C $(BUILD)/lilo
+	patch -d $(BUILD)/lilo/* -p1 < patches/lilo-24.0-jtl1.diff
+	( cd $(BUILD)/lilo/* \
+		&& $(MAKE) MAN_DIR=$(PREFIX)/share/man OPT="-fno-strict-aliasing -Os" CPP="gcc -E -P -ffreestanding" all \
+		&& $(REALLY) $(MAKE) DESTDIR=$(JTL_ROOT) MAN_DIR=$(PREFIX)/share/man install )
+	du -hs $(BUILD)/lilo > $(MADE)/lilo
+	rm -rf $(BUILD)/lilo

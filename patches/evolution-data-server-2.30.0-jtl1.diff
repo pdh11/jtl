@@ -1,0 +1,10 @@
+--- evolution-data-server-2.30.0/configure~	2010-03-29 19:28:21.000000000 +0100
++++ evolution-data-server-2.30.0/configure	2010-03-30 21:14:04.000000000 +0100
+@@ -17129,6 +17129,7 @@ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ #include <db.h>
++#include <stddef.h>
+ int
+ main ()
+ {

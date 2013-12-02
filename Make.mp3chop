@@ -1,0 +1,4 @@
+## Make.mp3chop
+
+mp3chop:
+	$(MAKE) PROG=mp3chop _gnu

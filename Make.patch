@@ -1,0 +1,5 @@
+## Make.patch
+
+patch:
+	$(MAKE) PROG=patch JTL_CFLAGS=-D_XOPEN_SOURCE=500 _gnu
+

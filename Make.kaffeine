@@ -1,0 +1,15 @@
+## Make.kaffeine
+#
+# Demands "real" cdparanoia, not libcdio
+
+kaffeine: kde-libs kde-base xine-lib cdparanoia
+	@echo Making kaffeine
+	rm -rf $(BUILD)/kaffeine
+	mkdir -p $(BUILD)/kaffeine
+	bunzip2 -c $(ARCHIVE)/kaffeine-*.bz2 | tar xf - -C $(BUILD)/kaffeine
+	( cd $(BUILD)/kaffeine/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ./configure --prefix=$(PREFIX)/kde --enable-shared --disable-static \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) -j1 install )
+	du -hs $(BUILD)/kaffeine > $(MADE)/kaffeine
+	rm -rf $(BUILD)/kaffeine

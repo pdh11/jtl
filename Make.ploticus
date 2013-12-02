@@ -1,0 +1,24 @@
+## Make.ploticus
+
+ploticus: gd x
+	@echo Making ploticus
+	rm -rf $(BUILD)/ploticus
+	mkdir -p $(BUILD)/ploticus
+	tar xzf $(ARCHIVE)/plsrc*gz -C $(BUILD)/ploticus \
+		|| tar xf $(ARCHIVE)/ploticus-*bz2 -C $(BUILD)/ploticus --use-compress-program bzip2 \
+		|| ( echo No archive found for ploticus ; exit 1 )
+	( cd $(BUILD)/ploticus/*/src \
+		&& $(MAKE) plgd18 FLAGS="$(JTL_CFLAGS)" \
+			XLIBS="-L/usr/X11R6/lib -lX11" \
+			XINCLUDEDIR="-I/usr/X11R6/include" \
+			GD18LIBS="-lgd -lpng -lfreetype -lpng -ljpeg -lz" \
+			GDFREETYPE="-DGDFREETYPE" ZFLAG=-DWZ \
+			PREFABS_DIR=$(PREFIX)/lib/ploticus \
+			PL=ploticus NORLIMFLAG=-DNORLIMIT \
+		&& $(REALLY) rm -rf $(PREFIX)/lib/ploticus \
+		&& $(REALLY) rm -rf $(PREFIX)/share/doc/ploticus \
+		&& $(REALLY) cp -dpR ../prefabs $(PREFIX)/lib/ploticus \
+		&& $(REALLY) cp -dpR ../doc $(PREFIX)/doc/ploticus \
+		&& $(REALLY) cp ploticus $(PREFIX)/bin )
+	du -hs $(BUILD)/ploticus > $(MADE)/ploticus
+	rm -rf $(BUILD)/ploticus

@@ -1,0 +1,4 @@
+## Make.pytz
+
+pytz: python
+	$(MAKE) PROG=pytz _pythonstyle

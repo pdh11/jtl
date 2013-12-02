@@ -1,0 +1,15 @@
+## Make.tcp_wrappers
+
+tcp_wrappers:
+	@echo Compiling tcp_wrappers
+	rm -rf $(BUILD)/tcp_wrappers
+	mkdir -p $(BUILD)/tcp_wrappers
+	tar xzf $(ARCHIVE)/tcp_wrappers-* -C $(BUILD)/tcp_wrappers
+	patch -d $(BUILD)/tcp_wrappers/* -p1 < patches/tcp_wrappers-7.6-jtl1.diff
+	( cd $(BUILD)/tcp_wrappers/* \
+		&& $(MAKE) REAL_DAEMON_DIR=$(PREFIX)/sbin STYLE=-DSYS_ERRLIST_DEFINED linux \
+		&& $(REALLY) cp -f tcpd{,chk} $(JTL_ROOT)$(PREFIX)/sbin \
+		&& $(REALLY) cp -f tcpd.h $(JTL_ROOT)$(PREFIX)/include \
+		&& $(REALLY) cp -f libwrap.so $(JTL_ROOT)$(PREFIX)/lib )
+	du -hs $(BUILD)/tcp_wrappers > $(MADE)/tcp_wrappers
+	rm -rf $(BUILD)/tcp_wrappers

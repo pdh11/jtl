@@ -1,0 +1,5 @@
+# Make.albumart
+#
+
+albumart: python_imaging
+	$(MAKE) PROG=albumart _pythonstyle

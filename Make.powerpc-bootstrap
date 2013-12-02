@@ -1,0 +1,10 @@
+## Make.powerpc-bootstrap
+#
+
+powerpc-bootstrap: powerpc-toolchain
+	mkdir -p powerpc-root/{lib,usr/lib}
+	$(MAKE) JTL_CROSS=powerpc JTL_CROSSCFLAGS="-O2" \
+		JTL_CROSSGCCFLAGS=--disable-multilib \
+		JTL_CROSSGLIBCFLAGS="--enable-add-ons=linuxthreads" \
+		powerpc-do-bootstrap
+	@echo done

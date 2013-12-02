@@ -1,0 +1,8 @@
+## Make.hal
+
+hal: glib python pkgconfig intltool perl perl_xml_parser expat dbus \
+		libusb udev usbutils pciutils alsa-lib alsa-utils \
+		dbus-glib docbook-xsl
+	$(MAKE) PROG=hal JTL_CONFIG="$(JTL_CONFIG) --disable-policy-kit" \
+		_gnu \
+                JTL_PATCH=hal-0.5.14-jtl1.diff

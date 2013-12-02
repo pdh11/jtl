@@ -1,0 +1,11 @@
+--- libdv-0.104/libdv/YUY2.c~	2004-10-20 04:49:24.000000000 +0100
++++ libdv-0.104/libdv/YUY2.c	2006-03-17 11:02:34.000000000 +0000
+@@ -51,7 +51,7 @@ static unsigned char	real_ylut_setup[768
+ 
+ #if ARCH_X86 || ARCH_X86_64
+ /* Define some constants used in MMX range mapping and clamping logic */
+-static mmx_t		mmx_0x0010s = (mmx_t) 0x0010001000100010LL,
++static volatile mmx_t   mmx_0x0010s = (mmx_t) 0x0010001000100010LL,
+ 			mmx_0x8080s = (mmx_t) 0x8080808080808080LL,
+ 			mmx_zero = (mmx_t) 0x0000000000000000LL,
+ 			mmx_cch  = (mmx_t) 0x0f000f000f000f00LL,

@@ -1,0 +1,12 @@
+## Make.nspark
+
+nspark:
+	@echo Compiling nspark
+	rm -rf $(BUILD)/nspark
+	mkdir -p $(BUILD)/nspark
+	tar xjf $(ARCHIVE)/nspark-* -C $(BUILD)/nspark
+	( cd $(BUILD)/nspark/* \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) INSTALLDIR=$(PREFIX)/bin install )
+	du -hs $(BUILD)/nspark > $(MADE)/nspark
+	rm -rf $(BUILD)/nspark

@@ -1,0 +1,14 @@
+## Make.db
+
+db:
+	@echo Making db
+	rm -rf $(BUILD)/db
+	mkdir -p $(BUILD)/db
+	tar xjf $(ARCHIVE)/db-1*.bz2 -C $(BUILD)/db
+	chmod -R u+w $(BUILD)/db
+	patch < patches/db-1.85-jtl1.diff -p1 -d $(BUILD)/db/*
+	( cd $(BUILD)/db/* \
+		&& $(MAKE) CFLAGS="$(JTL_CFLAGS)" dynamic \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/db > $(MADE)/db
+	rm -rf $(BUILD)/db

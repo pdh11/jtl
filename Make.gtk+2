@@ -1,0 +1,8 @@
+## Make.gtk+2
+#
+# Still needed for mozilla and inkscape
+
+gtk+2: glib x perl pkgconfig atk pango freetype libpng libjpeg libtiff \
+		fontconfig cairo cups jasper gdk-pixbuf gobject-introspection
+	$(MAKE) PROG=gtk+2 _gnu \
+		JTL_TESTS_BOGUS=bogus

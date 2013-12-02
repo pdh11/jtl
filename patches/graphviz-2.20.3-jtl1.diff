@@ -1,0 +1,11 @@
+--- a/cmd/tools/tred.c
++++ b/cmd/tools/tred.c
+@@ -102,7 +102,7 @@
+ 			agnameof(agtail(e)), agnameof(aghead(e)));
+ 	    }
+ 	} else
+-	    warn = dfs(aghead(e), e, warn);
++	    warn = dfs(aghead(e), AGOUT2IN(e), warn);
+     }
+ 
+     MARK(n) = 0;

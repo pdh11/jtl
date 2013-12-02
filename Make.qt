@@ -1,0 +1,57 @@
+## Make Qt4
+#
+# This puts Qt in /usr/qt-<ver>, as per trolltech; RedHat puts it in
+# /usr/lib/qt-<ver>. You can symlink or something if that's important.
+#
+# -qt-sql-pqsl disabled as it causes rpath hell for all Qt clients
+#
+# -no-phonon because we want the KDE one
+#
+# mkdir QtXmlPatterns is because 4.6.1 QtWebKit unconditionally includes it
+
+QT4:=$(wildcard $(ARCHIVE)/qt-*-4*)
+QT4VER=$(notdir $(QT4))
+QT4VER:=$(QT4VER:qt-%.tar.bz2=%)
+QT4VER:=$(shell echo $(QT4VER) | tr -dc '0-9.')
+
+# <sigh> but it does sensible things in both normal cases
+QT4DIR:=$(PREFIX)/qt-$(QT4VER)
+
+qt: x zlib libpng libjpeg libmng sqlite glib xserver cups dbus gstreamer \
+		openssl libtiff libmng alsa-lib gst-plugins-base
+	@echo Making Qt $(QT4VER)
+	rm -rf $(BUILD)/qt
+	mkdir -p $(BUILD)/qt
+	bunzip2 -c $(QT4) | tar xf - -C $(BUILD)/qt || exit 1
+	patch -d $(BUILD)/qt/* -p1 < patches/qt-4.7.0-jtl1.diff
+	( cd $(BUILD)/qt/* \
+		&& ( echo -e 'o\nyes\n' | QTDIR=$(QT4DIR) MAKEFLAGS= \
+			QMAKE_CFLAGS_RELEASE="$(JTL_CFLAGS)" \
+			QMAKE_CXXFLAGS_RELEASE="$(JTL_CXXFLAGS) -Wno-error" \
+			./configure -system-libtiff -system-zlib -largefile \
+			-system-libpng -system-libjpeg -xrender \
+			-no-separate-debug-info -no-phonon \
+			-reduce-relocations \
+			-xmlpatterns -shared -system-libmng \
+			-cups -qt-sql-sqlite -system-sqlite -stl \
+			-no-nis -glib -sm -prefix $(QT4DIR) ) \
+		&& QTDIR=$(QT4DIR) $(MAKE) \
+		&& QTDIR=$(QT4DIR) $(REALLY) $(MAKE) install \
+		&& ( echo -e 'o\nyes\n' | QTDIR=$(QT4DIR) MAKEFLAGS= \
+			QMAKE_CFLAGS_RELEASE="$(JTL_CFLAGS)" \
+			QMAKE_CXXFLAGS_RELEASE="$(JTL_CXXFLAGS) -Wno-error" \
+			./configure -system-libtiff -system-zlib -largefile \
+			-system-libpng -system-libjpeg -xrender \
+			-no-separate-debug-info -no-phonon \
+			-reduce-relocations \
+			-no-exceptions -shared -system-libmng \
+			-cups -qt-sql-sqlite -system-sqlite -stl \
+			-no-nis -glib -sm -prefix $(QT4DIR) ) \
+		&& QTDIR=$(QT4DIR) $(MAKE) \
+		&& QTDIR=$(QT4DIR) $(REALLY) $(MAKE) install )
+	$(REALLY) cp $(QT4DIR)/lib/pkgconfig/*.pc $(PREFIX)/lib/pkgconfig/
+	$(REALLY) ln -sfT qt-$(QT4VER) $(PREFIX)/qt
+	$(REALLY) mkdir -p $(QT4DIR)/include/QtXmlPatterns
+	$(REALLY) touch $(QT4DIR)/include/QtXmlPatterns/QtXmlPatterns
+	du -hs $(BUILD)/qt > $(MADE)/qt
+	( rm -rf $(BUILD)/qt ; sync ) &

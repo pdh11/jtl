@@ -1,0 +1,4 @@
+## Make.pyrex
+
+pyrex: python
+	$(MAKE) PROG=pyrex _pythonstyle

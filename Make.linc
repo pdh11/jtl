@@ -1,0 +1,4 @@
+## Make.linc
+
+linc: glib
+	$(MAKE) PROG=linc _gnu

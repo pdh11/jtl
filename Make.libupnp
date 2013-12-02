@@ -1,0 +1,7 @@
+## Make.libupnp
+
+libupnp: pkgconfig
+	make PROG=libupnp _gnu JTL_PATCH=libupnp-1.6.5-jtl1.diff
+
+# JTL_CONFIG="$(JTL_CONFIG) --enable-debug --program-suffix=_debug" JTL_CFLAGS="-g -ggdb -O"
+

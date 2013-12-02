@@ -1,0 +1,6 @@
+## Make.openssh
+
+openssh: openssl zlib
+	$(MAKE) PROG=openssh _gnu \
+		JTL_CONFIG="--without-pam --with-tcp-wrappers --sysconfdir=/etc" \
+		JTL_TESTS_BOGUS=5.3

@@ -1,0 +1,4 @@
+## Make.libelf
+
+libelf:
+	$(MAKE) PROG=libelf _gnu

@@ -1,0 +1,9 @@
+## Make.i686-bootstrap
+#
+
+i686-bootstrap: i686-toolchain
+	$(MAKE) JTL_CROSS=i686 JTL_CROSSCFLAGS="-march=core2" \
+		JTL_CROSSCPPFLAGS="-march=core2" \
+		JTL_CROSSGCCFLAGS="--with-cpu=i686" \
+		i686-do-bootstrap
+	@touch $(MADE)/i686-bootstrap

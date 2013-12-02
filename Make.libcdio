@@ -1,0 +1,6 @@
+## Make.libcdio
+#
+# Contains cd-paranoia
+
+libcdio: pkgconfig
+	$(MAKE) PROG=libcdio JTL_PATCH=libcdio-0.80-jtl1.diff _gnu

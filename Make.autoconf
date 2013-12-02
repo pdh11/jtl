@@ -1,0 +1,6 @@
+## Make.autoconf
+
+autoconf: perl
+	$(MAKE) PROG=autoconf _gnu \
+		JTL_TESTS_BOGUS=2.67
+

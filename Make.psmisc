@@ -1,0 +1,6 @@
+## Make.psmisc
+
+psmisc:
+	$(REALLY) rm -f $(PREFIX)/bin/pstree.x11
+	$(MAKE) PROG=psmisc _gnu
+

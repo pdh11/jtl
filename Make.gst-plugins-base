@@ -1,0 +1,8 @@
+## Make.gst-plugins-base
+
+gst-plugins-base: glib flex valgrind python perl bison pkgconfig gstreamer \
+		liboil libcdio libvorbis libogg alsa-utils \
+		libtheora mjpegtools pango
+	$(MAKE) PROG=gst-plugins-base _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-experimental --disable-gnome_vfs" \
+		JTL_TESTS_BOGUS=0.10.30.4-timeout

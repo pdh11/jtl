@@ -1,0 +1,4 @@
+## Make.yasm
+
+yasm:
+	$(MAKE) PROG=yasm _gnu

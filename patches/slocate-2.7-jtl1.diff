@@ -1,0 +1,13 @@
+--- slocate-2.7/Makefile.in~	2005-12-04 17:12:41.000000000 +0000
++++ slocate-2.7/Makefile.in	2005-12-04 17:13:42.000000000 +0000
+@@ -390,8 +390,8 @@ install-exec-hook:
+ @FREEBSD_TRUE@	-/usr/sbin/pw groupadd slocate	
+ @FREEBSD_FALSE@	-/usr/sbin/groupadd slocate
+ 	$(INSTALL) -d $(DESTDIR)$(datadir)/slocate
+-	chown root.slocate $(DESTDIR)$(bindir)/slocate
+-	chown root.slocate $(DESTDIR)$(datadir)/slocate
++	chown root.root $(DESTDIR)$(bindir)/slocate
++	chown root.root $(DESTDIR)$(datadir)/slocate
+ 	chmod 2755 $(DESTDIR)$(bindir)/slocate
+ 	chmod 0750 $(DESTDIR)$(datadir)/slocate
+ 	-ln -f -s $(DESTDIR)$(bindir)/slocate $(DESTDIR)$(bindir)/updatedb

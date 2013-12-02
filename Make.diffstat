@@ -1,0 +1,4 @@
+## Make.diffstat
+
+diffstat:
+	$(MAKE) PROG=diffstat _gnu

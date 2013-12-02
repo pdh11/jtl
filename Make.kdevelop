@@ -1,0 +1,24 @@
+## Make.kdevelop
+#
+# Wants db3
+
+kdevelop: kde-libs kde-base qt db3 apr apr-util
+	@echo Making kdevelop
+	rm -rf $(BUILD)/kdevelop
+	mkdir -p $(BUILD)/kdevelop
+	bunzip2 -c $(ARCHIVE)/kdevelop-*.bz2 | tar xf - -C $(BUILD)/kdevelop
+	# patch -d $(BUILD)/kdevelop/* -p1 < patches/kdevelop-3.3.0-jtl1.diff
+	( cd $(BUILD)/kdevelop/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			LDFLAGS=-lpthread \
+			./configure --prefix=$(PREFIX)/kde --enable-shared \
+			--disable-static --enable-final \
+			--with-db-includedir=$(PREFIX)/lib/db3/include \
+			--with-db-libdir=$(PREFIX)/lib/db3/lib \
+			--with-db-lib=db-3 \
+			--with-apr-config=apr-1-config \
+			--with-apu-config=apu-1-config \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/kdevelop > $(MADE)/kdevelop
+	rm -rf $(BUILD)/kdevelop

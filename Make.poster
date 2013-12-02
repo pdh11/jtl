@@ -1,0 +1,4 @@
+## Make.poster
+
+poster: kde-base
+	$(MAKE) PROG=poster _gnu

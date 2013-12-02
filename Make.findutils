@@ -1,0 +1,4 @@
+## Make.findutils
+
+findutils:
+	$(MAKE) PROG=findutils _gnu

@@ -1,0 +1,5 @@
+## Make.totem-pl-parser
+
+totem-pl-parser: glib libxml2 libsoup gmime libgcrypt
+	$(MAKE) PROG=totem-pl-parser _gnu \
+		JTL_TESTS_BOGUS=bogus

@@ -1,0 +1,14 @@
+## Make.freetype
+
+freetype: pkgconfig libpng
+	@echo Making freetype
+	rm -rf $(BUILD)/freetype
+	mkdir -p $(BUILD)/freetype
+	tar xjf $(ARCHIVE)/freetype*bz2 -C $(BUILD)/freetype
+	#patch -d $(BUILD)/freetype/* -p1 < patches/freetype-2.4.12-jtl1.diff
+	( cd $(BUILD)/freetype/* \
+		&& CFLAGS="$(JTL_CFLAGS) -DTT_CONFIG_OPTION_BYTECODE_INTERPRETER" ./configure --prefix=$(PREFIX) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/freetype > $(MADE)/freetype
+	rm -rf $(BUILD)/freetype

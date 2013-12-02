@@ -1,0 +1,6 @@
+## Make.libao
+#
+# Needed by Vorbis
+
+libao: alsa-lib alsa-utils
+	$(MAKE) PROG=libao _gnu

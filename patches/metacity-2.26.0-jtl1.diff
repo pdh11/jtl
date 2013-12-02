@@ -1,0 +1,55 @@
+--- metacity-2.26.0/src/wm-tester/test-resizing.c~	2009-02-05 01:10:05.000000000 +0000
++++ metacity-2.26.0/src/wm-tester/test-resizing.c	2009-03-19 18:01:20.000000000 +0000
+@@ -79,7 +79,7 @@ get_size (Display *d, Drawable draw,
+     *yp = y;
+   if (widthp)
+     *widthp = width;
+-  if (*heightp)
++  if (heightp)
+     *heightp = height;
+ }
+ 
+--- metacity-2.26.0/src/core/boxes.c~	2009-02-05 01:10:05.000000000 +0000
++++ metacity-2.26.0/src/core/boxes.c	2009-03-19 18:06:11.000000000 +0000
+@@ -932,6 +932,8 @@ meta_rectangle_clip_to_region (const GLi
+            compare_rect->y + compare_rect->height < rect->y + rect->height))
+         continue;
+ 
++      overlap.width = overlap.height = 0;
++
+       /* Determine maximal overlap amount */
+       meta_rectangle_intersect (rect, compare_rect, &overlap);
+       maximal_overlap_amount_for_compare = meta_rectangle_area (&overlap);
+--- metacity-2.26.0/src/core/window.c~	2009-02-05 01:10:05.000000000 +0000
++++ metacity-2.26.0/src/core/window.c	2009-03-19 18:08:27.000000000 +0000
+@@ -3965,7 +3965,7 @@ meta_window_begin_wireframe (MetaWindow 
+ {
+ 
+   MetaRectangle new_xor;
+-  int display_width, display_height;
++  int display_width = 0, display_height = 0;
+ 
+   meta_window_get_client_root_coords (window,
+                                       &window->display->grab_wireframe_rect);
+--- metacity-2.26.0/src/core/window.c~	2009-03-19 18:08:37.000000000 +0000
++++ metacity-2.26.0/src/core/window.c	2009-03-19 18:09:15.000000000 +0000
+@@ -3991,7 +3991,7 @@ meta_window_update_wireframe (MetaWindow
+ {
+ 
+   MetaRectangle new_xor;
+-  int display_width, display_height;
++  int display_width = 0, display_height = 0;
+ 
+   window->display->grab_wireframe_rect.x = x;
+   window->display->grab_wireframe_rect.y = y;
+--- metacity-2.26.0/configure~	2009-03-16 18:00:22.000000000 +0000
++++ metacity-2.26.0/configure	2009-03-28 19:59:39.000000000 +0000
+@@ -21225,7 +21225,7 @@ fi
+ 
+ # Warnings are there for a reason
+ if test "x$GCC" = "xyes"; then
+-  CFLAGS="$CFLAGS -Wall -Werror -ansi"
++  CFLAGS="$CFLAGS -Wall -Wextra -ansi"
+ fi
+ 
+ # Use gnome-doc-utils:

@@ -1,0 +1,5 @@
+## Make.libkcddb
+
+libkcddb: kde-libs
+	$(MAKE) PROG=libkcddb PREFIX=$(PREFIX)/kde _gnucmake
+

@@ -1,0 +1,14 @@
+--- hal-0.5.9.1/hald/linux/device.c~	2007-04-03 17:40:48.000000000 +0100
++++ hal-0.5.9.1/hald/linux/device.c	2007-09-20 22:37:35.000000000 +0100
+@@ -1223,9 +1223,10 @@ out:
+ static const gchar *
+ serial_get_prober (HalDevice *d)
+ {
++    const char *dev = hal_device_property_get_string (d, "linux.device_file");
+ 	/* FIXME TODO: check if there is an other way, to call the porber only
+ 		 on ttyS* devices, than check the name of the device file */
+-	if (!strncmp(hal_device_property_get_string (d, "linux.device_file"), "/dev/ttyS", 9))
++	if (dev && !strncmp(dev, "/dev/ttyS", 9))
+ 		return "hald-probe-serial";
+ 	else 
+ 		return NULL;

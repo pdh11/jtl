@@ -1,0 +1,4 @@
+## Make.transmission
+
+transmission: curl openssl intltool gettext
+	$(MAKE) PROG=transmission _gnu

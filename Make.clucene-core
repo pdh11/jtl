@@ -1,0 +1,5 @@
+## Make.clucene-core
+
+clucene-core: doxygen exiv2 perl qt dbus boost
+	$(MAKE) PROG=clucene-core _gnu \
+                JTL_TESTS_BOGUS=0.9.21b

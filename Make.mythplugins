@@ -1,0 +1,4 @@
+## Make.mythplugins
+
+mythplugins: mythtv
+	$(MAKE) PROG=mythplugins _gnu

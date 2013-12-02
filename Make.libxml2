@@ -1,0 +1,5 @@
+## Make.libxml2
+
+libxml2: zlib python
+	$(MAKE) PROG=libxml2 _gnu \
+		JTL_TESTS_BOGUS=2.7.7-thread-trouble-disappears-under-gdb

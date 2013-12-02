@@ -1,0 +1,5 @@
+# Make.python_imaging
+#
+
+python_imaging: python tk
+	$(MAKE) PROG=python_imaging _pythonstyle

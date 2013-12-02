@@ -1,0 +1,4 @@
+## Make.kde-sdk
+
+kde-sdk: kde-libs kde-runtime qt phonon
+	$(MAKE) PROG=kdesdk JTL_TOUCH=kde-sdk PREFIX=$(PREFIX)/kde _gnucmake

@@ -1,0 +1,11 @@
+--- ImageMagick-6.8.6-3/coders/png.c~	2013-06-20 20:51:35.000000000 +0100
++++ ImageMagick-6.8.6-3/coders/png.c	2013-06-30 16:13:44.000000000 +0100
+@@ -2268,7 +2268,7 @@ static Image *ReadOnePNGImage(MngInfo *m
+   /*
+     Allocate the PNG structures
+   */
+-#ifdef PNG_USER_MEM_SUPPORTED
++#if 0 //def PNG_USER_MEM_SUPPORTED
+  ping=png_create_read_struct_2(PNG_LIBPNG_VER_STRING, image,
+    MagickPNGErrorHandler,MagickPNGWarningHandler, NULL,
+    (png_malloc_ptr) Magick_png_malloc,(png_free_ptr) Magick_png_free);

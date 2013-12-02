@@ -1,0 +1,6 @@
+## Make.apache-php
+
+apache-php: postgresql openssl db3 apache-base zlib libxml2 sqlite krb5 curl gd
+	$(MAKE) PROG=php _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --with-apxs2=$(PREFIX)/sbin/apxs --with-openssl --with-kerberos --with-curl --with-gd --with-ldap --enable-soap --with-xsl --with-bz2 --without-db2 --enable-ftp --with-pgsql=$(PREFIX)/pgsql --with-zlib --without-mysql --with-sqlite" \
+		JTL_TOUCH=apache-php

@@ -1,0 +1,20 @@
+--- kdegames-4.8.0/kpat/patsolve/memory.h~	2011-07-27 19:25:17.000000000 +0100
++++ kdegames-4.8.0/kpat/patsolve/memory.h	2012-03-29 20:40:17.000000000 +0100
+@@ -20,6 +20,7 @@
+ #define MEMORY_H
+ 
+ #include <sys/types.h>
++#include <stdlib.h>
+ 
+ struct TREE;
+ 
+--- kdegames-4.8.0/kblocks/KBlocksPlayNetwork.cpp~	2011-07-27 19:25:16.000000000 +0100
++++ kdegames-4.8.0/kblocks/KBlocksPlayNetwork.cpp	2012-03-29 20:29:10.000000000 +0100
+@@ -12,6 +12,7 @@
+ #ifdef Q_OS_WIN
+ #include <windows.h>
+ #endif
++#include <unistd.h>
+ 
+ KBlocksPlayNetwork::KBlocksPlayNetwork(int capacity, const string& serverIP, int localPort)
+ {

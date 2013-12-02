@@ -1,0 +1,15 @@
+--- Mesa-7.11/bin/minstall~	2010-10-19 18:58:28.000000000 +0100
++++ Mesa-7.11/bin/minstall	2011-10-22 23:55:40.000000000 +0100
+@@ -85,11 +85,7 @@ if [ $# -ge 2 ] ; then
+ 
+ 		elif [ -f "$FILE" ] ; then
+ 			#echo "$FILE" is a regular file
+-			# Only copy if the files differ
+-			if ! cmp -s $FILE $DEST/`basename $FILE`; then
+-				$RM "$DEST/`basename $FILE`"
+-				cp "$FILE" "$DEST"
+-			fi
++                        install "$FILE" "$DEST"
+ 			if [ $MODE ] ; then
+ 				FILE=`basename "$FILE"`
+ 				chmod $MODE "$DEST/$FILE"

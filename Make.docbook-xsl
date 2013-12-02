@@ -1,0 +1,25 @@
+## Make.docbook-xsl
+
+docbook-xsl: libxslt docbookx
+	@echo Making docbook-xsl
+	rm -rf $(BUILD)/docbook-xsl
+	mkdir -p $(BUILD)/docbook-xsl
+	tar xjf $(ARCHIVE)/docbook-xsl-*bz2 -C $(BUILD)/docbook-xsl
+	( cd $(BUILD)/docbook-xsl/* \
+		&& find . \( -name '*.xml' -o -name '*.xsl' -o -name '*.ent' \) -printf '%h\n' | \
+			sort | uniq | \
+			xargs -n1 -i $(REALLY) \
+				mkdir -p $(PREFIX)/share/xml/docbook-xsl/\{} \
+		&& find . \( -name '*.xml' -o -name '*.xsl' -o -name '*.ent' -o -name VERSION \) -print0 | \
+			xargs -0 -n1 -i $(REALLY) \
+				cp -f \{} $(PREFIX)/share/xml/docbook-xsl/{} )
+	$(REALLY) xmlcatalog --noout \
+		--add rewriteURI \
+		http://docbook.sourceforge.net/release/xsl/current/ \
+		file://$(PREFIX)/share/xml/docbook-xsl/ \
+		--add rewriteSystem \
+		http://docbook.sourceforge.net/release/xsl/current/ \
+		file://$(PREFIX)/share/xml/docbook-xsl/ \
+			/etc/xml/catalog
+	du -hs $(BUILD)/docbook-xsl > $(MADE)/docbook-xsl
+	( rm -rf $(BUILD)/docbook-xsl ; sync ) &

@@ -1,0 +1,6 @@
+## Make.glib-networking
+
+glib-networking: glib gobject-introspection
+	$(MAKE) PROG=glib-networking _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --without-ca-certificates" \
+		JTL_TESTS_BOGUS=2.30.0

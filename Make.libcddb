@@ -1,0 +1,6 @@
+## Make.libcddb
+#
+
+libcddb: pkgconfig libcdio
+	$(MAKE) PROG=libcddb _gnu \
+		JTL_TESTS_BOGUS=bogus

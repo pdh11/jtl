@@ -1,0 +1,4 @@
+## Make.gupnp
+
+gupnp: glib gssdp libxml2 libsoup pkgconfig
+	$(MAKE) PROG=gupnp _gnu

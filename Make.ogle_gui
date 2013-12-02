@@ -1,0 +1,4 @@
+## Make.ogle_gui
+
+ogle_gui: ogle gtk+ libxml2 bison
+	$(MAKE) PROG=ogle_gui JTL_CONFIG="--enable-gtk2 --enable-shared --disable-static" _gnu

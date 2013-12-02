@@ -1,0 +1,4 @@
+## Make.libgsf
+
+libgsf: glib libxml2 gnome-vfs zlib gconf
+	$(MAKE) PROG=libgsf _gnu

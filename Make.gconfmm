@@ -1,0 +1,4 @@
+## Make.gconfmm
+
+gconfmm: glib pkgconfig gconf glibmm gtkmm
+	$(MAKE) PROG=gconfmm _gnu

@@ -1,0 +1,4 @@
+## Make.flake
+
+flake:
+	$(MAKE) PROG=flake JTL_CONFIG="--extra-cflags=\"$(JTL_CFLAGS)\" --disable-debug" _gnu -j1

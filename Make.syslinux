@@ -1,0 +1,12 @@
+## Make.syslinux
+
+syslinux:
+	@echo Making syslinux
+	rm -rf $(BUILD)/syslinux
+	mkdir -p $(BUILD)/syslinux
+	tar xzf $(ARCHIVE)/syslinux-* -C $(BUILD)/syslinux
+	( cd $(BUILD)/syslinux/* \
+		&& $(MAKE) BINDIR=$(PREFIX)/bin BTARGET= \
+		&& $(REALLY) $(MAKE) BINDIR=$(PREFIX)/bin LIBDIR=$(PREFIX)/lib/syslinux install )
+	du -hs $(BUILD)/syslinux > $(MADE)/syslinux
+	rm -rf $(BUILD)/syslinux

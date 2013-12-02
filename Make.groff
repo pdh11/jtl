@@ -1,0 +1,18 @@
+## Make.groff
+#
+# Can't use make _gnu as groff reacts badly to $PROG
+
+groff: bison x
+	@echo Making groff
+	rm -rf $(BUILD)/groff
+	mkdir -p $(BUILD)/groff
+	tar xjf $(ARCHIVE)/groff-*bz2 -C $(BUILD)/groff
+	( cd $(BUILD)/groff/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) \
+				--mandir=$(PREFIX)/share/man \
+				--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/groff > $(MADE)/groff
+	rm -rf $(BUILD)/groff

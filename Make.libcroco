@@ -1,0 +1,4 @@
+## Make.libcroco
+
+libcroco: glib libxml2 pkgconfig
+	$(MAKE) PROG=libcroco _gnu

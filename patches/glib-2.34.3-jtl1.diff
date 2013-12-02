@@ -1,0 +1,18 @@
+--- glib-2.34.3/gobject/gtype.c~	2012-11-26 16:52:48.000000000 +0000
++++ glib-2.34.3/gobject/gtype.c	2013-02-02 18:24:06.000000000 +0000
+@@ -130,12 +130,15 @@
+ }G_STMT_END
+ #define g_return_val_if_type_system_uninitialized(return_value) G_STMT_START{ \
+     if (G_UNLIKELY (!static_quark_type_flags))                                \
++    {  g_type_init();                                                         \
++    if (G_UNLIKELY (!static_quark_type_flags))                                \
+       {                                                                       \
+         g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,                            \
+                "%s: You forgot to call g_type_init()",                        \
+                G_STRLOC);                                                     \
+         return (return_value);                                                \
+       }                                                                       \
++      }                                                                       \
+ }G_STMT_END
+ 
+ #ifdef  G_ENABLE_DEBUG

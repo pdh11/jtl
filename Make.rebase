@@ -1,0 +1,17 @@
+## Make.rebase
+#
+# Make a new copy of base ready to replace existing system
+
+rebase:
+	mkdir -p $(SUB_ROOT)/lib
+	[ -L $(SUB_ROOT)/lib64 ] || ln -sf lib $(SUB_ROOT)/lib64
+	mkdir -p $(SUB_ROOT)/bin
+	mkdir -p $(SUB_ROOT)/usr/bin
+	mkdir -p $(SUB_ROOT)/usr/lib
+	[ -L $(SUB_ROOT)/lib64 ] || ln -sf lib $(SUB_ROOT)/usr/lib64
+	$(MAKE) JTL_ROOT=$(SUB_ROOT) glibc gcc binutils bash bison bzip2 \
+                coreutils ncurses diffutils e2fsprogs findutils flex gawk \
+                gettext gmp grep gzip init kernel-headers lilo dev86 m4 make \
+                module-init-tools mpfr nano nasm net-tools netkit-combo patch \
+                pcre procps sed sysklogd tar tcp_wrappers texinfo util-linux \
+                mpc zlib readline

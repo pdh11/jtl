@@ -1,0 +1,4 @@
+## Make.agave
+
+agave: gtk+ libglademm gtkmm
+	$(MAKE) PROG=agave _gnu

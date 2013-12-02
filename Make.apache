@@ -1,0 +1,4 @@
+## Make.apache
+
+apache: apache-base apache-php subversion
+	touch $(MADE)/apache

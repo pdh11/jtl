@@ -1,0 +1,14 @@
+## Make.sub-make
+#
+
+sub-make: sub-glibc
+	@echo Compiling make for image
+	rm -rf $(BUILD)/sub-make
+	mkdir -p $(BUILD)/sub-make
+	tar xzf $(ARCHIVE)/make-* -C $(BUILD)/sub-make
+	( cd $(BUILD)/sub-make/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ./configure i386-linux --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install-strip )
+	du -hs $(BUILD)/sub-make > $(MADE)/sub-make
+	rm -rf $(BUILD)/sub-make

@@ -1,0 +1,12 @@
+## Make.hdparm
+
+hdparm:
+	@echo Compiling hdparm
+	rm -rf $(BUILD)/hdparm
+	mkdir -p $(BUILD)/hdparm
+	tar xjf $(ARCHIVE)/hdparm-*bz2 -C $(BUILD)/hdparm
+	( cd $(BUILD)/hdparm/* \
+		&& $(MAKE) \
+		&& $(REALLY) cp hdparm /sbin )
+	du -hs $(BUILD)/hdparm > $(MADE)/hdparm
+	rm -rf $(BUILD)/hdparm

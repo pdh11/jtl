@@ -1,0 +1,4 @@
+## Make.xz
+
+xz:
+	$(MAKE) PROG=xz _gnu

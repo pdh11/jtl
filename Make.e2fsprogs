@@ -1,0 +1,10 @@
+## Make.e2fsprogs
+#
+# libblkid and libuuid come from util-linux
+
+e2fsprogs:
+	$(MAKE) -j1 PROG=e2fsprogs _gnu \
+		JTL_CONFIG="--enable-elf-shlibs --enable-dynamic-e2fsck --enable-fsck --with-gnu-ld --disable-libblkid --disable-libuuid --disable-uuidd --includedir=/usr/include --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share" \
+		JTL_INSTALL="install install-libs" \
+		PREFIX=/ \
+		JTL_TESTS_BOGUS=1.41.9

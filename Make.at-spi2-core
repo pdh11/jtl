@@ -1,0 +1,5 @@
+## Make.at-spi2-core
+
+at-spi2-core: perl_xml_parser glib dbus x intltool
+	$(MAKE) PROG=at-spi2-core _gnu \
+                JTL_TESTS_BOGUS=need-dbus

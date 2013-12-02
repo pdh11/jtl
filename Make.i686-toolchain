@@ -1,0 +1,10 @@
+## Make.i686-toolchain
+#
+
+i686-toolchain:
+	libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
+		$(MAKE) JTL_CROSS=i686 JTL_CROSS2=x86 \
+		JTL_CONFIGPATH=configs/i386_ \
+		JTL_CROSSGCCFLAGS="--disable-multilib --enable-decimal-float=no --with-cpu=i686" \
+		JTL_CROSSCFLAGS="-O2 -O9 -pipe -mtune=i686 -march=i686" \
+		i686-do-toolchain

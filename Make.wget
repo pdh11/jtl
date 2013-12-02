@@ -1,0 +1,4 @@
+## Make.wget
+
+wget:
+	$(MAKE) PROG=wget _gnu

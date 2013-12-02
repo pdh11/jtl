@@ -1,0 +1,4 @@
+## Make.zope
+
+zope: python setuptools
+	$(MAKE) PROG=zope.interface JTL_TOUCH=zope _pythonstyle

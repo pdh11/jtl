@@ -1,0 +1,4 @@
+## Make.gnome-themes-standard
+
+gnome-themes-standard: glib gtk+ intltool perl_xml_parser
+	$(MAKE) PROG=gnome-themes-standard _gnu

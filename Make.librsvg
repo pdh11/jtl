@@ -1,0 +1,9 @@
+## Make.librsvg
+#
+# mozplugin doesn't build against latest seamonkey, but then that has svg
+# support anyway
+
+librsvg: gtk+ glib libart libxml2 libgsf libcroco \
+		pango cairo fontconfig freetype
+	$(MAKE) PROG=librsvg JTL_CONFIG="$(JTL_CONFIG) --disable-mozilla-plugin" _gnu \
+		JTL_TESTS_BOGUS=2.32.0

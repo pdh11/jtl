@@ -1,0 +1,21 @@
+## Make.sub-xemacs
+#
+# Doesn't cope with -j
+#
+# NB Doesn't install sumo; there's no room
+
+sub-xemacs: sub-ncurses sub-glibc
+	@echo Compiling xemacs for image
+	rm -rf $(BUILD)/sub-xemacs
+	mkdir -p $(BUILD)/sub-xemacs
+	for i in $(ARCHIVE)/xemacs-2*.tar.gz ; do \
+		tar xzf $$i -C $(BUILD)/sub-xemacs || exit 1 ; \
+	done
+	#patch -d $(BUILD)/sub-xemacs/* -p0 < $(ARCHIVE)/xemacs-*-diff-scrollbar
+	mkdir $(BUILD)/sub-xemacs/build
+	( cd $(BUILD)/sub-xemacs/build \
+		&& ../x*/configure $(JTL_ARCH)-pc-linux --prefix=$(PREFIX) --cflags="$(JTL_CFLAGS)" --without-x11 --ldflags="-L$(SUB_ROOT)/usr/lib -L$(SUB_ROOT)/lib" --without-gpm --with-database=no --with-sound=no \
+		&& $(MAKE) -j1 \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-xemacs > $(MADE)/sub-xemacs
+	rm -rf $(BUILD)/sub-xemacs

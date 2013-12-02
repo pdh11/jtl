@@ -1,0 +1,5 @@
+## Make.kshisen
+
+kshisen: kde-libs kde-runtime qt pulseaudio
+	$(MAKE) PROG=kshisen PREFIX=$(PREFIX)/kde \
+                 _gnucmake

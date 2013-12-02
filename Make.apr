@@ -1,0 +1,5 @@
+## Make.apr
+
+apr: pkgconfig
+	$(MAKE) PROG=apr JTL_CONFIG="--enable-layout=GNU $(JTL_CONFIG)" _gnu \
+		JTL_TESTS_BOGUS=bogus

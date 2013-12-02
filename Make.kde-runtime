@@ -1,0 +1,6 @@
+## Make.kde-runtime
+
+kde-runtime: soprano phonon shared-desktop-ontologies cmake \
+                libtirpc smokeqt kde-libs kde-pimlibs
+	$(MAKE) PROG=kde-runtime PREFIX=$(PREFIX)/kde _gnucmake \
+                JTL_PATCH=kde-runtime-4.7.2-jtl1.diff

@@ -1,0 +1,11 @@
+--- anacron-2.3/gregor.c~	2000-06-22 23:50:40.000000000 +0100
++++ anacron-2.3/gregor.c	2009-05-05 18:32:12.000000000 +0100
+@@ -65,7 +65,7 @@ day_num(int year, int month, int day)
+ {
+     int dn;
+     int i;
+-    const int isleap; /* save three calls to leap() */
++    int isleap; /* save three calls to leap() */
+ 
+     /* Some validity checks */
+ 

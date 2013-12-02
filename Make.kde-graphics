@@ -1,0 +1,6 @@
+## Make.kde-graphics
+
+kde-graphics: kde-libs kde-base-runtime qt libtiff gphoto2 freetype pkgconfig \
+		lcms libart exiv2 poppler shared-desktop-ontologies \
+		sane-backends strigi qimageblitz phonon automoc
+	$(MAKE) PROG=kdegraphics JTL_TOUCH=kde-graphics PREFIX=$(PREFIX)/kde _gnucmake

@@ -1,0 +1,57 @@
+--- mozilla-1.9.2/xulrunner/confvars.sh~	2010-04-02 17:03:16.000000000 +0100
++++ mozilla-1.9.2/xulrunner/confvars.sh	2010-04-17 22:22:15.000000000 +0100
+@@ -36,7 +36,7 @@
+ #
+ # ***** END LICENSE BLOCK *****
+ 
+-MOZ_APP_NAME=xulrunner
+-MOZ_APP_DISPLAYNAME=XULRunner
++MOZ_APP_NAME=iceweasel
++MOZ_MAKE_FLAGS=-j5
+ MOZ_UPDATER=1
+ MOZ_XULRUNNER=1
+--- mozilla-release/ipc/chromium/src/base/file_util_linux.cc~	2012-03-13 01:36:53.000000000 +0000
++++ mozilla-release/ipc/chromium/src/base/file_util_linux.cc	2012-03-29 14:02:53.000000000 +0100
+@@ -5,7 +5,7 @@
+ #include "base/file_util.h"
+ 
+ #include <fcntl.h>
+-
++#include <unistd.h>
+ #include <string>
+ #include <vector>
+ 
+--- mozilla-release/ipc/chromium/src/base/time_posix.cc~	2012-03-13 01:36:53.000000000 +0000
++++ mozilla-release/ipc/chromium/src/base/time_posix.cc	2012-03-29 14:04:29.000000000 +0100
+@@ -15,6 +15,7 @@
+ #endif
+ 
+ #include <limits>
++#include <unistd.h>
+ 
+ #include "base/basictypes.h"
+ #include "base/logging.h"
+--- mozilla-release/ipc/chromium/src/base/file_util.cc~	2012-03-13 01:36:53.000000000 +0000
++++ mozilla-release/ipc/chromium/src/base/file_util.cc	2012-03-29 14:02:31.000000000 +0100
+@@ -8,9 +8,9 @@
+ #include <io.h>
+ #endif
+ #include <stdio.h>
+-#if defined(ANDROID)
++
+ #include <unistd.h>
+-#endif
++
+ 
+ #include <fstream>
+ 
+--- mozilla-release/ipc/chromium/src/base/message_pump_libevent.cc~	2012-03-13 01:36:53.000000000 +0000
++++ mozilla-release/ipc/chromium/src/base/message_pump_libevent.cc	2012-03-29 14:03:42.000000000 +0100
+@@ -6,6 +6,7 @@
+ 
+ #include <errno.h>
+ #include <fcntl.h>
++#include <unistd.h>
+ 
+ #include "eintr_wrapper.h"
+ #include "base/logging.h"

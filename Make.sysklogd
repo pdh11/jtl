@@ -1,0 +1,14 @@
+## Make.sysklogd
+
+sysklogd:
+	@echo Compiling sysklogd
+	rm -rf $(BUILD)/sysklogd
+	mkdir -p $(BUILD)/sysklogd
+	tar xzf $(ARCHIVE)/sysklogd-* -C $(BUILD)/sysklogd
+	# patch -d $(BUILD)/sysklogd/* -p1 < patches/sysklogd-1.4.1-jtl1.diff
+	( cd $(BUILD)/sysklogd/* \
+		&& $(MAKE) BINDIR=/sbin \
+		&& $(REALLY) $(MAKE) BINDIR=$(JTL_ROOT)/sbin install \
+		&& $(REALLY) chmod 755 $(JTL_ROOT)/sbin/{klogd,syslogd} )
+	du -hs $(BUILD)/sysklogd > $(MADE)/sysklogd
+	rm -rf $(BUILD)/sysklogd

@@ -1,0 +1,18 @@
+## Make.libfame
+#
+
+libfame:
+	@echo Making libfame
+	rm -rf $(BUILD)/libfame
+	mkdir -p $(BUILD)/libfame
+	tar xjf $(ARCHIVE)/libfame*bz2 -C $(BUILD)/libfame
+	patch -d $(BUILD)/libfame/l* -p1 < patches/libfame-0.9.1-jtl1.diff
+	( cd $(BUILD)/libfame/* \
+		&& cp $(PREFIX)/share/libtool/config/config.sub . \
+		&& ./configure --enable-shared --disable-static --prefix=$(PREFIX) \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) CFLAGS="$(JTL_CFLAGS)" \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/libfame > $(MADE)/libfame
+	rm -rf $(BUILD)/libfame

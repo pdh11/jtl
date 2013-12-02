@@ -1,0 +1,10 @@
+--- cdrdao-1.2.3/dao/ScsiIf-linux.cc~	2009-09-28 11:12:03.000000000 +0100
++++ cdrdao-1.2.3/dao/ScsiIf-linux.cc	2010-08-07 22:30:05.000000000 +0100
+@@ -26,6 +26,7 @@
+ #include <string.h>
+ #include <assert.h>
+ #include <sys/ioctl.h>
++#include <sys/stat.h>
+ #include <glob.h>
+ #include <asm/param.h>
+ #include <scsi/scsi.h>

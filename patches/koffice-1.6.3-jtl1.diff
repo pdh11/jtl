@@ -1,0 +1,52 @@
+--- koffice-1.6.3/krita/core/kis_perspective_math.cpp~	2007-05-30 22:40:31.000000000 +0100
++++ koffice-1.6.3/krita/core/kis_perspective_math.cpp	2008-03-07 22:36:11.000000000 +0000
+@@ -24,13 +24,15 @@
+ 
+ #if 1
+ 
+-#include <iostream.h>
++#include <iostream>
+ #include <stdlib.h>
+ #include <math.h>
+ //#define NDEBUG // uncomment to remove checking of assert()
+ #include <assert.h>
+ #define DEFAULT_ALLOC 2
+ 
++using namespace std;
++
+ namespace math { // TODO: use eigen
+ 
+ template <class ElType> class matrix;
+--- koffice-1.6.3/kspread/plugins/scripting/kspreadcore/krs_cell.cpp~	2007-05-30 22:43:20.000000000 +0100
++++ koffice-1.6.3/kspread/plugins/scripting/kspreadcore/krs_cell.cpp	2008-03-08 12:54:50.000000000 +0000
+@@ -48,7 +48,7 @@ Cell::Cell(KSpread::Cell* cell, KSpread:
+ 	this->addFunction1< void, Kross::Api::Variant >("setFormatString", this, &Cell::setFormatString);
+ 
+ 	this->addFunction0< Kross::Api::Variant >("text", this, &Cell::text);
+-	this->addFunction1< void, Kross::Api::Variant >("setText", this, &Cell::setText);
++	this->addFunction2< void, Kross::Api::Variant, Kross::Api::Variant >("setText", this, &Cell::setText);
+ 
+ 	this->addFunction0< Kross::Api::Variant >("textColor", this, &Cell::textColor);
+ 	this->addFunction1< void, Kross::Api::Variant >("setTextColor", this, &Cell::setTextColor);
+--- koffice-1.6.3/filters/kword/pdf/xpdf/goo/gfile.cc~	2007-05-30 22:39:18.000000000 +0100
++++ koffice-1.6.3/filters/kword/pdf/xpdf/goo/gfile.cc	2009-10-12 22:29:08.000000000 +0100
+@@ -315,7 +315,7 @@ GString *grabPath(const char *fileName) 
+ 
+ #else
+   //---------- Unix ----------
+-  char *p;
++  const char *p;
+ 
+   if ((p = strrchr(fileName, '/')))
+     return new GString(fileName, p - fileName);
+--- koffice-1.6.3/kspread/digest.cc~	2007-05-30 22:43:29.000000000 +0100
++++ koffice-1.6.3/kspread/digest.cc	2009-10-12 22:12:28.000000000 +0100
+@@ -50,7 +50,7 @@ typedef unsigned short sal_uInt16;
+ 
+ #if  SIZEOF_INT == 4
+ typedef unsigned int sal_uInt32;
+-#elif
++#else
+ typedef unsigned long sal_uInt32;
+ #endif
+ 

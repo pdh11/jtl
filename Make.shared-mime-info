@@ -1,0 +1,4 @@
+## Make.shared-mime-info
+
+shared-mime-info: perl_xml_parser gettext pkgconfig glib
+	$(MAKE) PROG=shared-mime-info _gnu

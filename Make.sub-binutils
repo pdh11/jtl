@@ -1,0 +1,14 @@
+## Make.sub-binutils
+#
+
+sub-binutils: sub-glibc
+	@echo Compiling binutils for image
+	rm -rf $(BUILD)/sub-binutils
+	mkdir -p $(BUILD)/sub-binutils
+	tar xz -C $(BUILD)/sub-binutils -f $(ARCHIVE)/binutils-*
+	( cd $(BUILD)/sub-binutils/* \
+		&& CFLAGS="$(JTL_CFLAGS)" ./configure --prefix=/usr --enable-shared --disable-static --with-gnu-ld --disable-nls $(JTL_ARCH)-linux \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr INSTALL_PROGRAM_ARGS=-s install )
+	du -hs $(BUILD)/sub-binutils > $(MADE)/sub-binutils
+	rm -rf $(BUILD)/sub-binutils

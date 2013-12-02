@@ -1,0 +1,4 @@
+## Make.udisks
+
+udisks: pkg-config gtk+ sg3_utils
+	$(MAKE) PROG=udisks _gnu

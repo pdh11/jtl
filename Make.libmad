@@ -1,0 +1,5 @@
+## Make.libmad
+
+libmad: libid3tag
+	$(MAKE) PROG=libmad JTL_CONFIG="--enable-static --enable-shared" \
+		JTL_MAKE="CFLAGS=\"$(JTL_CFLAGS)\"" _gnu

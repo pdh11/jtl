@@ -1,0 +1,5 @@
+## Make.enca
+
+enca:
+	$(MAKE) PROG=enca _gnu \
+		LN_S="ln -sf"

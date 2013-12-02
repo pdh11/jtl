@@ -1,0 +1,4 @@
+## Make.pyasn1
+
+pyasn1: python
+	$(MAKE) PROG=pyasn1 _pythonstyle

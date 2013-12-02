@@ -1,0 +1,16 @@
+## Make.lsof
+#
+# lsof's packaging is bonkers
+ 
+lsof: libtirpc
+	@echo Compiling lsof
+	rm -rf $(BUILD)/lsof
+	mkdir -p $(BUILD)/lsof
+	tar xjf $(ARCHIVE)/lsof-*bz2 -C $(BUILD)/lsof
+	( cd $(BUILD)/lsof/*src \
+		&& (yes | ./Configure linux ) \
+		&& $(MAKE) -j1 CFGL="-Llib -llsof -ltirpc -lcrypto" \
+		&& $(REALLY) install -m 4711 -s lsof $(PREFIX)/bin/lsof \
+		&& $(REALLY) install -D lsof.8 $(PREFIX)/share/man/man8/lsof.8 )
+	du -hs $(BUILD)/lsof > $(MADE)/lsof
+	rm -rf $(BUILD)/lsof

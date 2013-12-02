@@ -1,0 +1,4 @@
+## Make.gphoto2
+
+gphoto2: libusb libgphoto2 libjpeg libexif readline popt libtool
+	$(MAKE) PROG=gphoto2 _gnu

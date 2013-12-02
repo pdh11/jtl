@@ -1,0 +1,7 @@
+## Make.sane-backends
+#
+# 1.0.19 doesn't like -j
+
+sane-backends: libusb libjpeg libtiff pkgconfig libgphoto2
+	$(MAKE) -j1 PROG=sane-backends _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --enable-libusb_1_0"

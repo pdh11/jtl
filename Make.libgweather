@@ -1,0 +1,5 @@
+## Make.libgweather
+
+libgweather: glib gtk+ gnome-vfs intltool pkgconfig libsoup
+	$(MAKE) PROG=libgweather _gnu \
+		JTL_TESTS_BOGUS=bogus

@@ -1,0 +1,31 @@
+## Make.nfsboot
+#
+# NFS boot server setup using PXELinux
+
+nfsboot: syslinux
+	@echo Making NFS kernel
+	rm -rf $(BUILD)/nfs-kernel
+	mkdir -p $(BUILD)/nfs-kernel
+	tar xzf $(ARCHIVE)/linux-2.4*.tar.gz -C $(BUILD)/nfs-kernel
+	#gunzip -c $(ARCHIVE)/linux-2.4.*pre*diff.gz \
+	#	| patch -p1 -s -d $(BUILD)/nfs-kernel/*
+	#gunzip -c $(ARCHIVE)/linux-2.4.*aic7xxx*diff.gz \
+	#	| patch -p1 -s -d $(BUILD)/nfs-kernel/*
+	cp patches/linux-2.4*-config-nfs-boot \
+		$(BUILD)/nfs-kernel/linux-2.4.26/.config
+	yes "" | $(MAKE) -C $(BUILD)/nfs-kernel/* oldconfig
+	$(MAKE) -C $(BUILD)/nfs-kernel/* dep
+	$(MAKE) -C $(BUILD)/nfs-kernel/* bzImage
+	mkdir -p $(SUB_ROOT)/tftpboot/pxelinux.cfg
+	cp $(BUILD)/nfs-kernel/linux-2.4.26/arch/i386/boot/bzImage \
+		$(SUB_ROOT)/tftpboot/vmlinux.jtl
+	echo "default jtl"	   > $(SUB_ROOT)/tftpboot/pxelinux.cfg/default
+	echo "ipappend 1"	  >> $(SUB_ROOT)/tftpboot/pxelinux.cfg/default
+	echo "prompt 0" 	  >> $(SUB_ROOT)/tftpboot/pxelinux.cfg/default
+	echo "timeout 0" 	  >> $(SUB_ROOT)/tftpboot/pxelinux.cfg/default
+	echo "label jtl" 	  >> $(SUB_ROOT)/tftpboot/pxelinux.cfg/default
+	echo "kernel vmlinux.jtl" >> $(SUB_ROOT)/tftpboot/pxelinux.cfg/default
+	echo "append root=/dev/nfs" >> $(SUB_ROOT)/tftpboot/pxelinux.cfg/default
+	cp $(PREFIX)/lib/syslinux/pxelinux.0 $(SUB_ROOT)/tftpboot
+	du -hs $(BUILD)/nfs-kernel > $(MADE)/nfsboot
+	rm -rf $(BUILD)/nfs-kernel

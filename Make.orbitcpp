@@ -1,0 +1,6 @@
+## Make.orbitcpp
+#
+# 1.3.9 doesn't cope with -j
+
+orbitcpp: orbit
+	$(MAKE) PROG=orbitcpp -j1 _gnu

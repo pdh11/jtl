@@ -1,0 +1,5 @@
+## Make.scrollkeeper
+
+scrollkeeper: intltool docbookx libxslt libxml2 perl
+	$(MAKE) PROG=scrollkeeper _gnu
+

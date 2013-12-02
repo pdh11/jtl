@@ -1,0 +1,4 @@
+## Make.oxygen-icons
+
+oxygen-icons: cmake
+	$(MAKE) PROG=oxygen-icons PREFIX=$(PREFIX)/kde _gnucmake

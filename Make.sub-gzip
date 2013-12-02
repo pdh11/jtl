@@ -1,0 +1,18 @@
+## Make.sub-gzip
+
+sub-gzip: sub-glibc
+	@echo Compiling gzip for image
+	rm -rf $(BUILD)/sub-gzip
+	mkdir -p $(BUILD)/sub-gzip
+	tar xzf $(ARCHIVE)/gzip* -C $(BUILD)/sub-gzip
+	( cd $(BUILD)/sub-gzip/* \
+		&& CFLAGS="$(JTL_CFLAGS) $(JTL_SUBLIBS)" CXXFLAGS="$(JTL_CXXFLAGS) $(JTL_SUBLIBS)" ./configure $(JTL_ARCH)-linux --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	mkdir -p $(SUB_ROOT)/bin
+	mv $(SUB_ROOT)/usr/bin/gzip $(SUB_ROOT)/bin
+	ln -f $(SUB_ROOT)/bin/gzip $(SUB_ROOT)/bin/gunzip
+	ln -f $(SUB_ROOT)/bin/gzip $(SUB_ROOT)/bin/zcat
+	rm $(SUB_ROOT)/usr/bin/{gunzip,zcat}
+	du -hs $(BUILD)/sub-gzip > $(MADE)/sub-gzip
+	rm -rf $(BUILD)/sub-gzip

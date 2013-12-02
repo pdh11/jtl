@@ -1,0 +1,13 @@
+## Make.sub-tcp_wrappers
+
+sub-tcp_wrappers:
+	@echo Compiling sub-tcp_wrappers
+	rm -rf $(BUILD)/sub-tcp_wrappers
+	mkdir -p $(BUILD)/sub-tcp_wrappers
+	mkdir -p $(SUB_ROOT)/usr/{bin,sbin}
+	tar xzf $(ARCHIVE)/tcp_wrappers-* -C $(BUILD)/sub-tcp_wrappers
+	( cd $(BUILD)/sub-tcp_wrappers/* \
+		&& $(MAKE) REAL_DAEMON_DIR=/usr/sbin STYLE=-DSYS_ERRLIST_DEFINED linux \
+		&& $(REALLY) cp -f tcpd $(SUB_ROOT)/usr/sbin/tcpd )
+	du -hs $(BUILD)/sub-tcp_wrappers > $(MADE)/sub-tcp_wrappers
+	rm -rf $(BUILD)/sub-tcp_wrappers

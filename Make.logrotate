@@ -1,0 +1,17 @@
+## Make.logrotate
+
+logrotate:
+	@echo Making logrotate
+	rm -rf $(BUILD)/logrotate
+	mkdir -p $(BUILD)/logrotate
+	tar xf $(ARCHIVE)/logrotate-* -C $(BUILD)/logrotate
+	( cd $(BUILD)/logrotate/* \
+		&& $(MAKE) RPM_OPT_FLAGS="$(JTL_CFLAGS)" BASEDIR=/usr \
+			MANDIR=/usr/share/man \
+		&& $(MAKE) test BASEDIR=/usr \
+			MANDIR=/usr/share/man \
+		&& strip logrotate \
+		&& $(REALLY) $(MAKE) install BASEDIR=/usr \
+			MANDIR=/usr/share/man )
+	du -hs $(BUILD)/logrotate > $(MADE)/logrotate
+	rm -rf $(BUILD)/logrotate

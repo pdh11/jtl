@@ -1,0 +1,37 @@
+--- udev-9569148/autogen.sh~	2011-10-22 19:50:23.000000000 +0100
++++ udev-9569148/autogen.sh	2011-10-23 00:42:48.000000000 +0100
+@@ -2,34 +2,3 @@
+ 
+ gtkdocize
+ autoreconf --install --symlink
+-
+-MYCFLAGS="-g -Wall \
+--Wmissing-declarations -Wmissing-prototypes \
+--Wnested-externs -Wpointer-arith \
+--Wpointer-arith -Wsign-compare -Wchar-subscripts \
+--Wstrict-prototypes -Wshadow \
+--Wformat-security -Wtype-limits"
+-
+-case "$CFLAGS" in
+-	*-O[0-9]*)
+-		;;
+-	*)
+-		MYCFLAGS="$MYCFLAGS -O2"
+-		;;
+-esac
+-
+-libdir() {
+-	echo $(cd $1/$(gcc -print-multi-os-directory); pwd)
+-}
+-
+-args="--prefix=/usr \
+---sysconfdir=/etc \
+---sbindir=/sbin \
+---libdir=$(libdir /usr/lib) \
+---with-rootlibdir=$(libdir /lib) \
+---libexecdir=/lib/udev \
+---with-selinux \
+---enable-gtk-doc"
+-
+-export CFLAGS="$CFLAGS $MYCFLAGS"
+-./configure $args $@

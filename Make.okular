@@ -1,0 +1,4 @@
+## Make.okular
+
+okular: kde-libs kde-runtime poppler cmake
+	$(MAKE) PROG=okular PREFIX=$(PREFIX)/kde _gnucmake

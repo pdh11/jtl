@@ -1,0 +1,15 @@
+## Make.sub-tar
+
+sub-tar: sub-glibc
+	@echo Compiling tar for image
+	rm -rf $(BUILD)/sub-tar
+	mkdir -p $(BUILD)/sub-tar
+	tar xzf $(ARCHIVE)/tar* -C $(BUILD)/sub-tar
+	( cd $(BUILD)/sub-tar/* \
+		&& ac_cv_func_fnmatch_works=no CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ./configure $(JTL_ARCH)-linux --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-tar > $(MADE)/sub-tar
+	rm -rf $(BUILD)/sub-tar
+
+

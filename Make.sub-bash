@@ -1,0 +1,17 @@
+## Make.sub-bash
+#
+
+sub-bash: sub-ncurses sub-glibc
+	@echo Compiling bash for image
+	rm -rf $(BUILD)/sub-bash
+	mkdir -p $(BUILD)/sub-bash
+	tar xzf $(ARCHIVE)/bash-*.tar.gz -C $(BUILD)/sub-bash
+	( cd $(BUILD)/sub-bash/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" LDFLAGS="$(JTL_SUBLIBS)" ./configure i386-linux --prefix=/usr --with-curses --disable-nls \
+		&& $(MAKE) -j1 \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	mkdir -p $(SUB_ROOT)/bin
+	mv $(SUB_ROOT)/usr/bin/bash $(SUB_ROOT)/bin/bash
+	ln -sf /bin/bash $(SUB_ROOT)/bin/sh
+	du -hs $(BUILD)/sub-bash > $(MADE)/sub-bash
+	rm -rf $(BUILD)/sub-bash

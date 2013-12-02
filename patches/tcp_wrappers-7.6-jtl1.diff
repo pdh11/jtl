@@ -1,0 +1,58 @@
+--- tcp_wrappers_7.6/scaffold.c~	1997-03-21 18:27:24.000000000 +0000
++++ tcp_wrappers_7.6/scaffold.c	2005-12-04 16:48:07.000000000 +0000
+@@ -25,7 +25,6 @@ static char sccs_id[] = "@(#) scaffold.c
+ #define	INADDR_NONE	(-1)		/* XXX should be 0xffffffff */
+ #endif
+ 
+-extern char *malloc();
+ 
+ /* Application-specific. */
+ 
+--- tcp_wrappers_7.6/Makefile~	1997-03-21 18:27:21.000000000 +0000
++++ tcp_wrappers_7.6/Makefile	2009-02-14 14:29:42.000000000 +0000
+@@ -229,7 +229,7 @@ tandem:
+ 
+ # Amdahl UTS 2.1.5 (Richard.Richmond@bridge.bst.bls.com)
+ uts215:
+-	@make REAL_DAEMON_DIR=$(REAL_DAEMON_DIR) STYLE=$(STYLE) \   
++	@make REAL_DAEMON_DIR=$(REAL_DAEMON_DIR) STYLE=$(STYLE) \
+ 	LIBS="-lsocket" RANLIB=echo \
+ 	ARFLAGS=rv AUX_OBJ=setenv.o NETGROUP=-DNO_NETGROUP TLI= all
+ 
+@@ -664,7 +664,7 @@ CFLAGS	= -O -DFACILITY=$(FACILITY) $(ACC
+ 	-DREAL_DAEMON_DIR=\"$(REAL_DAEMON_DIR)\" $(STYLE) $(KILL_OPT) \
+ 	-DSEVERITY=$(SEVERITY) -DRFC931_TIMEOUT=$(RFC931_TIMEOUT) \
+ 	$(UCHAR) $(TABLES) $(STRINGS) $(TLI) $(EXTRA_CFLAGS) $(DOT) \
+-	$(VSYSLOG) $(HOSTNAME)
++	$(VSYSLOG) $(HOSTNAME) -fPIC
+ 
+ LIB_OBJ= hosts_access.o options.o shell_cmd.o rfc931.o eval.o \
+ 	hosts_ctl.o refuse.o percent_x.o clean_exit.o $(AUX_OBJ) \
+@@ -684,7 +684,7 @@ KIT	= README miscd.c tcpd.c fromhost.c h
+ 	refuse.c tcpdchk.8 setenv.c inetcf.c inetcf.h scaffold.c \
+ 	scaffold.h tcpdmatch.8 README.NIS
+ 
+-LIB	= libwrap.a
++LIB	= libwrap.so
+ 
+ all other: config-check tcpd tcpdmatch try-from safe_finger tcpdchk
+ 
+@@ -700,8 +700,7 @@ config-check:
+ 
+ $(LIB):	$(LIB_OBJ)
+ 	rm -f $(LIB)
+-	$(AR) $(ARFLAGS) $(LIB) $(LIB_OBJ)
+-	-$(RANLIB) $(LIB)
++	gcc -shared -o $(LIB) $(LIB_OBJ)
+ 
+ tcpd:	tcpd.o $(LIB)
+ 	$(CC) $(CFLAGS) -o $@ tcpd.o $(LIB) $(LIBS)
+@@ -710,7 +709,7 @@ miscd:	miscd.o $(LIB)
+ 	$(CC) $(CFLAGS) -o $@ miscd.o $(LIB) $(LIBS)
+ 
+ safe_finger: safe_finger.o $(LIB)
+-	$(CC) $(CFLAGS) -o $@ safe_finger.o $(LIB) $(LIBS)
++	$(CC) $(CFLAGS) -o $@ safe_finger.o -Wl,--as-needed $(LIB) $(LIBS)
+ 
+ TCPDMATCH_OBJ = tcpdmatch.o fakelog.o inetcf.o scaffold.o
+ 

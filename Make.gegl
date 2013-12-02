@@ -1,0 +1,10 @@
+## Make.gegl
+
+gegl: babl ruby perl glib gtk+ ruby libjpeg libpng librsvg sdl graphviz \
+		avifile
+	$(MAKE) PROG=gegl _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --disable-docs" \
+		JTL_TESTS_BOGUS=0.1.4
+
+# \
+#                JTL_PATCH=gegl-0.1.6-jtl1.diff

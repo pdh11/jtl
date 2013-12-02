@@ -1,0 +1,20 @@
+--- gstreamer-0.10.30/docs/gst/Makefile.in~	2010-07-15 10:20:00.000000000 +0100
++++ gstreamer-0.10.30/docs/gst/Makefile.in	2010-07-29 20:30:09.000000000 +0100
+@@ -908,7 +908,7 @@ install-data-local:
+ 	  $(INSTALL_DATA) $(srcdir)/html/$(DOC_MODULE).devhelp \
+ 	    $(DESTDIR)$(TARGET_DIR)/$(DOC_MODULE)-@GST_MAJORMINOR@.devhelp; \
+ 	  if test -e $(srcdir)/html/$(DOC_MODULE).devhelp2; then \
+-        	    $(INSTALL_DATA) $(srcdir)/html/$(DOC_MODULE).devhelp2 \
++		   $(INSTALL_DATA) $(srcdir)/html/$(DOC_MODULE).devhelp2 \
+ 	           $(DESTDIR)$(TARGET_DIR)/$(DOC_MODULE)-@GST_MAJORMINOR@.devhelp2; \
+ 	  fi; \
+ 	  (which gtkdoc-rebase >/dev/null && \
+@@ -936,7 +936,7 @@ dist-hook: dist-check-gtkdoc dist-hook-l
+ 	-cp $(srcdir)/$(DOC_MODULE).types $(distdir)/
+ 	-cp $(srcdir)/$(DOC_MODULE)-sections.txt $(distdir)/
+ 	cd $(distdir) && rm -f $(DISTCLEANFILES)
+-        -gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
++	-gtkdoc-rebase --online --relative --html-dir=$(distdir)/html
+ 
+ .PHONY : dist-hook-local docs
+ 

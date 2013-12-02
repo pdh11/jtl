@@ -1,0 +1,4 @@
+## Make.libunistring
+
+libunistring:
+	$(MAKE) PROG=libunistring _gnu

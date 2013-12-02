@@ -1,0 +1,4 @@
+## Make.cracklib
+
+cracklib: python
+	$(MAKE) PROG=cracklib _gnu

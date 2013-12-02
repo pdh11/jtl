@@ -1,0 +1,25 @@
+## Make.sub-e2fsprogs
+#
+# Doesn't cope with -j
+
+sub-e2fsprogs: sub-glibc
+	@echo Compiling e2fsprogs for image
+	rm -rf $(BUILD)/sub-e2fsprogs
+	mkdir -p $(BUILD)/sub-e2fsprogs
+	tar xzf $(ARCHIVE)/e2fsprogs* -C $(BUILD)/sub-e2fsprogs
+	( cd $(BUILD)/sub-e2fsprogs/* \
+		&& CFLAGS="$(JTL_CFLAGS)" ./configure --prefix=/usr \
+			--enable-shared --disable-static --with-gnu-ld \
+			--disable-nls --enable-fsck --enable-elf-shlibs \
+			--enable-dynamic-e2fsck i386-linux \
+		&& $(MAKE) -j1 \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr root_prefix=$(SUB_ROOT)/usr install )
+	mv $(SUB_ROOT)/usr/sbin/{fsck,e2fsck,mke2fs} $(SUB_ROOT)/sbin
+	mv $(SUB_ROOT)/usr/lib/lib{com_err,e2p,ext2fs,ss,uuid}* $(SUB_ROOT)/lib
+	rm -f $(SUB_ROOT)/lib/lib{com_err,e2p,ext2fs,ss,uuid}.so
+	ln -f $(SUB_ROOT)/sbin/e2fsck $(SUB_ROOT)/sbin/fsck.ext2
+	ln -f $(SUB_ROOT)/sbin/e2fsck $(SUB_ROOT)/sbin/fsck.ext3
+	ln -f $(SUB_ROOT)/sbin/mke2fs $(SUB_ROOT)/sbin/mkfs.ext2
+	rm -f $(SUB_ROOT)/usr/sbin/{fsck.ext2,fsck.ext3,mkfs.ext2}
+	du -hs $(BUILD)/sub-e2fsprogs > $(MADE)/sub-e2fsprogs
+	rm -rf $(BUILD)/sub-e2fsprogs

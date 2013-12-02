@@ -1,0 +1,4 @@
+## Make.libglademm
+
+libglademm: glib pkgconfig libglade glibmm gtkmm
+	$(MAKE) PROG=libglademm _gnu

@@ -1,0 +1,4 @@
+## Make.nano
+
+nano:
+	$(MAKE) PROG=nano _gnu

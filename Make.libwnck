@@ -1,0 +1,6 @@
+## Make.libwnck
+#
+# lib-I-*beg*-your-pardon?
+
+libwnck: glib gtk+ intltool perl_xml_parser pkgconfig
+	$(MAKE) PROG=libwnck _gnu

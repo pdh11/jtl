@@ -1,0 +1,5 @@
+## Make.dbus-python
+
+dbus-python: dbus python dbus-glib pygobject
+	$(MAKE) PROG=dbus-python _gnu \
+		JTL_TESTS_BOGUS=0.83.1

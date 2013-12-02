@@ -1,0 +1,12 @@
+## Make.efence
+
+efence:
+	@echo Compiling efence
+	rm -rf $(BUILD)/efence
+	mkdir -p $(BUILD)/efence
+	tar xzf $(ARCHIVE)/ElectricFence-* -C $(BUILD)/efence
+	( cd $(BUILD)/efence/* \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) MAN_INSTALL_DIR=/usr/share/man/man3 install )
+	du -hs $(BUILD)/efence > $(MADE)/efence
+	rm -rf $(BUILD)/efence

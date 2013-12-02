@@ -1,0 +1,4 @@
+## Make.libgcrypt
+
+libgcrypt: libgpg-error
+	$(MAKE) PROG=libgcrypt _gnu

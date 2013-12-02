@@ -1,0 +1,14 @@
+## Make.rhythmbox
+#
+# --disable-daap in 0.10.1 as daap doesn't compile against modern libsoup
+
+rhythmbox: glib perl perl_xml_parser pkgconfig totem gstreamer avahi libsoup \
+		zlib nautilus python pygtk gnome-media brasero \
+		libglade hal libnotify gst-plugins-base dbus-glib \
+		coherence control-center tdb
+	$(MAKE) PROG=rhythmbox _gnu \
+                LIBS="-L/usr/X11/lib" \
+		JTL_CONFIG="$(JTL_CONFIG) --disable-audioscrobbler" \
+		JTL_CFLAGS="$(JTL_CFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+		JTL_CXXFLAGS="$(JTL_CXXFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+		JTL_TESTS_BOGUS=bogus

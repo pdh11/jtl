@@ -1,0 +1,5 @@
+## Make.polkit-gnome
+
+polkit-gnome: glib gobject-introspection libxslt polkit
+	$(MAKE) PROG=polkit-gnome _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --with-authfw=shadow"

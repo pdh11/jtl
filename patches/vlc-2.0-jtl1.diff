@@ -1,0 +1,9 @@
+--- vlc-2.0.0/share/vlc.desktop.in~	2012-02-10 21:11:49.000000000 +0000
++++ vlc-2.0.0/share/vlc.desktop.in	2012-03-02 21:31:32.000000000 +0000
+@@ -1,5 +1,6 @@
+ [Desktop Entry]
+ Version=1.0
++Encoding=UTF-8
+ Name=VLC media player
+ GenericName=Media player
+ Comment=Read, capture, broadcast your multimedia streams

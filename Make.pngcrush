@@ -1,0 +1,14 @@
+## Make.pngcrush
+#
+
+pngcrush: zlib libpng
+	@echo Making pngcrush
+	rm -rf $(BUILD)/pngcrush
+	mkdir -p $(BUILD)/pngcrush
+	tar xjf $(ARCHIVE)/pngcrush*bz2 -C $(BUILD)/pngcrush
+	patch -d $(BUILD)/pngcrush/* -p1 < patches/pngcrush-1.7.25-jtl1.diff
+	cd $(BUILD)/pngcrush/* \
+                && $(MAKE) \
+                && $(REALLY) install -s pngcrush /usr/bin/pngcrush
+	du -hs $(BUILD)/pngcrush > $(MADE)/pngcrush
+	rm -rf $(BUILD)/pngcrush

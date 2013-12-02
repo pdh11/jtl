@@ -1,0 +1,6 @@
+## Make.dbus-glib
+#
+# Warning - does not BUILD unless dbus-daemon --system is running
+
+dbus-glib: glib dbus
+	$(MAKE) PROG=dbus-glib _gnu

@@ -1,0 +1,11 @@
+--- nose-0.10.4/setup.py~	2007-10-13 22:45:45.000000000 +0100
++++ nose-0.10.4/setup.py	2010-07-30 21:06:29.000000000 +0100
+@@ -57,7 +57,7 @@ setup(
+     download_url = \
+     'http://somethingaboutorange.com/mrl/projects/nose/nose-%s.tar.gz' \
+     % VERSION,
+-    data_files = [('man/man1', ['nosetests.1'])],
++    data_files = [('share/man/man1', ['nosetests.1'])],
+     package_data = {'': ['*.txt',
+                          'examples/*.py',
+                          'examples/*/*.py']},

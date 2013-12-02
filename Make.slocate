@@ -1,0 +1,20 @@
+## Make.slocate
+#
+# Locate comes from findutils
+
+slocate:
+	@echo Making slocate
+	rm -rf $(BUILD)/slocate
+	mkdir -p $(BUILD)/slocate
+	tar xf $(ARCHIVE)/slocate-*bz2 -C $(BUILD)/slocate
+	# patch -d $(BUILD)/slocate/* -p1 < patches/slocate-2.7-jtl1.diff
+	( cd $(BUILD)/slocate/* \
+		&& touch Makefile.in \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	$(REALLY) ln -sf /usr/bin/slocate /usr/bin/updatedb
+	$(REALLY) ln -sf /usr/bin/slocate /usr/bin/locate
+	du -hs $(BUILD)/slocate > $(MADE)/slocate
+	rm -rf $(BUILD)/slocate

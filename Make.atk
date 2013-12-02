@@ -1,0 +1,4 @@
+## Make.atk
+
+atk: glib gobject-introspection
+	$(MAKE) PROG=atk _gnu

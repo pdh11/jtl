@@ -1,0 +1,10 @@
+## Make.tracker
+
+tracker: dbus glib pango gtk+ libxml2 libnotify hal gdk-pixbuf qt poppler \
+                cairo libjpeg giflib libtiff libvorbis flac libexif \
+                libgsf exempi evolution-data-server taglib gnome-keyring rest \
+                gstreamer sqlite gobject-introspection libpng evolution \
+                taglib xine-lib
+	$(MAKE) PROG=tracker _gnu \
+                JTL_TESTS_BOGUS=0.14.5 \
+                JTL_CONFIG="$(JTL_CONFIG) --disable-miner-evolution"

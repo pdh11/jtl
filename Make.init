@@ -1,0 +1,17 @@
+## Make.init
+#
+
+init:
+	@echo Compiling init
+	rm -rf $(BUILD)/init
+	mkdir -p $(BUILD)/init
+	tar xzf $(ARCHIVE)/sysvinit-* -C $(BUILD)/init
+	patch -d $(BUILD)/init/* -p1 -F5 -z.old < patches/init-2.86-jtl1.diff
+	( cd $(BUILD)/init/*/src \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) ROOT=$(JTL_ROOT) install )
+	[ -p /dev/initctl ] || $(REALLY) rm -f $(JTL_ROOT)/dev/initctl
+	[ -p /dev/initctl ] || $(REALLY) mknod -m 600 $(JTL_ROOT)/dev/initctl p
+	$(REALLY) telinit u
+	du -hs $(BUILD)/init > $(MADE)/init
+	rm -rf $(BUILD)/init

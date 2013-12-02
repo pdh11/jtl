@@ -1,0 +1,4 @@
+## Make.libtasn1
+
+libtasn1: valgrind
+	$(MAKE) PROG=libtasn1 _gnu

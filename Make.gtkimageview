@@ -1,0 +1,4 @@
+## Make.gtkimageview
+
+gtkimageview: glib gtk+2
+	$(MAKE) PROG=gtkimageview _gnu

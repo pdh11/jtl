@@ -1,0 +1,74 @@
+--- gnome-settings-daemon-3.2.0/configure~	2011-09-26 16:50:30.000000000 +0100
++++ gnome-settings-daemon-3.2.0/configure	2011-10-23 21:30:56.000000000 +0100
+@@ -19191,12 +19191,12 @@ if test -n "$MEDIA_KEYS_CFLAGS"; then
+     pkg_cv_MEDIA_KEYS_CFLAGS="$MEDIA_KEYS_CFLAGS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-unix-2.0 upower-glib >= \$UPOWER_GLIB_REQUIRED_VERSION\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "gio-unix-2.0 upower-glib >= $UPOWER_GLIB_REQUIRED_VERSION") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-unix-2.0"; } >&5
++  ($PKG_CONFIG --exists --print-errors "gio-unix-2.0") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_MEDIA_KEYS_CFLAGS=`$PKG_CONFIG --cflags "gio-unix-2.0 upower-glib >= $UPOWER_GLIB_REQUIRED_VERSION" 2>/dev/null`
++  pkg_cv_MEDIA_KEYS_CFLAGS=`$PKG_CONFIG --cflags "gio-unix-2.0" 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+@@ -19208,12 +19208,12 @@ if test -n "$MEDIA_KEYS_LIBS"; then
+     pkg_cv_MEDIA_KEYS_LIBS="$MEDIA_KEYS_LIBS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-unix-2.0 upower-glib >= \$UPOWER_GLIB_REQUIRED_VERSION\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "gio-unix-2.0 upower-glib >= $UPOWER_GLIB_REQUIRED_VERSION") 2>&5
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gio-unix-2.0 "; } >&5
++  ($PKG_CONFIG --exists --print-errors "gio-unix-2.0") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_MEDIA_KEYS_LIBS=`$PKG_CONFIG --libs "gio-unix-2.0 upower-glib >= $UPOWER_GLIB_REQUIRED_VERSION" 2>/dev/null`
++  pkg_cv_MEDIA_KEYS_LIBS=`$PKG_CONFIG --libs "gio-unix-2.0" 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+   pkg_failed=yes
+@@ -19234,14 +19234,14 @@ else
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        MEDIA_KEYS_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gio-unix-2.0 upower-glib >= $UPOWER_GLIB_REQUIRED_VERSION" 2>&1`
++	        MEDIA_KEYS_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gio-unix-2.0" 2>&1`
+         else
+-	        MEDIA_KEYS_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gio-unix-2.0 upower-glib >= $UPOWER_GLIB_REQUIRED_VERSION" 2>&1`
++	        MEDIA_KEYS_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gio-unix-2.0" 2>&1`
+         fi
+ 	# Put the nasty error message in config.log where it belongs
+ 	echo "$MEDIA_KEYS_PKG_ERRORS" >&5
+ 
+-	as_fn_error $? "Package requirements (gio-unix-2.0 upower-glib >= $UPOWER_GLIB_REQUIRED_VERSION) were not met:
++	as_fn_error $? "Package requirements (gio-unix-2.0) were not met:
+ 
+ $MEDIA_KEYS_PKG_ERRORS
+ 
+--- gnome-settings-daemon-3.2.0/plugins/Makefile.in~	2011-09-26 16:50:32.000000000 +0100
++++ gnome-settings-daemon-3.2.0/plugins/Makefile.in	2011-10-23 21:29:05.000000000 +0100
+@@ -316,7 +316,7 @@ top_srcdir = @top_srcdir@
+ NULL = 
+ enabled_plugins = a11y-keyboard a11y-settings automount background \
+-	clipboard color cursor datetime dummy power housekeeping \
++	clipboard color cursor datetime dummy housekeeping \
+-	keybindings keyboard media-keys mouse sound wacom xrandr \
++	keybindings keyboard mouse sound wacom xrandr \
+ 	xsettings $(NULL) $(am__append_1) $(am__append_3) \
+ 	$(am__append_5) $(am__append_7) $(am__append_9)
+ disabled_plugins = $(NULL) $(am__append_2) $(am__append_4) \
+--- gnome-settings-daemon-3.2.0/plugins/Makefile.am~	2011-09-26 15:22:01.000000000 +0100
++++ gnome-settings-daemon-3.2.0/plugins/Makefile.am	2011-10-23 21:28:32.000000000 +0100
+@@ -14,7 +14,6 @@ enabled_plugins =	\
+ 	housekeeping    \
+ 	keybindings	\
+ 	keyboard	\
+-	media-keys	\
+ 	mouse		\
+ 	sound		\
+ 	wacom		\

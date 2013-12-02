@@ -1,0 +1,4 @@
+## Make.accountsservice
+
+accountsservice: glib gobject-introspection
+	$(MAKE) PROG=accountsservice _gnu

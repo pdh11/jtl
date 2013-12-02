@@ -1,0 +1,5 @@
+## Make.gmock
+
+gmock:
+	$(MAKE) PROG=gmock _gnu \
+                JTL_INSTALL="-k install || true"

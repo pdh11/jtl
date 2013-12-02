@@ -1,0 +1,4 @@
+## Make.kde-admin
+
+kde-admin: kde-libs kde-runtime qt
+	$(MAKE) PROG=kdeadmin JTL_TOUCH=kde-admin PREFIX=$(PREFIX)/kde _gnucmake

@@ -1,0 +1,14 @@
+## Make.anacron
+
+anacron:
+	@echo Making anacron
+	rm -rf $(BUILD)/anacron
+	mkdir -p $(BUILD)/anacron
+	tar xf $(ARCHIVE)/anacron-* -C $(BUILD)/anacron
+	patch -d $(BUILD)/anacron/* -p1 < patches/anacron-2.3-jtl1.diff
+	( cd $(BUILD)/anacron/* \
+		&& $(MAKE) CFLAGS="$(JTL_CFLAGS)" MANDIR=/usr/share/man \
+		&& strip anacron \
+		&& $(REALLY) $(MAKE) install MANDIR=/usr/share/man )
+	du -hs $(BUILD)/anacron > $(MADE)/anacron
+	rm -rf $(BUILD)/anacron

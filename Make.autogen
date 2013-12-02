@@ -1,0 +1,6 @@
+## Make.autogen
+
+autogen: guile libxml2
+	$(MAKE) PROG=autogen _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --enable-static" \
+                JTL_TESTS_BOGUS=2.69-columns

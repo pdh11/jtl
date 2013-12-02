@@ -1,0 +1,5 @@
+## Make.libgdata
+
+libgdata: glib gobject-introspection libsoup liboauth
+	$(MAKE) PROG=libgdata _gnu \
+		JTL_TESTS_BOGUS=0.5.1

@@ -1,0 +1,7 @@
+## Make.k3b
+#
+
+k3b: kde-libs kde-runtime hal alsa-lib ffmpeg flac libmad libvorbis lame \
+		taglib cdrtools cdrdao dvd+rw-tools libkcddb
+	$(MAKE) PROG=k3b PREFIX=$(PREFIX)/kde _gnucmake \
+		JTL_CMAKE="-DK3B_BUILD_FFMPEG_DECODER_PLUGIN=off"

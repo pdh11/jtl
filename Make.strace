@@ -1,0 +1,5 @@
+## Make.strace
+
+strace:
+	$(MAKE) PROG=strace _gnu \
+		JTL_PATCH=strace-4.5.19-jtl1.diff

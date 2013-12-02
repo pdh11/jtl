@@ -1,0 +1,4 @@
+## Make.pycrypto
+
+pycrypto: python
+	$(MAKE) PROG=pycrypto _pythonstyle

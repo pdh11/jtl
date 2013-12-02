@@ -1,0 +1,4 @@
+## Make.gc
+
+gc:
+	$(MAKE) PROG=gc _gnu

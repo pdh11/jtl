@@ -1,0 +1,6 @@
+## Make.gst-python
+
+gst-python:  gst-plugins-base python pygtk
+	$(MAKE) PROG=gst-python _gnu \
+		JTL_TESTS_BOGUS=bogus
+

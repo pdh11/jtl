@@ -1,0 +1,5 @@
+## Make.libnice
+
+libnice: glib gstreamer pkgconfig
+	$(MAKE) PROG=libnice _gnu \
+		JTL_TESTS_BOGUS=0.0.13

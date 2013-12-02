@@ -1,0 +1,12 @@
+## Make.louie
+#
+# Dispatcher thing for Coherence
+
+louie: python setuptools
+
+louie: nose
+	$(MAKE) PROG=louie _pythonstyle
+
+nose: python
+	$(MAKE) PROG=nose _pythonstyle \
+		JTL_PATCH=nose-0.10.4-jtl1.diff

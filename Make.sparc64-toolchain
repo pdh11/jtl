@@ -1,0 +1,15 @@
+## Make.sparc64-toolchain
+#
+# glibc does a link test to look for TLS :( which fails if first-time build
+
+sparc64-toolchain:
+	libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
+		libc_cv_sparc64_tls=yes \
+		$(MAKE) JTL_CROSS=sparc64-linux JTL_CROSS2=sparc \
+		JTL_CROSSCFLAGS="-mcpu=ultrasparc -m64 -O2" \
+		JTL_CROSSCPPFLAGS="-Wa,-xarch=v9a" \
+		JTL_CROSSGCCFLAGS=--disable-multilib \
+		sparc64-linux-do-toolchain \
+		JTL_CROSSCONFIGMAKE="biarch = 64" \
+		JTL_CONFIGPATH=configs/sparc64_
+	touch $(MADE)/sparc64-toolchain

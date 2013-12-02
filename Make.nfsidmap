@@ -1,0 +1,4 @@
+## Make.nfsidmap
+
+nfsidmap: openldap
+	$(MAKE) PROG=nfsidmap _gnu

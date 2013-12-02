@@ -1,0 +1,11 @@
+--- nano-1.2.5/nano.c~	2005-03-22 15:04:02.000000000 +0000
++++ nano-1.2.5/nano.c	2006-03-20 11:24:03.000000000 +0000
+@@ -2148,7 +2148,7 @@ size_t quote_length(const char *line)
+     size_t qlen = strlen(quotestr);
+ 
+     /* Compute quote depth level */
+-    while (strncmp(line + qdepth, quotestr, quotelen) == 0)
++    while (strncmp(line + qdepth, quotestr, qlen) == 0)
+ 	qdepth += qlen;
+     return qdepth;
+ }

@@ -1,0 +1,6 @@
+## Make.p11-kit
+
+p11-kit: pkgconfig libtasn1
+	$(MAKE) PROG=p11-kit _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --without-trust-paths" \
+                JTL_TESTS_BOGUS=0.20.1

@@ -1,0 +1,4 @@
+## Make.alsa-plugins
+
+alsa-plugins: alsa-lib hal jack ffmpeg
+	$(MAKE) PROG=alsa-plugins _gnu

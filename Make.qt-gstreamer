@@ -1,0 +1,4 @@
+## Make.qt-gstreamer
+
+qt-gstreamer: qt gstreamer
+	$(MAKE) PROG=qt-gstreamer _gnucmake

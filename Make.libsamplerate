@@ -1,0 +1,4 @@
+## Make.libsamplerate
+
+libsamplerate: pkgconfig fftw libsndfile
+	$(MAKE) PROG=libsamplerate _gnu

@@ -1,0 +1,11 @@
+--- eject-2.1.5+deb1+cvs20081104/eject.c~	2008-11-04 21:40:40.000000000 +0000
++++ eject-2.1.5+deb1+cvs20081104/eject.c	2012-03-01 20:17:41.000000000 +0000
+@@ -30,7 +30,7 @@
+  *
+  */
+ 
+-#include "config.h"
++#define VERSION "2.1.5-jtl1"
+ #include "i18n.h"
+ 
+ #ifndef DEFAULTDEVICE

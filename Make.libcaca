@@ -1,0 +1,4 @@
+## Make.libcaca
+
+libcaca: x doxygen
+	$(MAKE) PROG=libcaca SUBDIRS=src _gnu JTL_CONFIG="--disable-imlib2"

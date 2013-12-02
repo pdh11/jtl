@@ -1,0 +1,8 @@
+## Make.orbit
+#
+# Requires static linking
+
+orbit: glib libidl pkgconfig openssl
+	$(MAKE) -j1 PROG=orbit JTL_CONFIG="--enable-static --enable-shared --sysconfdir=/etc" _gnu \
+		JTL_TESTS_BOGUS=2.14.18-doesnt-like-glibc-2.11.2-malloc
+

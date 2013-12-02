@@ -1,0 +1,5 @@
+# Make.perl_xml_parser
+#
+
+perl_xml_parser: perl
+	$(MAKE) PROG=perl_xml_parser _perlstyle

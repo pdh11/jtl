@@ -1,0 +1,12 @@
+## Make.lcov
+
+lcov: perl
+	@echo Making GNU lcov with scons
+	rm -rf $(BUILD)/lcov
+	mkdir -p $(BUILD)/lcov
+	tar xjf $(ARCHIVE)/lcov-*bz2 -C $(BUILD)/lcov
+	# patch -d $(BUILD)/lcov/* -p1 -F5 -z.old < patches/lcov-1.9-jtl1.diff
+	( cd $(BUILD)/lcov/* \
+		&& $(REALLY) make install )
+	du -hs $(BUILD)/lcov > $(MADE)/lcov
+	( rm -rf $(BUILD)/lcov ; onesync ) &

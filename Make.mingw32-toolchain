@@ -1,0 +1,278 @@
+## Make.mingw32-toolchain
+
+mingw32-toolchain: binutils
+	touch $(MADE)/mingw32-toolchain
+
+mingw32-toolchain: cross-mingw32-binutils cross-mingw32-headers \
+		cross-mingw32-gcc cross-mingw32-boost cross-mingw32-pkgconfig \
+                cross-mingw32-flac \
+		cross-mingw32-lame cross-mingw32-libcddb
+
+cross-mingw32-binutils:
+	@echo Making cross-mingw32-binutils
+	rm -rf $(BUILD)/cross-mingw32-binutils
+	mkdir -p $(BUILD)/cross-mingw32-binutils
+	tar xf $(ARCHIVE)/binutils-*.tar* -C $(BUILD)/cross-mingw32-binutils
+	#patch -d $(BUILD)/cross-mingw32-binutils/b* -p1 \
+	# 	< patches/binutils-2.17.50.0.2-jtl1.diff
+	( cd $(BUILD)/cross-mingw32-binutils/* \
+		&& CFLAGS="$(JTL_CFLAGS)" ./configure \
+			--target=i586-mingw32 \
+			--prefix=$(PREFIX) --enable-static --disable-shared \
+			--with-gnu-ld --disable-nls --host=$(JTL_ARCH)-linux \
+			--build=$(JTL_ARCH)-linux --disable-werror \
+			--infodir=$(PREFIX)/share/info \
+			--mandir=$(PREFIX)/share/man \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/cross-mingw32-binutils \
+		> $(MADE)/cross-mingw32-binutils
+	( rm -rf $(BUILD)/cross-mingw32-binutils ; sync ) &
+
+cross-mingw32-headers:
+	@echo Installing cross-mingw32-headers
+	rm -rf $(BUILD)/cross-mingw32-headers
+	mkdir -p $(BUILD)/cross-mingw32-headers
+	tar xjf $(ARCHIVE)/mingw-runtime-*bz2 -C $(BUILD)/cross-mingw32-headers
+	$(REALLY) cp -r  $(BUILD)/cross-mingw32-headers/m*/include $(PREFIX)/i586-mingw32
+	tar xjf $(ARCHIVE)/w32api-*bz2 -C $(BUILD)/cross-mingw32-headers
+	$(REALLY) cp -r  $(BUILD)/cross-mingw32-headers/w32api-*/include $(PREFIX)/i586-mingw32
+	du -hs $(BUILD)/cross-mingw32-headers \
+		> $(MADE)/cross-mingw32-headers
+	( rm -rf $(BUILD)/cross-mingw32-headers ; sync ) &
+
+cross-mingw32-gcc-stage1: cross-mingw32-binutils cross-mingw32-headers
+	@echo Making cross-mingw32-gcc-stage1
+	rm -rf $(BUILD)/cross-mingw32-gcc-stage1
+	mkdir -p $(BUILD)/cross-mingw32-gcc-stage1/build
+	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/cross-mingw32-gcc-stage1
+	patch -d $(BUILD)/cross-mingw32-gcc-stage1/g* -p1 \
+		< patches/gcc-4.6.2-jtl1.diff
+	( cd $(BUILD)/cross-mingw32-gcc-stage1/build \
+		&& CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
+			 ../gcc-*/configure --target=i586-mingw32 \
+			--prefix=$(PREFIX) $(JTL_CROSSGCCFLAGS) \
+			--enable-languages="c" --enable-threads=win32 \
+			--disable-libmudflap --disable-libssp \
+			--enable-__cxa_atexit --enable-sjlj-exceptions \
+			--disable-win32-registry --with-gnu-as --with-gnu-ld \
+			--infodir=$(PREFIX)/share/info \
+			--mandir=$(PREFIX)/share/man \
+		&& $(MAKE) CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
+		&& $(REALLY) make install )
+	du -hs $(BUILD)/cross-mingw32-gcc-stage1 > $(MADE)/cross-mingw32-gcc-stage1
+	( rm -rf $(BUILD)/cross-mingw32-gcc-stage1 ; sync ) &
+
+cross-mingw32-api: cross-mingw32-gcc-stage1
+	@echo Making cross-mingw32-api
+	rm -rf $(BUILD)/cross-mingw32-api
+	mkdir -p $(BUILD)/cross-mingw32-api
+	tar xjf $(ARCHIVE)/w32api*.bz2 -C $(BUILD)/cross-mingw32-api
+	#patch -d $(BUILD)/cross-mingw32-api/b* -p1 \
+	# 	< patches/api-2.17.50.0.2-jtl1.diff
+	( cd $(BUILD)/cross-mingw32-api/* \
+		&& CFLAGS="$(JTL_CFLAGS) -mms-bitfields" ./configure \
+			--target=i586-mingw32 \
+			--prefix=$(PREFIX)/i586-mingw32 \
+			--with-gnu-ld --disable-nls --host=i586-mingw32 \
+			--build=$(JTL_ARCH)-linux --disable-werror \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/cross-mingw32-api \
+		> $(MADE)/cross-mingw32-api
+	( rm -rf $(BUILD)/cross-mingw32-api ; sync ) &	
+
+cross-mingw32-runtime: cross-mingw32-gcc-stage1 cross-mingw32-api
+	@echo Making cross-mingw32-runtime
+	rm -rf $(BUILD)/cross-mingw32-runtime
+	mkdir -p $(BUILD)/cross-mingw32-runtime
+	tar xjf $(ARCHIVE)/mingw-runtime*.bz2 -C $(BUILD)/cross-mingw32-runtime
+	tar xjf $(ARCHIVE)/w32api*.bz2 -C $(BUILD)/cross-mingw32-runtime
+	#patch -d $(BUILD)/cross-mingw32-runtime/b* -p1 \
+	# 	< patches/runtime-2.17.50.0.2-jtl1.diff
+	( cd $(BUILD)/cross-mingw32-runtime && ln -sf w32api-* w32api )
+	( cd $(BUILD)/cross-mingw32-runtime/m* \
+		&& CFLAGS="$(JTL_CFLAGS) -mms-bitfields" ./configure \
+			--target=i586-mingw32 \
+			--prefix=$(PREFIX)/i586-mingw32 \
+			--with-gnu-ld --disable-nls --host=i586-mingw32 \
+			--build=$(JTL_ARCH)-linux --disable-werror \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/cross-mingw32-runtime \
+		> $(MADE)/cross-mingw32-runtime
+	( rm -rf $(BUILD)/cross-mingw32-runtime ; sync ) &	
+
+cross-mingw32-gcc: cross-mingw32-runtime cross-mingw32-api
+	@echo Making cross-mingw32-gcc
+	rm -rf $(BUILD)/cross-mingw32-gcc
+	mkdir -p $(BUILD)/cross-mingw32-gcc/build
+	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/cross-mingw32-gcc
+	patch -d $(BUILD)/cross-mingw32-gcc/g* -p1 \
+		< patches/gcc-4.6.2-jtl1.diff
+	( cd $(BUILD)/cross-mingw32-gcc/build \
+		&& CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS) -mthreads" \
+		   	CXXFLAGS_FOR_TARGET="$(JTL_CROSSCXXFLAGS) -mthreads" \
+			 ../gcc-*/configure --target=i586-mingw32 \
+			--prefix=$(PREFIX) $(JTL_CROSSGCCFLAGS) \
+			--enable-languages="c,c++" --enable-threads=win32 \
+			--disable-libmudflap --disable-libssp \
+			--enable-__cxa_atexit --enable-sjlj-exceptions \
+			--disable-win32-registry --with-gnu-as --with-gnu-ld \
+			--disable-libstdcxx-pch \
+			--enable-static --disable-shared \
+			--enable-libstdcxx-allocator=new \
+			--infodir=$(PREFIX)/share/info \
+			--mandir=$(PREFIX)/share/man \
+		&& $(MAKE) CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS) -mthreads -march=pentium -fshort-wchar" \
+			CXXFLAGS_FOR_TARGET="$(JTL_CROSSCXXFLAGS) -mthreads -march=pentium -fshort-wchar" \
+		&& $(REALLY) make install )
+	du -hs $(BUILD)/cross-mingw32-gcc > $(MADE)/cross-mingw32-gcc
+	( rm -rf $(BUILD)/cross-mingw32-gcc ; sync ) &
+
+##
+#
+# Zlib for cross-compiler
+#
+
+cross-mingw32-zlib: cross-mingw32-gcc
+	CC=i586-mingw32-gcc $(MAKE) PROG=zlib \
+		JTL_CONFIG="--prefix=/usr/i586-mingw32" \
+		JTL_BUILD=cross-mingw32-zlib \
+		JTL_TOUCH=cross-mingw32-zlib \
+		AR="i586-mingw32-ar rc" \
+		RANLIB=i586-mingw-ranlib \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS) -mthreads" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS) -mthreads" _gnu
+
+##
+#
+# Boost for cross-compiler
+#
+cross-mingw32-boost: cross-mingw32-gcc
+	@echo Making cross-mingw32-boost
+	rm -rf $(BUILD)/cross-mingw32-boost
+	mkdir -p $(BUILD)/cross-mingw32-boost
+	tar xjf $(ARCHIVE)/boost*bz2 -C $(BUILD)/cross-mingw32-boost
+	# patch -d $(BUILD)/cross-mingw32-boost/* -p1 < patches/boost-1.44.0-jtl1.diff
+	cd $(BUILD)/cross-mingw32-boost/* \
+		&& ./bootstrap.sh --prefix=$(PREFIX)/i586-mingw32 \
+			--libdir=$(PREFIX)/i586-mingw32/lib \
+			--includedir=$(PREFIX)/i586-mingw32/include \
+		&& echo "using gcc : : i586-mingw32-g++ : <compileflags>-mthreads <linkflags>-mthreads ;" > jtl-config.jam \
+		&& ./bjam -d+2 \
+			--layout=system \
+			--without-python \
+			--without-iostreams \
+			--without-mpi \
+			--without-random \
+			-sGXX=i586-mingw32-g++ \
+			--user-config=jtl-config.jam \
+			variant=release \
+			link=static \
+			threading=multi \
+			threadapi=win32 \
+			target-os=windows \
+		&& $(REALLY) rm -rf $(PREFIX)/i586-mingw32/include/boost \
+		&& $(REALLY) ./bjam \
+			--layout=system \
+			--without-python \
+			--without-iostreams \
+			--without-mpi \
+			--without-random \
+			-sGXX=i586-mingw32-g++ \
+			--user-config=jtl-config.jam \
+			variant=release \
+			link=static \
+			threading=multi \
+			threadapi=win32 \
+			target-os=windows \
+			install
+	for i in $(PREFIX)/i586-mingw32/lib/libboost_*.a ; do $(REALLY) i586-mingw32-ranlib $$i ; done
+	du -hs $(BUILD)/cross-mingw32-boost > $(MADE)/cross-mingw32-boost
+	$(REALLY) rm -rf $(BUILD)/cross-mingw32-boost
+
+##
+#
+# pkg-config for packages available to cross-compiler
+#
+cross-mingw32-pkgconfig:
+	$(MAKE) PROG=pkgconfig JTL_CONFIG="$(JTL_CONFIG) --with-pc-path=/usr/i586-mingw32/lib/pkgconfig --program-prefix=i586-mingw32-" JTL_TOUCH=cross-mingw32-pkgconfig _gnu
+
+##
+#
+# libcdio for cross-compiler
+#
+
+cross-mingw32-libcdio: cross-mingw32-gcc
+	echo=echo $(MAKE) PROG=libcdio JTL_PATCH=libcdio-0.80-jtl1.diff \
+		PREFIX="$(PREFIX)/i586-mingw32" \
+		JTL_AUTOCONF=1 \
+		JTL_BUILD=cross-mingw32-libcdio \
+		JTL_TOUCH=cross-mingw32-libcdio \
+		JTL_TESTS_BOGUS=bogus \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS)" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS)" \
+		JTL_CONFIG="$(JTL_CONFIG) --host=i586-mingw32 --disable-joliet --disable-example-progs --without-iso-info --without-iso-read --without-cd-info --without-cd-drive --without-cd-read" _gnu
+
+cross-mingw32-taglib: cross-mingw32-gcc
+	$(MAKE) PROG=taglib JTL_BUILD=cross-mingw32-taglib \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/i586-mingw32 --host=i586-mingw32 --enable-static --disable-shared" \
+		JTL_TOUCH=cross-mingw32-taglib \
+		LDFLAGS=-mthreads \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS) -DMAKE_TAGLIB_LIB -DMINGW_STATIC -mthreads" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS) -DMAKE_TAGLIB_LIB -DMINGW_STATIC -mthreads" _gnu
+
+cross-mingw32-libxml2: cross-mingw32-gcc
+	$(MAKE) PROG=libxml2  JTL_BUILD=cross-mingw32-libxml2 \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/i586-mingw32 --host=i586-mingw32 --enable-static --disable-shared --without-python" \
+		JTL_TOUCH=cross-mingw32-libxml2 \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS)" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS)" _gnu
+
+cross-mingw32-flac: cross-mingw32-gcc
+	$(MAKE) PROG=flac JTL_BUILD=cross-mingw32-flac \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/i586-mingw32 --host=i586-mingw32 --enable-static --disable-shared --disable-ogg" \
+		JTL_TOUCH=cross-mingw32-flac \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS) -include stdint.h" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS) -D__STDC_LIMIT_MACROS=1 -include stdint.h -include string.h -Wl,-lstdc++" \
+		JTL_TESTS_BOGUS=cross \
+		 _gnu
+
+cross-mingw32-lame: cross-mingw32-gcc
+	$(MAKE) PROG=lame JTL_BUILD=cross-mingw32-lame \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/i586-mingw32 --host=i586-mingw32 --enable-static --disable-shared" \
+		JTL_TOUCH=cross-mingw32-lame \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS)" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS)" \
+		JTL_TESTS_BOGUS=cross \
+		 _gnu
+
+cross-mingw32-regex: cross-mingw32-gcc
+	$(MAKE) PROG=mingw-libgnurx \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/i586-mingw32 --host=i586-mingw32 --enable-static --disable-shared" \
+		JTL_TOUCH=cross-mingw32-regex \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS)" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS)" \
+		JTL_TESTS_BOGUS=cross \
+		 _gnu
+
+cross-mingw32-libcddb: cross-mingw32-gcc cross-mingw32-regex
+	ac_cv_func_malloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes \
+		$(MAKE) PROG=libcddb JTL_BUILD=cross-mingw32-libcddb \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/i586-mingw32 --host=i586-mingw32 --enable-static --disable-shared" \
+		JTL_TOUCH=cross-mingw32-libcddb \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS) -DICONV_CONST=const" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS)" \
+		JTL_TESTS_BOGUS=cross \
+		 _gnu
+
+# Not quite there yet
+cross-mingw32-qt: cross-mingw32-gcc qt
+	$(MAKE) PROG=qt _gnu \
+		JTL_BUILD=cross-mingw32-qt \
+		JTL_CONFIG="--prefix=/usr/i586-mingw32/qt -static -platform linux-g++-64 -make libs -opensource -stl -little-endian -host-little-endian -continue" \
+		JTL_TOUCH=cross-mingw32-qt \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS)" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS)" \
+		JTL_TESTS_BOGUS=cross

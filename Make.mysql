@@ -1,0 +1,12 @@
+## Make.mysql
+#
+# For its own darned reasons, libmsqld is a static library only, not
+# shared. But users of it want to link it into shared libraries, so it
+# must be compiled -fPIC.
+
+mysql: zlib perl doxygen
+	$(MAKE) PROG=mysql _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --with-charset=utf8 --with-embedded-server" \
+		JTL_CFLAGS="$(JTL_CFLAGS) -fPIC" \
+		JTL_CXXFLAGS="$(JTL_CXXFLAGS) -fPIC" \
+		JTL_PATCH=mysql-5.1.49-jtl1.diff

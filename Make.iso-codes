@@ -1,0 +1,4 @@
+## Make.iso-codes
+
+iso-codes: gawk
+	$(MAKE) PROG=iso-codes _gnu

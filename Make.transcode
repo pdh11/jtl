@@ -1,0 +1,10 @@
+## Make.transcode
+
+transcode: avifile libfame glib libogg libvorbis lame libdvdread x sdl \
+		imagemagick libjpeg xvidcore libdv mjpegtools libxml2 \
+		libtheora mplayer libfame libquicktime sox ffmpeg \
+		xvidcore x264 faac lzo
+	$(MAKE) PROG=transcode _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-freetype2 --enable-mjpegtools --enable-libxml2 --enable-libquicktime --enable-libfame --enable-libpostproc --enable-avifile --enable-a52 --enable-ogg --enable-vorbis --enable-libdv --enable-theora --enable-lzo --disable-nuv --enable-libmpeg3 --enable-imagemagick --enable-x264 --enable-xvid --enable-faac" \
+		xvid_EXTRA_LIBS="-lpthread -lm" \
+                JTL_PATCH=transcode-1.1.5-jtl1.diff

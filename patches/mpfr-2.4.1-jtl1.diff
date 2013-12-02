@@ -1,0 +1,11 @@
+--- mpfr-2.4.1/mpfr-longlong.h~	2009-02-20 09:43:17.000000000 +0000
++++ mpfr-2.4.1/mpfr-longlong.h	2009-04-10 20:10:25.000000000 +0100
+@@ -451,7 +451,7 @@ long __MPN(count_leading_zeros) _PROTO (
+ 	       : "=r" (sh), "=&r" (sl)					\
+ 	       : "r" (ah), "rI" (bh), "r" (al), "rI" (bl) __CLOBBER_CC);\
+     } while (0)
+-#if 1 || defined (__arm_m__)	/* `M' series has widening multiply support */
++#if defined (__arm_m__)	/* `M' series has widening multiply support */
+ #define umul_ppmm(xh, xl, a, b) \
+   __asm__ ("umull %0,%1,%2,%3" : "=&r" (xl), "=&r" (xh) : "r" (a), "r" (b))
+ #define UMUL_TIME 5

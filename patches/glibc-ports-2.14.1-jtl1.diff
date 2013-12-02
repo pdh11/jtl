@@ -1,0 +1,131 @@
+--- glibc-ports-2.14.1/sysdeps/unix/sysv/linux/alpha/bits/stat.h~	2011-09-06 15:10:43.000000000 +0100
++++ glibc-ports-2.14.1/sysdeps/unix/sysv/linux/alpha/bits/stat.h	2011-11-06 20:23:04.000000000 +0000
+@@ -30,6 +30,7 @@
+ #define _STAT_VER_GLIBC2_1	2
+ #define _STAT_VER_KERNEL64	3
+ #define _STAT_VER_GLIBC2_3_4	3
++#define _STAT_VER_LINUX         3
+ #define _STAT_VER		_STAT_VER_GLIBC2_3_4
+ 
+ /* Versions of the `xmknod' interface.  */
+--- glibc-ports-2.14.1/sysdeps/unix/sysv/linux/alpha/kernel-features.h~	2011-09-06 15:10:43.000000000 +0100
++++ glibc-ports-2.14.1/sysdeps/unix/sysv/linux/alpha/kernel-features.h	2011-11-06 20:39:00.000000000 +0000
+@@ -78,7 +78,7 @@
+ 
+ /* The *at syscalls were introduced on alpha just after 2.6.22-rc1.  */
+ #if __LINUX_KERNEL_VERSION < 0x020617
+-# undef __ASSUME_ATFCTS
++//# undef __ASSUME_ATFCTS
+ #endif
+ 
+ /* Support for inter-process robust mutexes was added on alpha just
+--- glibc-ports-2.14.1/sysdeps/alpha/dl-tls.h~	2011-09-06 15:10:43.000000000 +0100
++++ glibc-ports-2.14.1/sysdeps/alpha/dl-tls.h	2011-11-06 20:13:57.000000000 +0000
+@@ -27,3 +27,6 @@ typedef struct
+ 
+ 
+ extern void *__tls_get_addr (tls_index *ti);
++
++/* Value used for dtv entries for which the allocation is delayed.  */
++#define TLS_DTV_UNALLOCATED	((void *) -1l)
+--- glibc-ports-2.14.1/sysdeps/unix/sysv/linux/alpha/fxstatat.c~	2011-09-06 15:10:43.000000000 +0100
++++ glibc-ports-2.14.1/sysdeps/unix/sysv/linux/alpha/fxstatat.c	2011-11-06 21:17:06.000000000 +0000
+@@ -27,6 +27,7 @@
+ #include <sysdep.h>
+ #include <sys/syscall.h>
+ #include <xstatconv.h>
++#include <asm/unistd.h>
+ 
+ #undef __fxstatat64
+ 
+@@ -41,79 +42,7 @@ __fxstatat (int vers, int fd, const char
+       return -1;
+     }
+ 
+-  char *buf = NULL;
+-
+-  if (fd != AT_FDCWD && file[0] != '/')
+-    {
+-      size_t filelen = strlen (file);
+-      if (__builtin_expect (filelen == 0, 0))
+-        {
+-          __set_errno (ENOENT);
+-          return -1;
+-        }
+-
+-      static const char procfd[] = "/proc/self/fd/%d/%s";
+-      /* Buffer for the path name we are going to use.  It consists of
+-	 - the string /proc/self/fd/
+-	 - the file descriptor number
+-	 - the file name provided.
+-	 The final NUL is included in the sizeof.   A bit of overhead
+-	 due to the format elements compensates for possible negative
+-	 numbers.  */
+-      size_t buflen = sizeof (procfd) + sizeof (int) * 3 + filelen;
+-      buf = alloca (buflen);
+-
+-      __snprintf (buf, buflen, procfd, fd, file);
+-      file = buf;
+-    }
+-
+-  INTERNAL_SYSCALL_DECL (err);
+-  int result, errno_out;
+-  struct kernel_stat kst;
+-
+-#if __ASSUME_STAT64_SYSCALL > 0
+-  if (vers == _STAT_VER_KERNEL64)
+-    {
+-      if (flag & AT_SYMLINK_NOFOLLOW)
+-	result = INTERNAL_SYSCALL (lstat64, err, 2, file, st);
+-      else
+-	result = INTERNAL_SYSCALL (stat64, err, 2, file, st);
+-
+-      if (__builtin_expect (!INTERNAL_SYSCALL_ERROR_P (result, err), 1))
+-	return result;
+-      errno_out = INTERNAL_SYSCALL_ERRNO (result, err);
+-      goto fail;
+-    }
+-#elif defined __NR_stat64
+-  if (vers == _STAT_VER_KERNEL64 && !__libc_missing_axp_stat64)
+-    {
+-      if (flag & AT_SYMLINK_NOFOLLOW)
+-	result = INTERNAL_SYSCALL (lstat64, err, 2, file, st);
+-      else
+-	result = INTERNAL_SYSCALL (stat64, err, 2, file, st);
+-
+-      if (__builtin_expect (!INTERNAL_SYSCALL_ERROR_P (result, err), 1))
+-	return result;
+-      errno_out = INTERNAL_SYSCALL_ERRNO (result, err);
+-      if (errno_out != ENOSYS)
+-	goto fail;
+-      __libc_missing_axp_stat64 = 1;
+-    }
+-#endif
+-
+-  if (flag & AT_SYMLINK_NOFOLLOW)
+-    result = INTERNAL_SYSCALL (lstat, err, 2, file, &kst);
+-  else
+-    result = INTERNAL_SYSCALL (stat, err, 2, file, &kst);
+-
+-  if (__builtin_expect (!INTERNAL_SYSCALL_ERROR_P (result, err), 1))
+-    return __xstat_conv (vers, &kst, st);
+-  errno_out = INTERNAL_SYSCALL_ERRNO (result, err);
+-
+- fail:
+-  __atfct_seterrno (errno_out, fd, buf);
+-
+-  return -1;
++  return INLINE_SYSCALL (fstatat64, 4, fd, file, st, flag);
+ }
+ libc_hidden_def (__fxstatat)
+ strong_alias (__fxstatat, __fxstatat64);
+--- glibc-ports-2.14.1/sysdeps/unix/sysv/linux/alpha/kernel-features.h~	2011-11-06 21:05:15.000000000 +0000
++++ glibc-ports-2.14.1/sysdeps/unix/sysv/linux/alpha/kernel-features.h	2011-11-06 21:23:41.000000000 +0000
+@@ -59,6 +59,7 @@
+ # define __ASSUME_PIPE2     1
+ # define __ASSUME_EVENTFD2  1
+ # define __ASSUME_SIGNALFD4 1
++# define __ASSUME_DUP3		1
+ #endif
+ 
+ /* Support for accept4 was added for alpha after 2.6.33-rc1.  */

@@ -1,0 +1,8 @@
+## Make.gnome-desktop
+
+gnome-desktop: glib perl_xml_parser gtk+ gnome-vfs \
+		startup-notification scrollkeeper gnome-doc-utils \
+		gsettings-desktop-schemas xkeyboard-config itstool
+	$(MAKE) PROG=gnome-desktop _gnu \
+		JTL_TESTS_BOGUS=bogus
+

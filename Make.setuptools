@@ -1,0 +1,4 @@
+## Make.setuptools
+
+setuptools: python
+	$(MAKE) PROG=setuptools _pythonstyle

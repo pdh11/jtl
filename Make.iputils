@@ -1,0 +1,13 @@
+## Make.iputils
+
+iputils:
+	@echo Compiling iputils
+	rm -rf $(BUILD)/iputils
+	mkdir -p $(BUILD)/iputils
+	tar xjf $(ARCHIVE)/iputils-* -C $(BUILD)/iputils
+	( cd $(BUILD)/iputils/* \		
+		&& $(MAKE) DEFINES="$(JTL_CFLAGS)" \
+		&& $(REALLY) cp ping $(PREFIX)/bin \
+		&& $(REALLY) chmod 4755 $(PREFIX)/bin/ping )
+	du -hs $(BUILD)/iputils > $(MADE)/iputils
+	rm -rf $(BUILD)/iputils

@@ -1,0 +1,7 @@
+## Make.avahi
+
+avahi: glib qt pkgconfig libglade dbus doxygen graphviz libdaemon \
+		dbus-python gdbm expat perl
+	$(MAKE) PROG=avahi _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --with-distro=none --disable-mono --disable-qt3 --disable-gtk --disable-gtk3 --disable-pygtk" \
+                JTL_PATCH=avahi-0.6.31-jtl1.diff

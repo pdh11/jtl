@@ -1,0 +1,4 @@
+## Make.mpg123
+
+mpg123: portaudio jack esound alsa-lib
+	$(MAKE) PROG=mpg123 _gnu

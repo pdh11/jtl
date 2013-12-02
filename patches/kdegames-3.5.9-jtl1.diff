@@ -1,0 +1,223 @@
+--- kdegames-3.5.10/knetwalk/src/mainwindow.h~	2005-09-10 09:18:05.000000000 +0100
++++ kdegames-3.5.10/knetwalk/src/mainwindow.h	2009-01-29 21:19:42.000000000 +0000
+@@ -38,7 +38,7 @@ class MainWindow : public KMainWindow
+ 			NoviceBoardSize = 5,
+ 			NormalBoardSize = 7,
+ 			ExpertBoardSize = 9,
+-			MasterBoardSize = 9
++			MasterBoardSize = 16
+ 		};
+ 		enum
+ 		{
+@@ -63,6 +63,7 @@ class MainWindow : public KMainWindow
+ 		Cell* dCell(Cell* cell) const;
+ 		Cell* lCell(Cell* cell) const;
+ 		Cell* rCell(Cell* cell) const;
++                Cell* nextCell(Cell* cell, int dir) const;
+ 		bool  isGameOver();
+ 		bool  startBrowser(const QString& url);
+ 		bool  updateConnections();
+--- kdegames-3.5.10/knetwalk/src/mainwindow.cpp~	2006-01-19 16:36:41.000000000 +0000
++++ kdegames-3.5.10/knetwalk/src/mainwindow.cpp	2009-01-29 21:19:10.000000000 +0000
+@@ -26,6 +26,8 @@
+ #include <qtimer.h>
+ #include <qtoolbutton.h>
+ #include <qwhatsthis.h>
++#include <queue>
++#include <vector>
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -132,6 +134,21 @@ void MainWindow::slotNewGame()
+ 	newGame( Settings::skill() );
+ }
+ 
++struct Link
++{
++    Cell *from;
++    Cell::Dirs dir;
++    int weight;
++};
++
++struct RandomLinkOrder
++{
++    bool operator()(const Link& lhs, const Link& rhs)
++    {
++	return lhs.weight < rhs.weight;
++    }
++};
++
+ void MainWindow::newGame(int sk)
+ {
+ 	if (sk==Settings::EnumSkill::Novice || sk==Settings::EnumSkill::Normal 
+@@ -172,6 +189,83 @@ void MainWindow::newGame(int sk)
+ 	root->setConnected(true);
+ 	root->setRoot(true);
+ 
++	if (1) // rand() % 2
++	{
++	    // New maze algorithm
++		for(int row = start; row < start + size; row++)
++			for(int col = start; col < start + size; col++)
++				board[row * MasterBoardSize + col]->setDirs(Cell::Free);
++
++	    std::priority_queue<Link, std::vector<Link>,RandomLinkOrder> queue;
++
++	    Link rl;
++	    rl.from = root;
++	    rl.dir = Cell::U;
++	    rl.weight = rand();
++	    queue.push(rl);
++	    rl.dir = Cell::D;
++	    rl.weight = rand();
++	    queue.push(rl);
++	    rl.dir = Cell::L;
++	    rl.weight = rand();
++	    queue.push(rl);
++	    rl.dir = Cell::R;
++	    rl.weight = rand();
++	    queue.push(rl);
++
++	    for (unsigned int i=0; i<(size*size-3); ++i)
++	    {
++		for (;;)
++		{
++		    if (queue.empty())
++		    {
++//			fprintf(stderr, "This shouldn't happen\n");
++			break;
++		    }
++
++		    Link l = queue.top();
++		    queue.pop();
++		    Cell::Dirs d = l.from->dirs();
++		    if (d == 7 || d == 11 || d == 13 || d == 14)
++		    {
++//			printf("No threesomes\n");
++			continue;
++		    }
++		    
++		    Cell *to = nextCell(l.from, l.dir);
++		    if (!to)
++		    {
++//			printf("No target\n");
++			continue;
++		    }
++		    if (to->dirs() != Cell::Free)
++		    {
++//			printf("%d, %d from %d, not free\n", to->index(),
++//			       l.dir, l.from->index());
++			continue;
++		    }
++		    l.from->setDirs(Cell::Dirs(l.from->dirs() | l.dir));
++		    to->setDirs(contrdirs[l.dir]);
++
++		    l.from = to;
++		    l.dir = Cell::U;
++		    l.weight = rand();
++		    queue.push(l);
++		    l.dir = Cell::D;
++		    l.weight = rand();
++		    queue.push(l);
++		    l.dir = Cell::L;
++		    l.weight = rand();
++		    queue.push(l);
++		    l.dir = Cell::R;
++		    l.weight = rand();
++		    queue.push(l);
++
++		    break;
++		}
++	    }
++	}
++	else // Old maze algorithm
+ 	while(true)
+ 	{
+ 		for(int row = start; row < start + size; row++)
+@@ -329,6 +423,19 @@ Cell* MainWindow::rCell(Cell* cell) cons
+ 	else return 0;
+ }
+ 
++Cell* MainWindow::nextCell(Cell *cell, int dir) const
++{
++    switch (dir)
++    {
++    case Cell::U: return uCell(cell);
++    case Cell::D: return dCell(cell);
++    case Cell::L: return lCell(cell);
++    case Cell::R: return rCell(cell);
++    }
++
++    return NULL;
++}
++
+ void MainWindow::lClicked(int index)
+ {
+ 	rotate(index, true);
+--- kdegames-3.5.10/knetwalk/src/mainwindow.cpp~	2009-01-29 21:19:10.000000000 +0000
++++ kdegames-3.5.10/knetwalk/src/mainwindow.cpp	2009-01-30 14:21:49.000000000 +0000
+@@ -145,7 +145,7 @@ struct RandomLinkOrder
+ {
+     bool operator()(const Link& lhs, const Link& rhs)
+     {
+-	return lhs.weight < rhs.weight;
++	return lhs.weight > rhs.weight;
+     }
+ };
+ 
+@@ -189,12 +189,12 @@ void MainWindow::newGame(int sk)
+ 	root->setConnected(true);
+ 	root->setRoot(true);
+ 
+-	if (1) // rand() % 2
++	if (rand() % 2)
+ 	{
+ 	    // New maze algorithm
+-		for(int row = start; row < start + size; row++)
+-			for(int col = start; col < start + size; col++)
+-				board[row * MasterBoardSize + col]->setDirs(Cell::Free);
++	    for(int row = start; row < start + size; row++)
++		for(int col = start; col < start + size; col++)
++		    board[row * MasterBoardSize + col]->setDirs(Cell::Free);
+ 
+ 	    std::priority_queue<Link, std::vector<Link>,RandomLinkOrder> queue;
+ 
+@@ -213,7 +213,14 @@ void MainWindow::newGame(int sk)
+ 	    rl.weight = rand();
+ 	    queue.push(rl);
+ 
+-	    for (unsigned int i=0; i<(size*size-3); ++i)
++	    const int wiggliness = rand() % 10;
++	    int empties = rand() % size;
++	    if (empties)
++		empties = rand() % empties; // predispose to few empties
++
++//	    printf("w=%d e=%d\n", wiggliness, empties);
++
++	    for (unsigned int i=0; i<(size*size-1-empties); ++i)
+ 	    {
+ 		for (;;)
+ 		{
+@@ -228,7 +235,7 @@ void MainWindow::newGame(int sk)
+ 		    Cell::Dirs d = l.from->dirs();
+ 		    if (d == 7 || d == 11 || d == 13 || d == 14)
+ 		    {
+-//			printf("No threesomes\n");
++//			printf("No foursomes\n");
+ 			continue;
+ 		    }
+ 		    
+@@ -248,6 +255,13 @@ void MainWindow::newGame(int sk)
+ 		    to->setDirs(contrdirs[l.dir]);
+ 
+ 		    l.from = to;
++
++		    if ((rand() % 10) > wiggliness)
++		    {
++			l.weight = 0;
++			queue.push(l); // predispose to straight lines
++		    }
++
+ 		    l.dir = Cell::U;
+ 		    l.weight = rand();
+ 		    queue.push(l);

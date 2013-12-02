@@ -1,0 +1,6 @@
+## Make.valgrind
+
+valgrind:
+	$(MAKE) PROG=valgrind _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-only64bit" \
+                JTL_CFLAGS="$(JTL_CFLAGS) -ffreestanding"

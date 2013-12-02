@@ -1,0 +1,6 @@
+## Make.directfb
+#
+# Whatever a wm97xx is, it doesn't compile
+
+directfb: libjpeg sdl libmpeg3 freetype libpng perl zlib pkgconfig
+	ac_cv_header_linux_wm97xx_h=no $(MAKE) PROG=directfb _gnu

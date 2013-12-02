@@ -1,0 +1,5 @@
+## Make.gdk-pixbuf
+
+gdk-pixbuf: glib gobject-introspection x libpng libjpeg jasper libtiff
+	$(MAKE) PROG=gdk-pixbuf _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --with-x11 --with-libjasper"

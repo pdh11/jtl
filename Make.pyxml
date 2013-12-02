@@ -1,0 +1,4 @@
+## Make.pyxml
+
+pyxml: python expat
+	$(MAKE) PROG=pyxml _pythonstyle

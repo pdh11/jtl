@@ -1,0 +1,21 @@
+--- boost_1_44_0/tools/jam/src/make1.c~	2010-04-20 12:51:08.000000000 +0100
++++ boost_1_44_0/tools/jam/src/make1.c	2010-08-16 21:23:17.000000000 +0100
+@@ -247,7 +247,7 @@ int make1( TARGET * t )
+         printf( "...updated %d target%s...\n", counts->made,
+                 counts->made > 1 ? "s" : "" );
+ 
+-    return counts->total != counts->made;
++    return counts->total != counts->made || intr;
+ }
+ 
+ 
+--- boost_1_54_0/boost/atomic.hpp~	2012-12-15 18:28:27.000000000 +0000
++++ boost_1_54_0/boost/atomic.hpp	2013-08-23 18:24:01.000000000 +0100
+@@ -9,6 +9,7 @@
+ 
+ // This header includes all Boost.Atomic public headers
+ 
++#include <stdint.h>
+ #include <boost/atomic/atomic.hpp>
+ 
+ #ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE

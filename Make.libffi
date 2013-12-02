@@ -1,0 +1,4 @@
+## Make.libffi
+
+libffi:
+	$(MAKE) PROG=libffi _gnu

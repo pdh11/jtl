@@ -1,0 +1,4 @@
+## Make.pyjwt
+
+pyjwt: python
+	$(MAKE) PROG=pyjwt _pythonstyle

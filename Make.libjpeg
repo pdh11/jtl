@@ -1,0 +1,18 @@
+## Make.libjpeg
+
+libjpeg:
+	@echo Making libjpeg
+	rm -rf $(BUILD)/libjpeg
+	mkdir -p $(BUILD)/libjpeg
+	tar xjf $(ARCHIVE)/jpegsrc*bz2 -C $(BUILD)/libjpeg
+	patch -d $(BUILD)/libjpeg/* -p1 < patches/jpegsrc.v9-jtl1.diff
+	( cd $(BUILD)/libjpeg/* \
+		&& cp $(PREFIX)/share/libtool/config/config.sub . \
+		&& ./configure --enable-shared --disable-static \
+			--prefix=$(PREFIX) \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) CFLAGS="$(JTL_CFLAGS)" \
+		&& $(REALLY) $(MAKE) mandir=$(PREFIX)/share/man/man1 install )
+	du -hs $(BUILD)/libjpeg > $(MADE)/libjpeg
+	rm -rf $(BUILD)/libjpeg

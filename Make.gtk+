@@ -1,0 +1,7 @@
+## Make.gtk+
+
+gtk+: glib x perl pkgconfig atk pango freetype libpng libjpeg libtiff \
+		fontconfig cairo cups jasper gdk-pixbuf gobject-introspection \
+                at-spi2-atk
+	$(MAKE) PROG=gtk+ _gnu \
+		JTL_TESTS_BOGUS=bogus

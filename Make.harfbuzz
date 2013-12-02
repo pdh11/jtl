@@ -1,0 +1,5 @@
+## Make.harfbuzz
+
+harfbuzz: glib cairo freetype
+	$(MAKE) PROG=harfbuzz _gnu \
+                JTL_TESTS_BOGUS=0.9.4-afraid-of-c++

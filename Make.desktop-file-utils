@@ -1,0 +1,4 @@
+## Make.desktop-file-utils
+
+desktop-file-utils: glib popt
+	$(MAKE) PROG=desktop-file-utils _gnu

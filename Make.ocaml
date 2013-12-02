@@ -1,0 +1,18 @@
+## Make.ocaml
+
+ocaml: tk tcl
+	@echo Making GNU ocaml
+	mv $(BUILD)/ocaml $(BUILD)/ocaml.old || true
+	( $(REALLY) rm -rf $(BUILD)/ocaml.old ) &
+	mkdir -p $(BUILD)/ocaml
+	tar xjf $(ARCHIVE)/ocaml-*bz2 -C $(BUILD)/ocaml
+	( cd $(BUILD)/ocaml/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure -prefix $(PREFIX) -mandir $(PREFIX)/share/man/man1 \
+		&& $(MAKE) -j1 world \
+		&& $(MAKE) -j1 bootstrap \
+		&& $(MAKE) -j1 opt \
+		&& $(MAKE) -j1 opt.opt \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/ocaml > $(MADE)/ocaml
+	( $(REALLY) rm -rf $(BUILD)/ocaml ; onesync ) &

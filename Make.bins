@@ -1,0 +1,18 @@
+# Make.bins
+#
+# Groovy photo-album maker
+
+bins: perl imagemagick ed
+	@echo Installing bins
+	rm -rf $(BUILD)/bins
+	mkdir -p $(BUILD)/bins
+	tar xjf $(ARCHIVE)/bins-* -C $(BUILD)/bins
+	export PREFIX=/usr ; ( cd $(BUILD)/bins/* \
+		&& yes | $(REALLY) ./install.sh )
+	rm -rf $(BUILD)/bins
+	touch $(MADE)/bins
+
+bins: perl_image_size perl_image_info perl_uri \
+		perl_html_parser perl_html_template perl_html_clean \
+		perl_xml_grove perl_libxml perl_xml_handler_yawriter \
+		perl_text_iconv perl_time_date perl_text_unaccent

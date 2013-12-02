@@ -1,0 +1,102 @@
+## Make.sub
+#
+# Hopefully-bootable JTL CD, also acting as a backup of this directory
+#
+# Must be run with fakeroot: "fakeroot make JTL_ARCH=i386 sub"
+
+sub: fakeroot cdrtools sub-xemacs \
+		sub-autoconf \
+		sub-automake \
+		sub-bash \
+		sub-binutils \
+		sub-bootdisk \
+		sub-bzip2 \
+		sub-coreutils \
+		sub-dhcpcd \
+		sub-e2fsprogs \
+		sub-findutils \
+		sub-gawk \
+		sub-gcc \
+		sub-gettext \
+		sub-glibc \
+		sub-grep \
+		sub-gzip \
+		sub-init \
+		sub-kernel \
+		sub-lilo \
+		sub-make \
+		sub-ncurses \
+		sub-net-tools \
+		sub-patch \
+		sub-procps \
+		sub-sed \
+		sub-tar \
+		sub-tcp_wrappers \
+		sub-util-linux \
+		nfsboot
+	# 1. Strip all binaries
+	#
+	for i in $(SUB_ROOT)/bin/* $(SUB_ROOT)/usr/bin/* $(SUB_ROOT)/lib/*.so ; do \
+		[ -L $$i ] || (strip $$i ; echo Stripped $$i) ; \
+	done 2>&1 | grep -v "File format not recognized"
+	#
+	# 2. Set up /etc
+	#
+	mkdir -p $(SUB_ROOT)/proc
+	mkdir -p $(SUB_ROOT)/etc
+	mkdir -p $(SUB_ROOT)/tmp
+	mkdir -p $(SUB_ROOT)/mnt
+	mkdir -p $(SUB_ROOT)/root
+	mkdir -p $(SUB_ROOT)/usr/src/jtl/{build,made}
+	cd $(SUB_ROOT)/usr/src/jtl && ln -sf /archive archive
+	cp -dpR etc/* $(SUB_ROOT)/etc
+	rm -rf $(SUB_ROOT)/etc/CVS $(SUB_ROOT)/etc/*~
+	echo "root::0:0:root:/root:/bin/bash" > $(SUB_ROOT)/etc/passwd
+	echo "root::0:root" > $(SUB_ROOT)/etc/group
+	cd $(SUB_ROOT)/etc && rm -f localtime && ln -s ../usr/share/zoneinfo/Europe/London localtime
+	mkdir -p $(SUB_ROOT)/var/run
+	touch $(SUB_ROOT)/var/mtab
+	cd $(SUB_ROOT)/etc && ln -sf ../var/mtab mtab
+	#
+	# 3. Set up graft points for all JTL files
+	#
+	ls Make* README TODO | grep -v "~" | \
+		awk -- '{ print "/usr/src/jtl/" $$1 "=$(JTL_ROOT)/" $$1 }' \
+		> $(BUILD)/mappings
+	ls -d patches/* etc/* | grep -v "~" | grep -v "CVS" | \
+		awk -- '{ print "/usr/src/jtl/" $$1 "=$(JTL_ROOT)/" $$1 }' \
+		>> $(BUILD)/mappings
+	( cd $(ARCHIVE) && find . -type f -a -not -name "*~" ) | cut -b3- | \
+		awk -- '{ print "/archive/" $$1 "=$(ARCHIVE)/" $$1 }' \
+		 >> $(BUILD)/mappings
+	#
+	# 4. Do root stuff (making devices, mainly) then make the tgz and iso
+	# All this makedev stuff is temporary until devfs sorts its life out
+	#
+	rm -rf $(SUB_ROOT)/dev
+	mkdir -p $(SUB_ROOT)/dev
+	echo -e "#!/bin/sh \n" \
+		"cd $(SUB_ROOT)/dev && \
+		/dev/MAKEDEV std hda hdb console scd0 sg sda sdb pty && \
+		ln -sf scd0 cdrom && \
+		ln -sf scd0 dvd && \
+		rm -f initctl && \
+		mknod -m 600 initctl p && \
+		mkdir pts && \
+		cd $(SUB_ROOT) && \
+		cd .. && \
+		mkisofs -o /media/$(JTL_ARCH).iso -r -T -eltorito-boot boot/disk \
+			-graft-points -path-list $(BUILD)/mappings i386-root " \
+	> $(BUILD)/doit.sh
+	chmod a+x $(BUILD)/doit.sh
+	sh -c $(BUILD)/doit.sh
+
+#	set FAKE_PID=`faked --key 1360649363 | cut -d: -f2` ; \
+#	echo $$FAKE_PID ; \
+#	LD_PRELOAD=/usr/lib/libfakeroot/libfakeroot.so.0 FAKEROOTKEY=1360649363 /bin/sh -c $(BUILD)/doit.sh ; \
+#	kill $$FAKE_PID
+#	rm -f $(BUILD)/mappings $(BUILD)/doit.sh
+#	touch $(MADE)/sub
+
+#		tar cf - * --exclude=$(JTL_ARCH)-root.tar.gz \
+#			| gzip -9 > $(JTL_ARCH)-root.tar.gz && \

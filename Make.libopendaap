@@ -1,0 +1,4 @@
+## Make.libopendaap
+
+libopendaap:
+	$(MAKE) PROG=libopendaap _gnu

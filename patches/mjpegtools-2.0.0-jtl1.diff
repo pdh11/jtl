@@ -1,0 +1,11 @@
+--- mjpegtools-2.0.0/y4mdenoise/MotionSearcher.hh~	2010-07-25 21:06:56.000000000 +0100
++++ mjpegtools-2.0.0/y4mdenoise/MotionSearcher.hh	2012-03-22 17:30:31.000000000 +0000
+@@ -2196,7 +2196,7 @@ MotionSearcher<PIXEL_NUM,DIM,PIXEL_TOL,P
+ 	{
+ 		// This region is too small to be bothered with.
+ 		// Just get rid of it.
+-		DeleteRegion (a_pRegion);
++                this->DeleteRegion (a_pRegion);
+ 	}
+ 	else
+ 	{

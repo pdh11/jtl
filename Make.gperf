@@ -1,0 +1,4 @@
+## Make.gperf
+
+gperf:
+	$(MAKE) PROG=gperf _gnu

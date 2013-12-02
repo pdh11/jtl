@@ -1,0 +1,4 @@
+## Make.lprng
+
+lprng: openssl
+	$(MAKE) PROG=lprng CLEAR=no _gnu

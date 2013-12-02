@@ -1,0 +1,14 @@
+## Make.libv4l
+
+libv4l:
+	@echo Compiling libv4l
+	rm -rf $(BUILD)/libv4l
+	mkdir -p $(BUILD)/libv4l
+	tar xjf $(ARCHIVE)/libv4l-* -C $(BUILD)/libv4l
+	( cd $(BUILD)/libv4l/* \
+		&& $(MAKE) CFLAGS="$(JTL_CFLAGS)" \
+		&& $(REALLY) $(MAKE) PREFIX="$(PREFIX)" install \
+		&& $(REALLY) /sbin/ldconfig )
+	du -hs $(BUILD)/libv4l > $(MADE)/libv4l
+	rm -rf $(BUILD)/libv4l
+	touch $(MADE)/libv4l

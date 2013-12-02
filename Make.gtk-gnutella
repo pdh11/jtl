@@ -1,0 +1,17 @@
+## Make.gtk-gnutella
+
+gtk-gnutella: glib gtk+ libxml2 bison
+	# $(MAKE) PROG=gtk-gnutella _gnu
+	@echo Compiling gtk-gnutella
+	rm -rf $(BUILD)/gtk-gnutella
+	mkdir -p $(BUILD)/gtk-gnutella
+	tar xjf $(ARCHIVE)/gtk-gnutella-*bz2 -C $(BUILD)/gtk-gnutella
+	( cd $(BUILD)/gtk-gnutella/* \
+		&& ./Configure -deO -r -s -Dprefix=$(PREFIX) \
+			-Doptimize='$(JTL_CFLAGS)' -Dcc=gcc -Dgtkversion=2 \
+			-Dremotectrl=false \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/gtk-gnutella > $(MADE)/gtk-gnutella
+	rm -rf $(BUILD)/gtk-gnutella
+

@@ -1,0 +1,32 @@
+## Make.boost
+#
+# It's safe to remove the boost *headers* before installing, as existing
+# *binaries* can't be using them. And Boost often updates in ways that mean
+# leftover headers make new headers fail.
+#
+# bjam acts like "make -k" by default; the option to not make it do that is
+# "-q". Naturally.
+#
+# In 1.39.0 the cracksmoking build system doesn't correctly infer libdir from
+# prefix.
+#
+# In 1.44.0 the cracksmoking build system does nothing whatsoever if -q is
+# given (but returns zero anyway)
+
+boost: python
+	@echo Making boost
+	rm -rf $(BUILD)/boost
+	mkdir -p $(BUILD)/boost
+	tar xjf $(ARCHIVE)/boost*bz2 -C $(BUILD)/boost
+	# patch -d $(BUILD)/boost/* -p1 < patches/boost-1.44.0-jtl1.diff
+	cd $(BUILD)/boost/* \
+		&& ./bootstrap.sh --prefix=$(PREFIX) \
+			--libdir=$(PREFIX)/lib \
+			--includedir=$(PREFIX)/include \
+		&& ./bjam -j 4 --layout=system variant=release \
+			link=static link=shared threading=multi \
+		&& $(REALLY) rm -rf $(PREFIX)/include/boost \
+		&& $(REALLY) ./bjam --layout=system variant=release \
+			link=static link=shared threading=multi install
+	du -hs $(BUILD)/boost > $(MADE)/boost
+	rm -rf $(BUILD)/boost

@@ -1,0 +1,5 @@
+## Make.lcms
+
+lcms: libjpeg libtiff pkgconfig python
+	$(MAKE) PROG=lcms2 _gnu \
+                JTL_TOUCH=lcms

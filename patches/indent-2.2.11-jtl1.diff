@@ -1,0 +1,11 @@
+--- indent-2.2.11/doc/Makefile.in~	2010-01-31 16:25:21.000000000 +0000
++++ indent-2.2.11/doc/Makefile.in	2011-10-29 21:44:58.000000000 +0100
+@@ -663,7 +663,7 @@ html-monolithic: @PACKAGE@.html
+ html-split: @PACKAGE@_toc.html
+ 
+ @PACKAGE@.html: version.texi $(@PACKAGE@_TEXINFOS)
+-	$(TEXI2HTML) -expandinfo -number -monolithic `if test -f @PACKAGE@.texinfo; then echo @PACKAGE@.texinfo; else echo $(srcdir)/@PACKAGE@.texinfo; fi`
++	$(TEXI2HTML) -expandinfo -number-sections -monolithic `if test -f @PACKAGE@.texinfo; then echo @PACKAGE@.texinfo; else echo $(srcdir)/@PACKAGE@.texinfo; fi`
+ 
+ @PACKAGE@_toc.html: version.texi $(@PACKAGE@_TEXINFOS)
+ 	case "$(TEXI2HTML)" in \

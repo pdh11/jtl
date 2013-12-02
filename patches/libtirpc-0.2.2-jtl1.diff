@@ -1,0 +1,61 @@
+--- libtirpc-0.2.2/src/auth_time.c~	2011-05-02 13:10:40.000000000 +0100
++++ libtirpc-0.2.2/src/auth_time.c	2011-10-28 18:12:49.000000000 +0100
+@@ -491,3 +491,5 @@ error:
+ 
+ 	return (time_valid);
+ }
++
++#include "netnamer.c"
+--- libtirpc-0.2.2/src/key_call.c~	2011-05-02 13:10:40.000000000 +0100
++++ libtirpc-0.2.2/src/key_call.c	2011-10-28 18:10:42.000000000 +0100
+@@ -354,7 +354,7 @@ int	vers;
+ #if defined(__FreeBSD__)
+ 	if (uname(&u) == -1)
+ #else
+-#if defined(i386)
++#if 1
+ 	if (uname(&u) == -1)
+ #elif defined(sparc)
+ 	if (uname(&u) == -1)
+--- libtirpc-0.2.2/src/auth_des.c~	2011-05-02 13:10:40.000000000 +0100
++++ libtirpc-0.2.2/src/auth_des.c	2011-10-28 18:13:02.000000000 +0100
+@@ -491,3 +491,9 @@ authdes_ops(void)
+ 	mutex_unlock(&authdes_ops_lock);
+ 	return (&ops);
+ }
++
++#include "key_call.c"
++#include "netname.c"
++#include "key_prot_xdr.c" 
++#include "getpublickey.c"
++#include "rpcdname.c"
+--- libtirpc-0.2.2/src/xdr_mem.c~	2011-05-02 13:10:40.000000000 +0100
++++ libtirpc-0.2.2/src/xdr_mem.c	2011-10-28 18:17:45.000000000 +0100
+@@ -250,3 +250,5 @@ xdrmem_inline_unaligned(xdrs, len)
+ 
+ 	return (0);
+ }
++
++/*#include "crypt_client.c"*/
+--- libtirpc-0.2.2/src/key_call.c~	2011-05-02 13:10:40.000000000 +0100
++++ libtirpc-0.2.2/src/key_call.c	2011-10-28 18:16:36.000000000 +0100
+@@ -302,7 +302,7 @@ int	vers;
+ 	struct timeval wait_time;
+ 	struct utsname u;
+ 	int fd;
+-	extern thread_key_t key_call_key;
++	thread_key_t key_call_key;
+ 	extern mutex_t tsd_lock;
+ 
+ #define	TOTAL_TIMEOUT	30	/* total timeout talking to keyserver */
+--- libtirpc-0.2.2/src/des_crypt.c~	2011-05-02 13:10:40.000000000 +0100
++++ libtirpc-0.2.2/src/des_crypt.c	2011-10-29 20:02:45.000000000 +0100
+@@ -146,7 +146,7 @@ common_crypt(key, buf, len, mode, desp)
+ 			return (DESERR_HWERROR);
+ 		}
+ 	} else {
+-		if (!_des_crypt_call(buf, len, desp)) {
++		if (!_des_crypt(buf, len, desp)) {
+ 			return (DESERR_HWERROR);
+ 		}
+ 	}

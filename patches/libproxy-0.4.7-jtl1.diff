@@ -1,0 +1,39 @@
+--- libproxy-0.4.7/libproxy/url.cpp~	2011-06-06 22:44:37.000000000 +0100
++++ libproxy-0.4.7/libproxy/url.cpp	2012-08-06 13:42:10.000000000 +0100
+@@ -33,6 +33,7 @@
+ #include <cstdlib>    // For atoi()
+ #include <sys/stat.h> // For stat()
+ #include <algorithm> // For transform()
++#include <unistd.h>
+ 
+ #ifdef WIN32
+ #include <io.h>
+--- libproxy-0.4.7/libproxy/modules/pacrunner_mozjs.cpp~	2011-06-06 22:44:37.000000000 +0100
++++ libproxy-0.4.7/libproxy/modules/pacrunner_mozjs.cpp	2012-08-06 13:46:01.000000000 +0100
+@@ -19,6 +19,8 @@
+ 
+ #include <cstring> // ?
+ 
++#include <unistd.h>
++
+ #include "../extension_pacrunner.hpp"
+ using namespace libproxy;
+ 
+@@ -42,6 +44,8 @@ using namespace libproxy;
+ #define INET6_ADDRSTRLEN 46
+ #endif
+ 
++typedef unsigned uintN;
++
+ static JSBool dnsResolve_(JSContext *cx, jsval hostname, jsval *vp) {
+ 	// Get hostname argument
+ 	char *tmp = JS_EncodeString(cx, JS_ValueToString(cx, hostname));
+@@ -85,7 +89,7 @@ static JSBool myIpAddress(JSContext *cx,
+ 	if (!gethostname(hostname, 1023)) {
+ 		JSString *myhost = JS_NewStringCopyN(cx, hostname, strlen(hostname));
+ 		jsval arg = STRING_TO_JSVAL(myhost);
+-		return dnsResolve_(cx, 1, &arg);
++		return dnsResolve_(cx, arg, vp);
+ 	}
+ 	JS_free(cx, hostname);
+ 	JS_SET_RVAL(cx, vp, JSVAL_NULL);

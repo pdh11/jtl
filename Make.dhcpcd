@@ -1,0 +1,18 @@
+## Make.dhcpcd
+#
+# Regressed to not use autotools in v3
+
+dhcpcd:
+	$(MAKE) PROG=dhcpcd _gnu
+
+dhcpcdx:
+	@echo Compiling dhcpcd
+	rm -rf $(BUILD)/dhcpcd
+	mkdir -p $(BUILD)/dhcpcd
+	tar xf $(ARCHIVE)/dhcpcd-* -C $(BUILD)/dhcpcd
+	# patch -d $(BUILD)/dhcpcd/* -p1 -F5 < patches/dhcpcd-1.0.5-jtl1.diff
+	( cd $(BUILD)/dhcpcd/* \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/dhcpcd > $(MADE)/dhcpcd
+	rm -rf $(BUILD)/dhcpcd &

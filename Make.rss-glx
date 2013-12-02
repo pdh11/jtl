@@ -1,0 +1,19 @@
+## Make.rss-glx
+#
+# 0.8.2 ships with config.sub etc. as symlinks to /usr/libtool/wrong-place...
+
+rss-glx: xscreensaver freealut
+	@echo Making rss-glx
+	rm -rf $(BUILD)/rss-glx
+	mkdir -p $(BUILD)/rss-glx
+	tar xjf $(ARCHIVE)/rss-glx-*bz2 -C $(BUILD)/rss-glx
+	#patch -d $(BUILD)/rss-glx/r* -p1 < patches/rss-glx-0.8.2-jtl1.diff
+	( cd $(BUILD)/rss-glx/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+                        LIBS=-Wl,-L/usr/X11/lib,-lXext \
+			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/rss-glx > $(MADE)/rss-glx
+	rm -rf $(BUILD)/rss-glx
+

@@ -1,0 +1,6 @@
+## Make.x264
+
+# yasm gpac
+
+x264: yasm
+	$(MAKE) PROG=x264 JTL_CONFIG="$(JTL_CONFIG) --enable-pthread --enable-shared --enable-pic" _gnu

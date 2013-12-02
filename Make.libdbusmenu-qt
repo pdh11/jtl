@@ -1,0 +1,5 @@
+## Make.libdbusmenu-qt
+
+libdbusmenu-qt: dbus qt qjson openssl cmake
+	$(MAKE) PROG=libdbusmenu-qt _gnucmake \
+		LDFLAGS="-L/usr/qt/lib"

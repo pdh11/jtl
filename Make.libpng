@@ -1,0 +1,6 @@
+## Make.libpng
+#
+# You need the libpng-x.y.z-config.tar.bz2
+
+libpng: zlib
+	$(MAKE) PROG=libpng _gnu

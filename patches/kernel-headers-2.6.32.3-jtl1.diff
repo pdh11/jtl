@@ -1,0 +1,19 @@
+--- linux/include/scsi/scsi.h~	2009-12-03 03:51:21.000000000 +0000
++++ linux/include/scsi/scsi.h	2010-01-08 12:13:43.000000000 +0000
+@@ -143,6 +143,7 @@ struct scsi_cmnd;
+ 
+ #define SCSI_MAX_VARLEN_CDB_SIZE 260
+ 
++#ifdef __KERNEL
+ /* defined in T10 SCSI Primary Commands-2 (SPC2) */
+ struct scsi_varlen_cdb_hdr {
+ 	u8 opcode;        /* opcode always == VARIABLE_LENGTH_CMD */
+@@ -169,6 +170,8 @@ scsi_command_size(const unsigned char *c
+ 		scsi_varlen_cdb_length(cmnd) : COMMAND_SIZE(cmnd[0]);
+ }
+ 
++#endif // __KERNEL
++
+ /*
+  *  SCSI Architecture Model (SAM) Status codes. Taken from SAM-3 draft
+  *  T10/1561-D Revision 4 Draft dated 7th November 2002.

@@ -1,0 +1,4 @@
+## Make.python-coverage
+
+python-coverage: python
+	$(MAKE) PROG=coverage _pythonstyle JTL_TOUCH=python-coverage

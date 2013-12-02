@@ -1,0 +1,7 @@
+## Make.kde
+
+kde: smokekde kde-workspace kde-runtime kshisen kde-libs \
+		kcharselect gwenview \
+		k3b kde-plasma-addons amarok oxygen-icons okular \
+		kde-l10n-en_GB digikam kate kde-baseapps kde-webdev
+	touch $(MADE)/kde

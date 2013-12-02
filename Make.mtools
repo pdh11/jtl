@@ -1,0 +1,5 @@
+## Make.mtools
+
+mtools:
+	$(MAKE) PROG=mtools _gnu
+

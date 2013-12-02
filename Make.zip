@@ -1,0 +1,12 @@
+## Make.zip
+
+zip:
+	@echo Making zip
+	rm -rf $(BUILD)/zip
+	mkdir -p $(BUILD)/zip
+	tar xjf $(ARCHIVE)/zip-*bz2 -C $(BUILD)/zip
+	( cd $(BUILD)/zip/* \
+		&& $(MAKE) prefix=$(PREFIX) CFLAGS="$(JTL_CFLAGS) -DHAVE_DIRENT_H -DUNIX -I. -D_POSIX_C_SOURCE=200112 -D_BSD_SOURCE" -f unix/Makefile zips \
+		&& $(REALLY) $(MAKE) prefix=$(PREFIX) MANDIR=$(PREFIX)/share/man/man1 -f unix/Makefile install )
+	du -hs $(BUILD)/zip > $(MADE)/zip
+	rm -rf $(BUILD)/zip

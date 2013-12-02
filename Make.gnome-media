@@ -1,0 +1,7 @@
+## Make.gnome-media
+#
+# Tests attempt external DTD fetch
+
+gnome-media: glib gtk+ libcanberra libxml2 gstreamer gconf gst-plugins-base
+	$(MAKE) PROG=gnome-media _gnu \
+		JTL_TESTS_BOGUS=bogus

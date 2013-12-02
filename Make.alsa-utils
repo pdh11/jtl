@@ -1,0 +1,6 @@
+## Make.alsa-utils
+#
+# Needs yet another freakoid docbook thing to build its man pages
+
+alsa-utils: alsa-lib
+	$(MAKE) PROG=alsa-utils man_MANS= _gnu

@@ -1,0 +1,5 @@
+## Make.videorbits
+
+videorbits: zlib libjpeg x libpng fftw
+	$(MAKE) PROG=videorbits _gnu \
+                JTL_PATCH=videorbits-2.204-jtl1.diff

@@ -1,0 +1,5 @@
+## Make.xsane
+
+xsane: gimp gtk+ libjpeg libpng libtiff lcms sane-backends libtool libgphoto2
+	$(MAKE) PROG=xsane _gnu \
+                JTL_PATCH=xsane-0.998-jtl1.diff

@@ -1,0 +1,360 @@
+--- libcdio-0.80/config.h.in~	2008-04-23 19:54:21.000000000 +0100
++++ libcdio-0.80/config.h.in	2008-04-23 20:17:06.000000000 +0100
+@@ -184,6 +184,9 @@
+ /* Define to 1 if you have the <string.h> header file. */
+ #undef HAVE_STRING_H
+ 
++/* Define this if you have struct timespec */
++#undef HAVE_STRUCT_TIMESPEC
++
+ /* Define to 1 if you have the <sys/cdio.h> header file. */
+ #undef HAVE_SYS_CDIO_H
+ 
+--- libcdio-0.80/configure.ac~	2008-03-15 17:45:17.000000000 +0000
++++ libcdio-0.80/configure.ac	2008-04-23 20:18:24.000000000 +0100
+@@ -246,6 +246,15 @@ int main(int argc, char **argv) {
+    [AC_MSG_RESULT(no); ac_have_issock=no],
+    [AC_MSG_RESULT(no); ac_have_issock=no])
+ 
++AC_MSG_CHECKING([for struct timespec])
++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
++#ifdef HAVE_SYS_TIME_H
++#include <sys/time.h>
++#endif
++],[struct timespec ts;])],
++[ AC_MSG_RESULT(yes); AC_DEFINE(HAVE_STRUCT_TIMESPEC, [], [Define this if you have struct timespec]) ],
++[ AC_MSG_RESULT(no) ])
++
+ dnl empty_array_size
+ AC_MSG_CHECKING([how to create empty arrays])
+ 
+@@ -271,6 +280,49 @@ dnl empty_array_size
+ 
+ dnl bitfield order
+ AC_MSG_CHECKING(bitfield ordering in structs)
++dnl First see whether we can work out ordering without running a program --
++dnl for instance, when cross-compiling
++boring_CFLAGS="$CFLAGS"
++CFLAGS="$CFLAGS -O2"
++AC_LINK_IFELSE([
++int conftest_undefined_reference_();
++int main() {
++  union {
++    unsigned int x;
++    struct {
++      unsigned int x0: 1;
++      unsigned int x1: 31;
++    } s;
++  } u;
++
++  u.x = 0;
++  u.s.x0 = 1;
++  if (u.x == 1)
++    return conftest_undefined_reference_();
++  return 0;
++}
++], [bf_lsbf=0])
++AC_LINK_IFELSE([
++int conftest_undefined_reference_();
++int main() {
++  union {
++    unsigned int x;
++    struct {
++      unsigned int x0: 1;
++      unsigned int x1: 31;
++    } s;
++  } u;
++
++  u.x = 0;
++  u.s.x0 = 1;
++  if (u.x == 0x80000000)
++    return conftest_undefined_reference_();
++  return 0;
++}
++], [bf_lsbf=1])
++CFLAGS="$boring_CFLAGS"
++dnl If we haven't found out for certain yet, try the runtime test
++if test "x$bf_lsbf" = "x"; then
+ AC_TRY_RUN([
+ int
+  main() {
+@@ -292,6 +344,7 @@ main() {
+   if (sizeof (bf) != 1) return 1;
+   return *((unsigned char*) &bf) != 0xa5; }
+ ], bf_lsbf=0, AC_MSG_ERROR([unsupported bitfield ordering])))
++fi
+ if test "x$bf_lsbf" = "x1"; then
+  AC_MSG_RESULT(LSBF)
+  AC_DEFINE(BITFIELD_LSBF, [], [compiler does least-significant bit first in struct bitfields])
+@@ -467,7 +520,7 @@ int has_timeout=sizeof(test.timeout);],
+ esac
+ 
+ AC_MSG_CHECKING(extern long timezone variable)
+-AC_TRY_RUN([
++AC_LINK_IFELSE([
+ #ifdef NEED_TIMEZONEVAR
+ #define timezonevar 1
+ #endif
+--- libcdio-0.80/lib/udf/udf.c~	2006-04-17 04:32:38.000000000 +0100
++++ libcdio-0.80/lib/udf/udf.c	2008-04-23 20:09:45.000000000 +0100
+@@ -64,13 +64,17 @@ udf_get_posix_filemode(const udf_dirent_
+     if (i_perms & FE_PERM_U_WRITE) mode |= S_IWUSR;
+     if (i_perms & FE_PERM_U_EXEC)  mode |= S_IXUSR;
+     
++#ifdef S_IRGRP
+     if (i_perms & FE_PERM_G_READ)  mode |= S_IRGRP;
+     if (i_perms & FE_PERM_G_WRITE) mode |= S_IWGRP;
+     if (i_perms & FE_PERM_G_EXEC)  mode |= S_IXGRP;
++#endif
+     
++#ifdef S_IROTH
+     if (i_perms & FE_PERM_O_READ)  mode |= S_IROTH;
+     if (i_perms & FE_PERM_O_WRITE) mode |= S_IWOTH;
+     if (i_perms & FE_PERM_O_EXEC)  mode |= S_IXOTH;
++#endif
+ 
+     switch (udf_fe.icb_tag.file_type) {
+     case ICBTAG_FILE_TYPE_DIRECTORY: 
+@@ -79,24 +83,30 @@ udf_get_posix_filemode(const udf_dirent_
+     case ICBTAG_FILE_TYPE_REGULAR:
+       mode |= S_IFREG;
+       break;
++#ifdef S_IFLNK
+     case ICBTAG_FILE_TYPE_SYMLINK:
+       mode |= S_IFLNK;
+       break;
++#endif
+     case ICBTAG_FILE_TYPE_CHAR:
+       mode |= S_IFCHR;
+       break;
++#ifdef S_IFSOCK
+     case ICBTAG_FILE_TYPE_SOCKET:
+       mode |= S_IFSOCK;
+       break;
++#endif
+     case ICBTAG_FILE_TYPE_BLOCK:
+       mode |= S_IFBLK;
+       break;
+     default: ;
+     };
+   
++#ifdef S_ISUID
+     if (i_flags & ICBTAG_FLAG_SETUID) mode |= S_ISUID;
+     if (i_flags & ICBTAG_FLAG_SETGID) mode |= S_ISGID;
+     if (i_flags & ICBTAG_FLAG_STICKY) mode |= S_ISVTX;
++#endif
+   }
+   
+   return mode;
+--- libcdio-0.80/lib/udf/udf_time.c~	2006-02-13 01:59:42.000000000 +0000
++++ libcdio-0.80/lib/udf/udf_time.c	2008-04-23 20:19:33.000000000 +0100
+@@ -147,7 +147,7 @@ udf_stamp_to_time(time_t *dest, long int
+   return dest;
+ }
+ 
+-
++#ifdef HAVE_STRUCT_TIMESPEC
+ /*!
+   Convert a UDF timestamp to a time_t. If microseconds are desired,
+   use dest_usec. The return value is the same as dest. */
+@@ -205,6 +205,7 @@ udf_timespec_to_stamp(const struct times
+ 			 - (dest->hundreds_of_microseconds * 100) );
+   return dest;
+ }
++#endif
+ 
+ /*!
+   Return the modification time of the file.
+--- libcdio-0.80/lib/iso9660/xa.c~	2006-01-14 09:48:42.000000000 +0000
++++ libcdio-0.80/lib/iso9660/xa.c	2008-04-23 20:07:41.000000000 +0100
+@@ -163,11 +163,19 @@ iso9660_get_posix_filemode_from_xa(uint1
+   if (i_perms & XA_PERM_RUSR)  mode |= S_IRUSR;
+   if (i_perms & XA_PERM_XUSR)  mode |= S_IXUSR;
+   
++#ifdef S_IRGRP
+   if (i_perms & XA_PERM_RGRP)  mode |= S_IRGRP;
++#endif
++#ifdef S_IXGRP
+   if (i_perms & XA_PERM_XGRP)  mode |= S_IXGRP;
++#endif
+   
++#ifdef S_IROTH
+   if (i_perms & XA_PERM_ROTH)  mode |= S_IROTH;
++#endif
++#ifdef S_IXOTH
+   if (i_perms & XA_PERM_XOTH)  mode |= S_IXOTH;
++#endif
+   
+   if (i_perms & XA_ATTR_DIRECTORY)  mode |= S_IFDIR;
+   
+--- libcdio-0.80/lib/driver/gnu_linux.c~	2007-03-07 04:35:47.000000000 +0000
++++ libcdio-0.80/lib/driver/gnu_linux.c	2008-04-23 20:05:27.000000000 +0100
+@@ -32,8 +32,6 @@ static const char _rcsid[] = "$Id: gnu_l
+ 
+ #include <string.h>
+ #include <limits.h>
+-#include <sys/types.h>
+-#include <sys/wait.h>
+ 
+ #include <cdio/sector.h>
+ #include <cdio/util.h>
+@@ -47,6 +45,9 @@ static const char _rcsid[] = "$Id: gnu_l
+ 
+ #ifdef HAVE_LINUX_CDROM
+ 
++#include <sys/types.h>
++#include <sys/wait.h>
++
+ #if defined(HAVE_LINUX_VERSION_H)
+ # include <linux/version.h>
+ # if LINUX_VERSION_CODE >= KERNEL_VERSION(2,2,16)
+--- libcdio-0.80/src/Makefile.am~	2008-03-15 16:21:28.000000000 +0000
++++ libcdio-0.80/src/Makefile.am	2008-04-23 20:31:44.000000000 +0100
+@@ -21,11 +21,6 @@
+ 
+ GETOPT_C = getopt.c getopt1.c
+ 
+-man_MANS = cd-drive.1 cd-info.1 cd-read.1 iso-read.1 iso-info.1 
+-EXTRA_DIST = cd-drive.help2man cd-info.help2man cd-read.help2man \
+-	     iso-info.help2man iso-read.help2man $(GETOPT_C) getopt.h \
+-             $(man_MANS)
+-
+ noinst_HEADERS = cddb.h getopt.h util.h
+ 
+ ####################################################
+@@ -39,10 +34,6 @@ endif
+ CDDB_LIBS=@CDDB_LIBS@
+ CDDA_PLAYER_LIBS=@CDDA_PLAYER_LIBS@
+ 
+-$(man_MANS): %.1: % %.help2man
+-	-$(HELP2MAN) --opt-include=$<.help2man --no-info --output=$@ ./$<
+-MOSTLYCLEANFILES = $(man_MANS)
+-
+ if BUILD_CDDA_PLAYER
+ cdda_player_SOURCES = cdda-player.c cddb.c cddb.h $(GETOPT_C)
+ cdda_player_LDADD   = $(LIBCDIO_LIBS) $(CDDB_LIBS) $(CDDA_PLAYER_LIBS)
+@@ -53,12 +44,14 @@ if BUILD_CD_DRIVE
+ cd_drive_SOURCES = cd-drive.c util.c util.h $(GETOPT_C)
+ cd_drive_LDADD   =  $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LIBICONV)
+ bin_cd_drive     = cd-drive
++man_cd_drive	 = cd-drive.1
+ endif
+ 
+ if BUILD_CDINFO
+ cd_info_SOURCES = cd-info.c cddb.c cddb.h util.c util.h $(GETOPT_C)
+ cd_info_LDADD   =  $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(CDDB_LIBS) $(VCDINFO_LIBS) $(LIBICONV)
+ bin_cd_info     = cd-info 
++man_cd_info     = cd-info.1
+ endif
+ 
+ if BUILD_CDINFO_LINUX
+@@ -71,18 +64,21 @@ if BUILD_CD_READ
+ cd_read_SOURCES = cd-read.c util.c util.h $(GETOPT_C)
+ cd_read_LDADD   = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LIBICONV)
+ bin_cd_read     = cd-read 
++man_cd_read     = cd-read.1
+ endif
+ 
+ if BUILD_ISO_INFO
+ iso_info_SOURCES = iso-info.c util.c util.h $(GETOPT_C)
+ iso_info_LDADD   = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LIBICONV)
+ bin_iso_info     = iso-info
++man_iso_info     = iso-info.1
+ endif
+ 
+ if BUILD_ISO_READ
+ iso_read_SOURCES = iso-read.c util.c util.h $(GETOPT_C)
+ iso_read_LDADD   = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LIBICONV)
+ bin_iso_read     = iso-read
++man_iso_read     = iso-read.1
+ endif
+ 
+ mmc_tool_SOURCES = mmc-tool.c util.c util.h $(GETOPT_C)
+@@ -92,3 +88,12 @@ bin_mmc_tool     = mmc-tool
+ bin_PROGRAMS = $(bin_cd_drive) $(bin_cd_info)  $(bin_cdinfo_linux) $(bin_cd_read) $(bin_iso_info) $(bin_iso_read) $(bin_cdda_player) $(bin_mmc_tool)
+ 
+ INCLUDES = -I$(top_srcdir) $(LIBCDIO_CFLAGS) $(VCDINFO_CFLAGS) $(CDDB_CFLAGS)
++
++man_MANS = $(man_cd_drive) $(man_cd_info) $(man_cd_read) $(man_iso_read) $(man_iso_info)
++EXTRA_DIST = cd-drive.help2man cd-info.help2man cd-read.help2man \
++	     iso-info.help2man iso-read.help2man $(GETOPT_C) getopt.h \
++             $(man_MANS)
++
++$(man_MANS): %.1: % %.help2man
++	-$(HELP2MAN) --opt-include=$<.help2man --no-info --output=$@ ./$<
++MOSTLYCLEANFILES = $(man_MANS)
+--- libcdio-0.80/Makefile.am~	2008-03-15 16:21:28.000000000 +0000
++++ libcdio-0.80/Makefile.am	2008-04-09 16:17:36.000000000 +0100
+@@ -48,7 +48,7 @@ pkgconfig_DATA = libcdio.pc  \
+ 	         libcdio++.pc  \
+ 	         libiso9660.pc \
+ 	         libiso9660++.pc \
+-	         libudf.pc
++	         libudf.pc \
+ 		 $(paranoiapcs)
+ 
+ 
+--- libcdio-0.80/lib/driver/MSWindows/win32_ioctl.c~	2006-03-17 03:11:29.000000000 +0000
++++ libcdio-0.80/lib/driver/MSWindows/win32_ioctl.c	2008-04-24 10:09:54.000000000 +0100
+@@ -901,8 +901,8 @@ read_fulltoc_win32mmc (_img_private_t *p
+       set_track_flags(&(p_env->gen.track_flags[j]), 
+ 		      p_env->tocent[j-1].Control);
+     
+-      cdio_debug("p_sectors: %i, %lu", i, 
+-		 (unsigned long int) (p_env->tocent[i].start_lsn));
++//      cdio_debug("p_sectors: %i, %lu", i, 
++//		 (unsigned long int) (p_env->tocent[i].start_lsn));
+       
+       if (cdrom_toc_full.TrackData[i].POINT == p_env->gen.i_tracks)
+ 	i_seen_flag|=0x08;
+@@ -1003,8 +1003,8 @@ read_toc_win32ioctl (_img_private_t *p_e
+       p_env->tocent[i].Control & 0x8 ? 4 : 2;
+     
+ 
+-    cdio_debug("p_sectors: %i, %lu", i, 
+-	       (unsigned long int) (p_env->tocent[i].start_lsn));
++//    cdio_debug("p_sectors: %i, %lu", i, 
++//	       (unsigned long int) (p_env->tocent[i].start_lsn));
+   }
+   p_env->gen.toc_init = true;
+   return true;
+--- libcdio-0.80/lib/cdda_interface/interface.c~     2005-10-04 01:38:34.000000000 +0100
++++ libcdio-0.80/lib/cdda_interface/interface.c      2008-04-24 10:29:30.000000000 +0100
+@@ -122,7 +122,11 @@ cdio_cddap_open(cdrom_drive_t *d)
+ 
+   if ( -1 == d->bigendianp ) {
+     d->bigendianp = data_bigendianp(d);
++    
++    fprintf(stderr, "OK 126\n");
+   }
++    
++    fprintf(stderr, "OK 129\n");
+   
+ 
+   return(0);
+--- libcdio-0.80/lib/cdda_interface/common_interface.c~	2007-09-28 13:09:39.000000000 +0100
++++ libcdio-0.80/lib/cdda_interface/common_interface.c	2008-04-24 10:36:22.000000000 +0100
+@@ -161,17 +161,17 @@ data_bigendianp(cdrom_drive_t *d)
+   if (lsb_votes>msb_votes) {
+     char buffer[256];
+     cdmessage(d,"\n\tData appears to be coming back Little Endian.\n");
+-    sprintf(buffer,"\tcertainty: %d%%\n",(int)
+-	    (100.*lsb_votes/(lsb_votes+msb_votes)+.5));
+-    cdmessage(d,buffer);
++//    sprintf(buffer,"\tcertainty: %d%%\n",(int)
++//	    (100.*lsb_votes/(lsb_votes+msb_votes)+.5));
++//    cdmessage(d,buffer);
+     return(0);
+   } else {
+     if(msb_votes>lsb_votes){
+       char buffer[256];
+       cdmessage(d,"\n\tData appears to be coming back Big Endian.\n");
+-      sprintf(buffer,"\tcertainty: %d%%\n",(int)
+-	      (100.*msb_votes/(lsb_votes+msb_votes)+.5));
+-      cdmessage(d,buffer);
++//      sprintf(buffer,"\tcertainty: %d%%\n",(int)
++//	      (100.*msb_votes/(lsb_votes+msb_votes)+.5));
++//      cdmessage(d,buffer);
+       return(1);
+     }
+ 

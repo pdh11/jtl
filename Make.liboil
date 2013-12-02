@@ -1,0 +1,5 @@
+## Make.liboil
+
+liboil: glib pkgconfig
+	$(MAKE) PROG=liboil _gnu \
+		JTL_TESTS_BOGUS=bogus

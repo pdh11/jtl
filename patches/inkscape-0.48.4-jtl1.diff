@@ -1,0 +1,11 @@
+--- inkscape-0.48.4/src/widgets/desktop-widget.h~	2011-07-08 19:25:09.000000000 +0100
++++ inkscape-0.48.4/src/widgets/desktop-widget.h	2013-03-24 13:21:13.000000000 +0000
+@@ -239,7 +239,7 @@ struct SPDesktopWidget {
+ private:
+     GtkWidget *tool_toolbox;
+     GtkWidget *aux_toolbox;
+-    GtkWidget *commands_toolbox,;
++    GtkWidget *commands_toolbox;
+     GtkWidget *snap_toolbox;
+ 
+     static void init(SPDesktopWidget *widget);

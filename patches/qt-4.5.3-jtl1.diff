@@ -1,0 +1,13 @@
+--- qt-x11-opensource-src-4.5.3/configure~	2009-09-29 12:01:31.000000000 +0100
++++ qt-x11-opensource-src-4.5.3/configure	2009-10-15 15:25:15.000000000 +0100
+@@ -4742,8 +4742,8 @@ if [ "$PLATFORM_X11" = "yes" -o "$PLATFO
+         if [ "$CFG_PHONON_BACKEND" != "no" ]; then
+             if [ "$CFG_GLIB" = "yes" -a "$CFG_GSTREAMER" != "no" ]; then
+                 if [ -n "$PKG_CONFIG" ]; then
+-                    QT_CFLAGS_GSTREAMER=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-plugins-base-0.10 2>/dev/null`
+-                    QT_LIBS_GSTREAMER=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-plugins-base-0.10 2>/dev/null`
++                    QT_CFLAGS_GSTREAMER=`$PKG_CONFIG --cflags gstreamer-0.10 2>/dev/null`
++                    QT_LIBS_GSTREAMER=`$PKG_CONFIG --libs gstreamer-0.10 2>/dev/null`
+                 fi
+                 if "$unixtests/compile.test" "$XQMAKESPEC" "$QMAKE_CONFIG" $OPT_VERBOSE "$relpath" "$outpath" config.tests/unix/gstreamer "GStreamer" $L_FLAGS $I_FLAGS $l_FLAGS $QT_CFLAGS_GSTREAMER $QT_LIBS_GSTREAMER $X11TESTS_FLAGS; then
+                     CFG_GSTREAMER=yes

@@ -1,0 +1,10 @@
+## Make.gimp
+#
+
+gimp: x gtk+ glib libtiff libjpeg libmng libpng fontconfig \
+		libart libexif librsvg lcms gtkhtml gimp-print pygtk \
+		python dbus-glib hal alsa-lib gnome-vfs curl libart pango \
+		freetype perl_xml_parser iso-codes intltool babl gegl
+	$(MAKE) PROG=gimp _gnu \
+                JTL_TESTS_BOGUS=2.6.12 \
+                JTL_PATCH=gimp-2.8.8.diff

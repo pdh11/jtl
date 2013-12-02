@@ -1,0 +1,5 @@
+## Make.bc
+
+bc:
+	$(MAKE) PROG=bc _gnu
+

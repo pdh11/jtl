@@ -1,0 +1,5 @@
+## Make.gmediaserver
+#
+
+gmediaserver: glib libupnp perl taglib id3lib pkgconfig flex bison
+	$(MAKE) PROG=gmediaserver _gnu

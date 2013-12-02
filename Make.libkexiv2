@@ -1,0 +1,4 @@
+## Make.libkexiv2
+
+libkexiv2: kde-libs
+	$(MAKE) PROG=libkexiv2 PREFIX=$(PREFIX)/kde _gnucmake

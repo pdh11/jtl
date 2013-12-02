@@ -1,0 +1,14 @@
+## Make.net-tools
+
+net-tools:
+	@echo Compiling net-tools
+	rm -rf $(BUILD)/net-tools
+	mkdir -p $(BUILD)/net-tools
+	tar xzf $(ARCHIVE)/net-tools*gz -C $(BUILD)/net-tools
+	patch -d $(BUILD)/net-tools/* -p1 < patches/net-tools-1.60-jtl1.diff
+	( cd $(BUILD)/net-tools/* \
+		&& yes '' | $(MAKE) config \
+		&& $(MAKE) -j1 COPT="$(JTL_CFLAGS)" \
+		&& $(REALLY) $(MAKE) BASEDIR=$(JTL_ROOT) update )
+	du -hs $(BUILD)/net-tools > $(MADE)/net-tools
+	rm -rf $(BUILD)/net-tools

@@ -1,0 +1,11 @@
+--- dconf-0.6/gsettings/Makefile.in~	2010-12-21 17:33:56.000000000 +0000
++++ dconf-0.6/gsettings/Makefile.in	2011-06-18 19:11:01.000000000 +0100
+@@ -187,7 +187,7 @@ top_srcdir = @top_srcdir@
+ AM_CFLAGS = -std=c89 -Wall -Wmissing-prototypes -Wwrite-strings -fPIC -DPIC
+ INCLUDES = -I$(top_srcdir)/common -I$(top_srcdir)/gvdb -I$(top_srcdir)/engine $(gio_CFLAGS)
+ libdconfsettings_so_LDADD = $(gio_LIBS)
+-libdconfsettings_so_LDFLAGS = -module -avoid-version -shared
++libdconfsettings_so_LDFLAGS = -module -shared
+ libdconfsettings_so_SOURCES = \
+ 	../engine/dconf-engine.c	\
+ 	../common/dconf-shmdir.c	\

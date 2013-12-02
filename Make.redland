@@ -1,0 +1,7 @@
+## Make.redland
+#
+# librdf has a silly package name
+
+redland: raptor rasqal db3 libtool
+	$(MAKE) PROG=redland _gnu \
+		JTL_TESTS_BOGUS=1.0.10

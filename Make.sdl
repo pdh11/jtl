@@ -1,0 +1,5 @@
+## Make.sdl
+
+sdl: yasm
+	$(MAKE) PROG=sdl _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --disable-x11-shared"

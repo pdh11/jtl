@@ -1,0 +1,4 @@
+## Make.gsl
+
+gsl:
+	$(MAKE) PROG=gsl _gnu

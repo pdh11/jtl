@@ -1,0 +1,17 @@
+## Make.rekall
+
+rekall: kde-libs postgresql scons
+	rm -rf $(BUILD)/rekall
+	mkdir -p $(BUILD)/rekall
+	tar xjf $(ARCHIVE)/rekall-*bz2 -C $(BUILD)/rekall
+	( cd $(BUILD)/rekall/* \
+		&& cp scons/Makefile . \
+		&& cp scons/build/settings.kde . \
+		&& echo prefix=$(PREFIX) >> settings.kde \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			make config.kde \
+		&& make \
+		&& $(REALLY) make install )
+	du -hs $(BUILD)/rekall > $(MADE)/$(JTL_TOUCH)
+	rm -rf $(BUILD)/rekall
+	sync

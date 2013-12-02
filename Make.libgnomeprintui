@@ -1,0 +1,5 @@
+## Make.libgnomeprintui
+
+libgnomeprintui: libgnomeprint libgnomecanvas pango glib gtk+ \
+		gnome-icon-theme
+	$(MAKE) PROG=libgnomeprintui _gnu

@@ -1,0 +1,27 @@
+## Make.graphviz
+#
+# libgnome depends on it, so it can't depend on libgnomeui or librsvg
+#
+# Really all the language bindings should be a separate package; none of the
+# packages that depend on graphviz need them.
+
+graphviz: bison libpng zlib libjpeg tk python x fontconfig freetype python \
+		tcl ruby swig cairo pango gd gtk+ libglade libtool
+	@echo Making Graphviz
+	rm -rf $(BUILD)/graphviz
+	mkdir -p $(BUILD)/graphviz
+	tar xjf $(ARCHIVE)/graphviz-*bz2 -C $(BUILD)/graphviz
+	# patch -d $(BUILD)/graphviz/g* -p1 < patches/graphviz-2.20.3-jtl1.diff
+	( cd $(BUILD)/graphviz/* \
+		&& rm -f config.cache \
+		&& chmod a+x configure \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			ac_cv_prog_PHP= \
+			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+				--with-freetype2 --with-fontconfig \
+				--with-pangocairo --with-rsvg \
+				--with-gtk --with-glade \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/graphviz > $(MADE)/graphviz
+	rm -rf $(BUILD)/graphviz

@@ -1,0 +1,4 @@
+## Make.libglade
+
+libglade: gtk+2 pango atk pkgconfig
+	$(MAKE) PROG=libglade _gnu JTL_TESTS_BOGUS=2.6.4

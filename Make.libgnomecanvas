@@ -1,0 +1,5 @@
+## Make.libgnomecanvas
+
+libgnomecanvas: gtk+ libart pango perl libglade
+	$(MAKE) PROG=libgnomecanvas _gnu \
+		JTL_TESTS_BOGUS=2.26.0-needs-x-display

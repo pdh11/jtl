@@ -1,0 +1,7 @@
+## Make.kde-games
+
+kde-games: kde-libs kde-runtime qt pulseaudio
+	$(MAKE) PROG=kdegames JTL_TOUCH=kde-games PREFIX=$(PREFIX)/kde \
+                 _gnucmake \
+                JTL_PATCH=kde-games-4.8.0-jtl1.diff
+

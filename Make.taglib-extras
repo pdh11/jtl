@@ -1,0 +1,4 @@
+## Make.taglib-extras
+
+taglib-extras: taglib cmake
+	$(MAKE) PROG=taglib-extras PREFIX=$(PREFIX)/kde _gnucmake

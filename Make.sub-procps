@@ -1,0 +1,17 @@
+## Make.sub-procps
+#
+# Doesn't like -j
+
+sub-procps: sub-ncurses sub-glibc
+	@echo Compiling procps for image
+	rm -rf $(BUILD)/sub-procps
+	mkdir -p $(BUILD)/sub-procps
+	tar xzf $(ARCHIVE)/procps-* -C $(BUILD)/sub-procps
+	mkdir -p $(SUB_ROOT)/bin
+	mkdir -p $(SUB_ROOT)/etc/X11/applnk/Utilities
+	( cd $(BUILD)/sub-procps/* \
+		&& $(MAKE) -j1 OPT="$(JTL_CFLAGS)" XSCPT="" \
+		&& $(REALLY) $(MAKE) DESTDIR=$(SUB_ROOT) ldconfig=":" XSCPT="" PREFIX="" install )
+	mv -f $(SUB_ROOT)/usr/bin/kill $(SUB_ROOT)/bin
+	du -hs $(BUILD)/sub-procps > $(MADE)/sub-procps
+	rm -rf $(BUILD)/sub-procps

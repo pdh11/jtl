@@ -1,0 +1,4 @@
+## Make.libart
+
+libart:
+	$(MAKE) PROG=libart _gnu

@@ -1,0 +1,6 @@
+## Make.libdv
+#
+# Wanted gtk+1 not 2
+
+libdv: pkgconfig x
+	$(MAKE) PROG=libdv JTL_CONFIG="--disable-gtk --enable-shared --disable-static" _gnu

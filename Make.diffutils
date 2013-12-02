@@ -1,0 +1,5 @@
+## Make.diffutils
+
+diffutils:
+	$(MAKE) PROG=diffutils _gnu
+

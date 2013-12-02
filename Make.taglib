@@ -1,0 +1,6 @@
+## Make.taglib
+
+taglib: zlib cmake
+	$(MAKE) PROG=taglib _gnucmake \
+		JTL_ARCHFLAGS="-DNDEBUG $(JTL_ARCHFLAGS)" \
+		JTL_CMAKE="-DWITH_MP4=ON -DWITH_ASF=ON -DCMAKE_RELEASE_TYPE=Release"

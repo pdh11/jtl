@@ -1,0 +1,8 @@
+## Make.gettext
+#
+# Tests in 0.18.1.1 et pre broken by glibc 2.14
+
+gettext:
+	$(MAKE) PROG=gettext _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --without-emacs --without-git" \
+		JTL_TESTS_BOGUS=0.18.1.1

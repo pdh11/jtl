@@ -1,0 +1,39 @@
+--- ffmpeg-export-2008-04-26/libavcodec/cabac.h~	2008-04-16 05:40:21.000000000 +0100
++++ ffmpeg-export-2008-04-26/libavcodec/cabac.h	2008-04-26 15:15:45.000000000 +0100
+@@ -494,7 +494,6 @@ static av_always_inline int get_cabac_in
+         "xor    "tmp"       , "ret"                                     \n\t"
+ #endif /* HAVE_FAST_CMOV */
+ 
+-
+ #define BRANCHLESS_GET_CABAC(ret, cabac, statep, low, lowword, range, tmp, tmpbyte)\
+         "movzbl "statep"    , "ret"                                     \n\t"\
+         "mov    "range"     , "tmp"                                     \n\t"\
+--- ffmpeg-export-2008-04-26/libavcodec/h264.c~	2008-04-26 15:15:45.000000000 +0100
++++ ffmpeg-export-2008-04-26/libavcodec/h264.c	2008-04-26 18:23:45.000000000 +0100
+@@ -5469,7 +5469,7 @@ static void decode_cabac_residual( H264C
+             index[coeff_count++] = last;\
+         }
+         const uint8_t *sig_off = significant_coeff_flag_offset_8x8[MB_FIELD];
+-#if defined(ARCH_X86) && defined(HAVE_7REGS) && defined(HAVE_EBX_AVAILABLE) && !defined(BROKEN_RELOCATIONS)
++#if defined(ARCH_X86) && defined(HAVE_7REGS) && defined(HAVE_EBX_AVAILABLE) && !defined(BROKEN_RELOCATIONS) && !defined(ARCH_X86_64)
+         coeff_count= decode_significance_8x8_x86(CC, significant_coeff_ctx_base, index, sig_off);
+     } else {
+         coeff_count= decode_significance_x86(CC, max_coeff, significant_coeff_ctx_base, index);
+--- ffmpeg-export-2008-04-26/configure~	2008-04-25 08:56:15.000000000 +0100
++++ ffmpeg-export-2008-04-26/configure	2008-11-10 19:42:57.000000000 +0000
+@@ -884,11 +884,11 @@ logfile="config.err"
+ 
+ # installation paths
+ prefix="/usr/local"
+-libdir='$(PREFIX)/lib'
++libdir='${prefix}/lib'
+ shlibdir="$libdir"
+-incdir='$(PREFIX)/include'
+-mandir='$(PREFIX)/share/man'
+-bindir='$(PREFIX)/bin'
++incdir='${prefix}/include'
++mandir='${prefix}/share/man'
++bindir='${prefix}/bin'
+ 
+ # toolchain
+ cc="gcc"

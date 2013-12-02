@@ -1,0 +1,15 @@
+## Make.dhcpd
+#
+# Doesn't support a $prefix
+
+dhcpd: groff openssl
+	@echo Compiling dhcpd
+	rm -rf $(BUILD)/dhcpd
+	mkdir -p $(BUILD)/dhcpd
+	tar xjf $(ARCHIVE)/dhcp-* -C $(BUILD)/dhcpd
+	( cd $(BUILD)/dhcpd/* \
+		&& CFLAGS="$(JTL_CFLAGS) -D_GNU_SOURCE" ./configure --disable-dhcpv6 \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/dhcpd > $(MADE)/dhcpd
+	rm -rf $(BUILD)/dhcpd

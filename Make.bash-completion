@@ -1,0 +1,4 @@
+## Make.bash-completion
+
+bash-completion:
+	$(MAKE) PROG=bash-completion _gnu

@@ -1,0 +1,11 @@
+--- xine-lib/src/xine-engine/buffer.h~	2008-07-16 22:01:56.000000000 +0100
++++ xine-lib/src/xine-engine/buffer.h	2009-01-11 16:29:34.000000000 +0000
+@@ -676,7 +676,7 @@ void _x_bmiheader_le2me( xine_bmiheader 
+ /* convert xine_waveformatex struct from little endian */
+ void _x_waveformatex_le2me( xine_waveformatex *wavex ) XINE_PROTECTED;
+ 
+-static inline _x_is_fourcc(void *ptr, void *tag) {
++static int _x_is_fourcc(void *ptr, void *tag) {
+   return memcmp(ptr, tag, 4) == 0;
+ }
+ 

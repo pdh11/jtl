@@ -1,0 +1,17 @@
+## Make.pidgin-facebookchat
+#
+
+pidgin-facebookchat: pidgin json-glib
+	rm -rf $(BUILD)/pidgin-facebookchat
+	mkdir -p $(BUILD)/pidgin-facebookchat
+	( [ -f $(ARCHIVE)/pidgin-facebookchat-*gz ] \
+		&& tar xzf $(ARCHIVE)/pidgin-facebookchat-*gz -C $(BUILD)/pidgin-facebookchat ) \
+	    || ( [ -f $(ARCHIVE)/pidgin-facebookchat-*bz2 ] \
+		&& tar xjf $(ARCHIVE)/pidgin-facebookchat-*bz2 -C $(BUILD)/pidgin-facebookchat ) \
+	    || ( echo No archive found for pidgin-facebookchat ; exit 1 )
+	patch -p1 -d $(BUILD)/pidgin-facebookchat/* < patches/pidgin-facebookchat-1.47-jtl1.diff
+	( cd $(BUILD)/pidgin-facebookchat/* \
+		&& $(MAKE) LINUX32_COMPILER=gcc \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/pidgin-facebookchat > $(MADE)/pidgin-facebookchat
+	rm -rf $(BUILD)/pidgin-facebookchat

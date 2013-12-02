@@ -1,0 +1,21 @@
+--- strace-4.5.19/configure~	2009-10-21 18:41:11.000000000 +0100
++++ strace-4.5.19/configure	2010-01-07 16:26:51.000000000 +0000
+@@ -5880,6 +5880,7 @@ for ac_header in linux/icmp.h linux/in6.
+ do :
+   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ ac_fn_c_check_header_compile "$LINENO" "$ac_header" "$as_ac_Header" "#include <stddef.h>
++#include <sys/socket.h>
+ #include <linux/socket.h>
+ "
+ eval as_val=\$$as_ac_Header
+--- strace-4.7/process.c~	2012-05-01 21:56:32.000000000 +0100
++++ strace-4.7/process.c	2013-08-23 00:51:38.000000000 +0100
+@@ -60,7 +60,7 @@
+ # ifdef HAVE_STRUCT_PT_ALL_USER_REGS
+ #  define pt_all_user_regs XXX_pt_all_user_regs
+ # endif
+-# include <linux/ptrace.h>
++//# include <linux/ptrace.h>
+ # undef ia64_fpreg
+ # undef pt_all_user_regs
+ #endif

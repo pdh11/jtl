@@ -1,0 +1,6 @@
+## Make.rest
+
+rest: glib libsoup libxml2
+	$(MAKE) PROG=rest _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --with-ca-certificates=/etc/ca-certs" \
+		JTL_TESTS_BOGUS=0.7.10

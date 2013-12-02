@@ -1,0 +1,18 @@
+## Make.cdparanoia
+
+cdparanoia:
+	@echo Compiling cdparanoia
+	rm -rf $(BUILD)/cdparanoia
+	mkdir -p $(BUILD)/cdparanoia
+	tar xjf $(ARCHIVE)/cdparanoia-*bz2 -C $(BUILD)/cdparanoia
+	patch -d $(BUILD)/cdparanoia/* -p1 < patches/cdparanoia-10.2-jtl1.diff
+	( cd $(BUILD)/cdparanoia/* \
+		&& CFLAGS="$(JTL_CFLAGS) -fPIC" CXXFLAGS="$(JTL_CXXFLAGS) -fPIC" \
+			 ./configure --prefix=$(PREFIX) --enable-shared \
+			--disable-static \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) FLAGS="$(JTL_CFLAGS) -fPIC" -j1 \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/cdparanoia > $(MADE)/cdparanoia
+	rm -rf $(BUILD)/cdparanoia

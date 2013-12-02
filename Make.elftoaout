@@ -1,0 +1,12 @@
+## Make.elftoaout
+
+elftoaout:
+	@echo Making elftoaout
+	rm -rf $(BUILD)/elftoaout
+	mkdir -p $(BUILD)/elftoaout
+	tar xjf $(ARCHIVE)/elftoaout-* -C $(BUILD)/elftoaout
+	( cd $(BUILD)/elftoaout/* \
+		&& $(MAKE) CC=gcc \
+		&& $(REALLY) cp elftoaout /usr/bin )
+	du -hs $(BUILD)/elftoaout > $(MADE)/elftoaout
+	rm -rf $(BUILD)/elftoaout

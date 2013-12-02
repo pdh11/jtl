@@ -1,0 +1,4 @@
+## Make.akonadi
+
+akonadi: qt soprano boost cmake sqlite shared-mime-info
+	$(MAKE) PROG=akonadi _gnucmake

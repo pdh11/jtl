@@ -1,0 +1,4 @@
+## Make.qimageblitz
+
+qimageblitz: qt cmake
+	$(MAKE) PROG=qimageblitz _gnucmake

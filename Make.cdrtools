@@ -1,0 +1,14 @@
+## Make.cdrtools
+
+cdrtools:
+	@echo Making cdrtools
+	rm -rf $(BUILD)/cdrtools
+	mkdir -p $(BUILD)/cdrtools
+	tar xjf $(ARCHIVE)/cdrtools*.bz2 -C build/cdrtools
+	make -C $(BUILD)/cdrtools/cdrtools*
+	$(REALLY) make -C $(BUILD)/cdrtools/cdrtools* INS_BASE=$(PREFIX) \
+		MANDIR=share/man install
+	$(REALLY) chmod 4755 $(PREFIX)/bin/mkisofs
+	du -hs $(BUILD)/cdrtools > $(MADE)/cdrtools
+	$(REALLY) rm -rf $(BUILD)/cdrtools
+	

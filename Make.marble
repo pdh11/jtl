@@ -1,0 +1,4 @@
+## Make.marble
+
+marble: kde-libs lcms
+	$(MAKE) PROG=marble PREFIX=$(PREFIX)/kde _gnucmake

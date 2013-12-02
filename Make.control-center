@@ -1,0 +1,23 @@
+## Make.control-center
+#
+# Package was renamed to gnome-control-center in version 2.20
+
+control-center: nautilus desktop-file-utils metacity libxklavier \
+		gstreamer gst-plugins-base dbus-glib gnome-panel libgnomekbd \
+		hal shared-mime-info gnome-settings-daemon gnome-vfs upower \
+		intltool gnome-desktop libpwquality \
+		libglade gconf libcanberra polkit-gnome libgtop \
+		gnome-menus upower colord-gtk accountsservice talloc
+	@echo Making control-center
+	rm -rf $(BUILD)/control-center
+	mkdir -p $(BUILD)/control-center
+	tar xjf $(ARCHIVE)/gnome-control-center-*bz2 -C $(BUILD)/control-center
+	( cd $(BUILD)/control-center/* \
+		&& rm -f config.cache \
+		&& chmod a+x configure \
+		&& CFLAGS="$(JTL_CFLAGS) -DDBUS_API_SUBJECT_TO_CHANGE" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/control-center > $(MADE)/control-center
+	rm -rf $(BUILD)/control-center

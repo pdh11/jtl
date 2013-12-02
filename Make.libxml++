@@ -1,0 +1,4 @@
+## Make.libxml++
+
+libxml++: libxml2 perl glibmm
+	$(MAKE) PROG=libxml++ JTL_CONFIG="--enable-shared --disable-static" _gnu

@@ -1,0 +1,14 @@
+## Make.sub-lilo
+#
+
+sub-lilo: sub-glibc dev86
+	@echo Compiling lilo for image
+	rm -rf $(BUILD)/sub-lilo
+	mkdir -p $(BUILD)/sub-lilo
+	tar xzf $(ARCHIVE)/lilo-* -C $(BUILD)/sub-lilo
+	( cd $(BUILD)/sub-lilo/* \
+		&& $(MAKE) CC="cc $(JTL_CFLAGS) -DDOS_EXTENDED_PARTITION=DOS_EXTENDED_PARTITION -DLINUX_EXTENDED_PARTITION=LINUX_EXTENDED_PARTITION" LDFLAGS="$(JTL_SUBLIBS)" \
+		&& $(MAKE) ROOT=$(SUB_ROOT) install )
+	du -hs $(BUILD)/sub-lilo > $(MADE)/sub-lilo
+	rm -rf $(BUILD)/sub-lilo
+

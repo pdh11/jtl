@@ -1,0 +1,4 @@
+## Make.mpeg2dec
+
+mpeg2dec: x sdl
+	$(MAKE) PROG=mpeg2dec _gnu

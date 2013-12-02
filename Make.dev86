@@ -1,0 +1,16 @@
+## Make.dev86
+#
+# elksemu in 0.16.17 doesn't build on amd64 so we build everything else (not
+# 'all')
+
+dev86:
+	@echo Making dev86
+	rm -rf $(BUILD)/dev86
+	mkdir -p $(BUILD)/dev86
+	tar xzf $(ARCHIVE)/dev86-*gz -C $(BUILD)/dev86
+	patch -d $(BUILD)/dev86/* -p1 < patches/dev86-0.16.18-jtl1.diff
+	( cd $(BUILD)/dev86/* \
+		&& echo q | make -j1 PREFIX=$(PREFIX) \
+		&& $(REALLY) $(MAKE) -j1 PREFIX=$(PREFIX) DIST=$(JTL_ROOT) install-bcc install-lib )
+	du -hs $(BUILD)/dev86 > $(MADE)/dev86
+	rm -rf $(BUILD)/dev86

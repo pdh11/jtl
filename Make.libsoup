@@ -1,0 +1,10 @@
+## Make.libsoup
+#
+# Only the tests want apache
+
+libsoup: glib libxml2 gettext gnome-keyring sqlite glib-networking p11-kit \
+                gobject-introspection curl
+	$(MAKE) PROG=libsoup _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --without-apache-httpd" \
+		JTL_TESTS_BOGUS=yup
+

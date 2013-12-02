@@ -1,0 +1,16 @@
+## Make.attr
+#
+# The 2.4.44 build system copies libattr.so in such a way that the cp
+# command dies, leaving the system unusable. So we must install to a
+# temporary dir and move it into place with tar.
+
+attr:
+	$(MAKE) PROG=attr _gnu \
+		DIST_ROOT=$(BUILD)/attr-root \
+		JTL_INSTALL="install install-dev install-lib" \
+		JTL_TESTS_BOGUS=yup
+	@echo Installing
+	tar cf - -C $(BUILD)/attr-root . | $(REALLY) tar xvf - -C / --no-same-owner
+	@echo Installed
+	$(REALLY) rm -rf $(BUILD)/attr-root
+	onesync

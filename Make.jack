@@ -1,0 +1,4 @@
+## Make.jack
+
+jack: alsa-lib alsa-utils libsndfile doxygen readline pkgconfig
+	$(MAKE) PROG=jack _gnu

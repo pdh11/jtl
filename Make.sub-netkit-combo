@@ -1,0 +1,18 @@
+## Make.sub-netkit-combo
+#
+# Only essential ones are actually built
+
+NETKIT_COMBO := netkit-base netkit-rpc linux-ftpd netkit-ftp netkit-tftp netkit-rsh netkit-telnet
+
+sub-netkit-combo:
+	@echo Compiling netkit-combo for image
+	rm -rf $(BUILD)/sub-netkit
+	mkdir -p $(BUILD)/sub-netkit
+	tar xzf $(ARCHIVE)/netkit-* -C $(BUILD)/sub-netkit
+	mkdir -p $(SUB_ROOT)/{bin,sbin,usr/bin,usr/sbin,usr/share/man}
+	( cd $(BUILD)/sub-netkit/* \
+		&& ./configure --prefix=/usr --without-pam --without-shadow --installroot=$(SUB_ROOT) \
+		&& for i in $(NETKIT_COMBO) ; do $(MAKE) MANDIR=/usr/share/man -C $$i || exit 1 ; done \
+		&& for i in $(NETKIT_COMBO) ; do $(REALLY) $(MAKE) MANDIR=/usr/share/man -C $$i install || exit 1 ; done )
+	du -hs $(BUILD)/sub-netkit > $(MADE)/sub-netkit-combo
+	rm -rf $(BUILD)/sub-netkit

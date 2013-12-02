@@ -1,0 +1,5 @@
+## Make.tdb
+
+tdb: python
+	$(MAKE) PROG=tdb _gnu \
+                JTL_CONFIG="--prefix=/usr"

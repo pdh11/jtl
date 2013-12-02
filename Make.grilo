@@ -1,0 +1,4 @@
+## Make.grilo
+
+grilo: glib gobject-introspection gtk+ libxml2 libsoup
+	$(MAKE) PROG=grilo _gnu

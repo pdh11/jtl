@@ -1,0 +1,4 @@
+## Make.libvisual
+
+libvisual:
+	$(MAKE) PROG=libvisual _gnu

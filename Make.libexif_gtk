@@ -1,0 +1,6 @@
+## Make.libexif_gtk
+
+libexif_gtk: libexif gtk+
+	ac_cv_header_exif_mem_h=yes \
+	$(MAKE) PROG=libexif_gtk _gnu \
+		JTL_CFLAGS="$(JTL_CFLAGS) -UGTK_DISABLE_DEPRECATED"

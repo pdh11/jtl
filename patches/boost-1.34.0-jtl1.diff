@@ -1,0 +1,44 @@
+--- tools/jam/src/build.jam.orig	2007-07-07 21:34:09.000000000 +0000
++++ tools/jam/src/build.jam	2007-07-07 21:36:19.000000000 +0000
+@@ -153,7 +153,7 @@
+ ## GCC 2.x, 3.x, 4.x
+ toolset gcc gcc : "-o " : -D
+     : -pedantic
+-    [ opt --release : [ opt --symbols : -g : -s ] -O3 ]
++    [ opt --release : [ opt --symbols : -g : -s ] -O3 -fno-strict-aliasing ]
+     [ opt --debug : -g -O0 -fno-inline ]
+     -I$(--python-include) -Wno-long-long
+     : -L$(--python-lib[1]) -l$(--python-lib[2]) ;
+--- Jamfile.v2~	2007-05-11 04:40:34.000000000 +0100
++++ Jamfile.v2	2007-07-17 22:11:30.000000000 +0100
+@@ -110,9 +110,9 @@ local default-build ;
+ if $(__file__:D) = ""
+ {
+     default-build =
+-        debug release
+-        <threading>single <threading>multi
+-        <link>shared <link>static
++        release
++        <threading>multi
++        <link>shared
+         ;
+     
+     if [ os.name ] = NT
+@@ -277,7 +277,7 @@ rule tag ( name : type ? : property-set 
+         if $(layout) = versioned
+         {
+             local result = [ common.format-name
+-                <base> <toolset> <threading> <runtime> -$(BOOST_VERSION_TAG)
++                <base>
+                 -$(BUILD_ID)
+                 : $(name) : $(type) : $(property-set) ] ;
+             
+@@ -299,7 +299,7 @@ rule tag ( name : type ? : property-set 
+         else
+         {
+             return [ common.format-name
+-                <base> <threading> <runtime> -$(BUILD_ID)
++                <base>
+                 : $(name) : $(type) : $(property-set) ] ;
+         }
+     }

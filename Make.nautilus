@@ -1,0 +1,11 @@
+## Make.nautilus
+#
+# Tests need $DISPLAY
+
+nautilus: startup-notification esound glib intltool \
+		gnome-desktop pango gnome-vfs libart gtk+ \
+		librsvg libxml2 libexif dbus-glib libunique exempi libnotify \
+                tracker
+	$(MAKE) PROG=nautilus _gnu \
+		JTL_CONFIG="--disable-update-mimedb $(JTL_CONFIG)" \
+		JTL_TESTS_BOGUS=bogus

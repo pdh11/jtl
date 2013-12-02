@@ -1,0 +1,10 @@
+--- lilo-24.0/src/Makefile~	2013-06-07 14:23:05.000000000 +0100
++++ lilo-24.0/src/Makefile	2013-06-29 22:04:33.000000000 +0100
+@@ -245,7 +245,6 @@ install:
+ 
+ 	strip lilo
+ 	cp lilo $$DESTDIR$(SBIN_DIR)/lilo
+-	[ -x lilo.static ] && strip lilo.static
+ 	cp ../mkrescue $$DESTDIR$(USRSBIN_DIR)/mkrescue
+ 	cp ../keytab-lilo.pl $$DESTDIR$(USRSBIN_DIR)/keytab-lilo
+ 

@@ -1,0 +1,14 @@
+## Make.sub-autoconf
+#
+
+sub-autoconf: sub-glibc
+	@echo Compiling autoconf for image
+	rm -rf $(BUILD)/sub-autoconf
+	mkdir -p $(BUILD)/sub-autoconf
+	tar xzf $(ARCHIVE)/autoconf*gz -C $(BUILD)/sub-autoconf
+	( cd $(BUILD)/sub-autoconf/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" LDFLAGS="$(JTL_SUBLIBS)" ./configure --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-autoconf > $(MADE)/sub-autoconf
+	rm -rf $(BUILD)/sub-autoconf

@@ -1,0 +1,9 @@
+## Make.trac
+
+trac: python sqlite pysqlite subversion clearsilver
+
+trac: genshi
+	$(MAKE) PROG=trac _pythonstyle
+
+genshi: python
+	$(MAKE) PROG=genshi _pythonstyle

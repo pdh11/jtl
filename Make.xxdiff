@@ -1,0 +1,16 @@
+## Make.xxdiff
+
+xxdiff: qt perl
+	@echo Making xxdiff
+	rm -rf $(BUILD)/xxdiff
+	mkdir -p $(BUILD)/xxdiff
+	tar xzf $(ARCHIVE)/xxdiff-*gz -C $(BUILD)/xxdiff \
+		|| tar xf $(ARCHIVE)/xxdiff-*bz2 -C $(BUILD)/xxdiff --use-compress-program bzip2 \
+		|| ( echo No archive found for xxdiff ; exit 1 )
+	( cd $(BUILD)/xxdiff/* \
+		&& perl ./automoc \
+		&&  CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install-strip )
+	du -hs $(BUILD)/xxdiff > $(MADE)/xxdiff
+	rm -rf $(BUILD)/xxdiff

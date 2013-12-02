@@ -1,0 +1,4 @@
+## Make.sharutils
+
+sharutils:
+	$(MAKE) PROG=sharutils _gnu

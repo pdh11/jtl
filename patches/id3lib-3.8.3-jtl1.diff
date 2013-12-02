@@ -1,0 +1,65 @@
+--- id3lib-3.8.3/include/id3/id3lib_strings.h~	2003-03-02 00:23:00.000000000 +0000
++++ id3lib-3.8.3/include/id3/id3lib_strings.h	2008-11-10 11:59:08.000000000 +0000
+@@ -30,6 +30,7 @@
+ #define _ID3LIB_STRINGS_H_
+ 
+ #include <string>
++#include <string.h>
+ 
+ #if (defined(__GNUC__) && (__GNUC__ >= 3) || (defined(_MSC_VER) && _MSC_VER > 1000))
+ namespace std
+--- id3lib-3.8.3/include/id3/writers.h~	2003-03-02 00:23:00.000000000 +0000
++++ id3lib-3.8.3/include/id3/writers.h	2008-11-10 11:59:31.000000000 +0000
+@@ -30,7 +30,7 @@
+ 
+ #include "id3/writer.h"
+ #include "id3/id3lib_streams.h"
+-//#include <string.h>
++#include <string.h>
+ 
+ class ID3_CPP_EXPORT ID3_OStreamWriter : public ID3_Writer
+ {
+--- id3lib-3.8.3/examples/demo_info.cpp~	2003-03-02 00:23:00.000000000 +0000
++++ id3lib-3.8.3/examples/demo_info.cpp	2008-11-10 12:00:00.000000000 +0000
+@@ -309,7 +309,7 @@ void PrintInformation(const ID3_Tag &myT
+ 
+ #define DEBUG
+ 
+-int main( unsigned int argc, char * const argv[])
++int main( int argc, char * const argv[])
+ {
+   ID3D_INIT_DOUT();
+ 
+--- id3lib-3.8.3/examples/demo_convert.cpp~	2003-03-02 00:23:00.000000000 +0000
++++ id3lib-3.8.3/examples/demo_convert.cpp	2008-11-10 12:00:32.000000000 +0000
+@@ -84,7 +84,7 @@ void DisplayTags(ostream &os, luint nTag
+   }
+ }
+ 
+-int main( unsigned int argc, char * const argv[])
++int main( int argc, char * const argv[])
+ {
+   flags_t ulFlag = ID3TT_ALL;
+   gengetopt_args_info args;
+--- id3lib-3.8.3/examples/demo_tag.cpp~	2003-03-02 00:23:00.000000000 +0000
++++ id3lib-3.8.3/examples/demo_tag.cpp	2008-11-10 12:00:43.000000000 +0000
+@@ -46,7 +46,7 @@ void DisplayTags(ostream &os, luint nTag
+     os << "v2";
+ }
+ 
+-int main( unsigned int argc, char * const argv[])
++int main( int argc, char * const argv[])
+ {
+   int ulFlag = ID3TT_ID3;
+   ID3D_INIT_DOUT();
+--- id3lib-3.8.3/examples/demo_copy.cpp~	2003-03-02 00:23:00.000000000 +0000
++++ id3lib-3.8.3/examples/demo_copy.cpp	2008-11-10 12:00:56.000000000 +0000
+@@ -81,7 +81,7 @@ void DisplayTags(ostream &os, luint nTag
+   }
+ }
+ 
+-int main( unsigned int argc, char * const argv[])
++int main( int argc, char * const argv[])
+ {
+   int ulFlag = ID3TT_ID3;
+   ID3D_INIT_DOUT();

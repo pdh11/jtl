@@ -1,0 +1,4 @@
+## Make.xpdf
+
+xpdf: x
+	$(MAKE) PROG=xpdf _gnu

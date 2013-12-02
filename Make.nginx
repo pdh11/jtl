@@ -1,0 +1,5 @@
+## Make.nginx
+
+nginx:
+	$(MAKE) PROG=nginx _gnu \
+                JTL_CONFIG="--prefix=/usr"

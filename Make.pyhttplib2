@@ -1,0 +1,4 @@
+## Make.pyjwt
+
+pyhttplib2: python
+	$(MAKE) PROG=pyhttplib2 _pythonstyle

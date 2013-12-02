@@ -1,0 +1,4 @@
+## Make.giflib
+
+giflib: x
+	$(MAKE) PROG=giflib JTL_CONFIG="--enable-shared --disable-static $(JTL_ARCH)-linux" _gnu

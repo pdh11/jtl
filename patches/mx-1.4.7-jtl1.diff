@@ -1,0 +1,22 @@
+--- mx-1.4.7/mx/mx-deform-texture.c~	2012-08-08 15:06:54.000000000 +0100
++++ mx-1.4.7/mx/mx-deform-texture.c	2013-02-07 00:02:24.000000000 +0000
+@@ -33,6 +33,8 @@
+ #include "mx-offscreen.h"
+ #include "mx-private.h"
+ 
++typedef unsigned short GLushort;
++
+ G_DEFINE_ABSTRACT_TYPE (MxDeformTexture, mx_deform_texture, MX_TYPE_WIDGET)
+ 
+ #define DEFORM_TEXTURE_PRIVATE(o) \
+--- mx-1.4.7/mx/mx-texture-frame.c~	2012-08-08 15:06:54.000000000 +0100
++++ mx-1.4.7/mx/mx-texture-frame.c	2013-02-07 00:03:02.000000000 +0000
+@@ -38,6 +38,8 @@
+ #include "mx-texture-frame.h"
+ #include "mx-private.h"
+ 
++typedef float GLfloat;
++
+ enum
+ {
+   PROP_0,

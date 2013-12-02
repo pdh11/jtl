@@ -1,0 +1,4 @@
+## Make.which
+
+which:
+	$(MAKE) PROG=which _gnu

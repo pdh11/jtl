@@ -1,0 +1,11 @@
+## Make.distcc
+
+distcc: gtk+
+	$(MAKE) PROG=distcc JTL_CONFIG=--with-gtk _gnu
+	if [ $(PREFIX) = /usr ] ; then \
+	   $(REALLY) mkdir -p /usr/local/bin ; \
+	   $(REALLY) ln -sf /usr/bin/distcc /usr/local/bin/cc ; \
+	   $(REALLY) ln -sf /usr/bin/distcc /usr/local/bin/gcc ; \
+	   $(REALLY) ln -sf /usr/bin/distcc /usr/local/bin/c++ ; \
+	   $(REALLY) ln -sf /usr/bin/distcc /usr/local/bin/g++ ; \
+	fi

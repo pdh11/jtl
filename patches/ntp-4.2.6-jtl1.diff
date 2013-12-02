@@ -1,0 +1,11 @@
+--- ntp-4.2.6/ntpd/ntp_loopfilter.c~	2009-12-09 07:36:36.000000000 +0000
++++ ntp-4.2.6/ntpd/ntp_loopfilter.c	2009-12-14 16:46:33.000000000 +0000
+@@ -517,7 +517,7 @@ local_clock(
+ 			ntv.modes = MOD_STATUS;
+ 		} else {
+ #ifdef STA_NANO
+-			ntv.modes = MOD_BITS | MOD_NANO;
++			ntv.modes = MOD_BITS | ADJ_NANO;
+ #else /* STA_NANO */
+ 			ntv.modes = MOD_BITS;
+ #endif /* STA_NANO */

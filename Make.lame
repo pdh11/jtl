@@ -1,0 +1,15 @@
+## Make.lame
+
+lame:
+	@echo Making lame
+	rm -rf $(BUILD)/lame
+	mkdir -p $(BUILD)/lame
+	tar xjf $(ARCHIVE)/lame-*bz2 -C $(BUILD)/lame
+	( cd $(BUILD)/lame/* \
+		&& ./configure --prefix=/usr --enable-shared --disable-static \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/lame > $(MADE)/lame
+	rm -rf $(BUILD)/lame

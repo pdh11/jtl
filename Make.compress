@@ -1,0 +1,15 @@
+## Make.compress
+#
+
+compress:
+	@echo Making compress
+	rm -rf $(BUILD)/compress
+	mkdir -p $(BUILD)/compress
+	tar xjf $(ARCHIVE)/compress-*bz2 -C $(BUILD)/compress
+	( cd $(BUILD)/compress/* \
+		&& echo "1000000000" > USERMEM \
+		&& $(MAKE) COMFLAGS="$(JTL_CFLAGS)" \
+		&& $(REALLY) rm -f $(PREFIX)/lib/compress2.3/pydcop.py \
+		&& $(REALLY) $(MAKE) MAN=$(PREFIX)/share/man/man1 install )
+	du -hs $(BUILD)/compress > $(MADE)/compress
+	rm -rf $(BUILD)/compress

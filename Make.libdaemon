@@ -1,0 +1,4 @@
+## Make.libdaemon
+
+libdaemon: lynx
+	$(MAKE) PROG=libdaemon _gnu

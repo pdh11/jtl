@@ -1,0 +1,19 @@
+## Make.xvidcore
+
+xvidcore: nasm
+	@echo Making xvidcore
+	rm -rf $(BUILD)/xvidcore
+	mkdir -p $(BUILD)/xvidcore
+	( [ -f $(ARCHIVE)/xvidcore-*gz ] \
+		&& tar xzf $(ARCHIVE)/xvidcore-*gz -C $(BUILD)/xvidcore ) \
+	    || ( [ -f $(ARCHIVE)/xvidcore-*bz2 ] \
+		&& tar xjf $(ARCHIVE)/xvidcore-*bz2 -C $(BUILD)/xvidcore ) \
+	    || ( echo No archive found for xvidcore ; exit 1 )
+	( cd $(BUILD)/xvidcore/*/build/generic \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			LDFLAGS="-lpthread -lm" \
+			./configure $(JTL_CONFIG) --prefix=$(PREFIX) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/xvidcore > $(MADE)/xvidcore
+	rm -rf $(BUILD)/xvidcore

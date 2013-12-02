@@ -1,0 +1,4 @@
+## Make.sudo
+
+sudo:
+	$(MAKE) PROG=sudo JTL_CONFIG="$(JTL_CONFIG) --without-pam" _gnu

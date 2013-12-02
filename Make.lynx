@@ -1,0 +1,5 @@
+## Make.lynx
+
+lynx:
+	$(MAKE) PROG=lynx _gnu
+

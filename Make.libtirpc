@@ -1,0 +1,5 @@
+## Make.libtirpc
+
+libtirpc: openssl
+	$(MAKE) PROG=libtirpc _gnu \
+                JTL_PATCH=libtirpc-0.2.2-jtl1.diff

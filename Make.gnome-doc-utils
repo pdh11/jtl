@@ -1,0 +1,8 @@
+## Make.gnome-doc-utils
+#
+# Tests demand external DTD lookup
+
+gnome-doc-utils: libxml2 libxslt python perl_xml_parser scrollkeeper
+	$(MAKE) PROG=gnome-doc-utils _gnu \
+		JTL_TESTS_BOGUS=bogus
+

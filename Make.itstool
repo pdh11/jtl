@@ -1,0 +1,4 @@
+## Make.itstool
+
+itstool:
+	$(MAKE) PROG=itstool _gnu

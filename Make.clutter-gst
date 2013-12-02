@@ -1,0 +1,4 @@
+## Make.clutter-gst
+
+clutter-gst: clutter gstreamer gst-plugins-base
+	$(MAKE) PROG=clutter-gst _gnu

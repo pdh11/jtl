@@ -1,0 +1,8 @@
+## Make.libassuan
+#
+# 1.0.5 only builds a static library, but other things link it into a shared
+# library, so it must be PIC.
+
+libassuan: pth
+	$(MAKE) PROG=libassuan _gnu \
+		JTL_CFLAGS="$(JTL_CFLAGS) -fPIC"

@@ -1,0 +1,4 @@
+## Make.jasper
+
+jasper: libjpeg
+	$(MAKE) PROG=jasper _gnu

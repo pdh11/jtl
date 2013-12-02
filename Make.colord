@@ -1,0 +1,7 @@
+## Make.colord
+
+colord: glib lcms sqlite udev libusb libgusb bash-completion
+	$(MAKE) PROG=colord _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --disable-polkit --disable-systemd-login" \
+                JTL_PATCH=colord-1.1.4.diff \
+                JTL_TESTS_BOGUS=0.1.13

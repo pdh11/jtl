@@ -1,0 +1,16 @@
+## Make.procps
+#
+# Doesn't cope with -j (in 2.0.7)
+
+procps:
+	@echo Compiling procps
+	rm -rf $(BUILD)/procps
+	mkdir -p $(BUILD)/procps
+	tar xzf $(ARCHIVE)/procps-* -C $(BUILD)/procps
+	patch -d $(BUILD)/procps/* -p1 < patches/procps-3.2.8.diff
+	( cd $(BUILD)/procps/* \
+		&& $(MAKE) OPT="$(JTL_CFLAGS)" -j1 \
+		&& $(REALLY) mkdir -p /etc/X11/applnk/Utilities \
+		&& $(REALLY) $(MAKE) DESTDIR=$(JTL_ROOT) install )
+	du -hs $(BUILD)/procps > $(MADE)/procps
+	rm -rf $(BUILD)/procps

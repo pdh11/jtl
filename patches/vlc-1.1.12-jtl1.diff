@@ -1,0 +1,33 @@
+--- vlc-1.1.12/projects/mozilla/vlcshell.h~	2011-07-12 19:11:26.000000000 +0100
++++ vlc-1.1.12/projects/mozilla/vlcshell.h	2011-11-17 20:21:41.000000000 +0000
+@@ -24,7 +24,7 @@
+ #ifndef __VLCSHELL_H__
+ #define __VLCSHELL_H__
+ 
+-char * NPP_GetMIMEDescription( void );
++const char * NPP_GetMIMEDescription( void );
+ 
+ NPError NPP_Initialize( void );
+ 
+--- vlc-1.1.12/projects/mozilla/support/npunix.cpp~	2011-07-12 19:11:26.000000000 +0100
++++ vlc-1.1.12/projects/mozilla/support/npunix.cpp	2011-11-17 20:22:19.000000000 +0000
+@@ -767,7 +767,7 @@ Private_GetJavaClass(void)
+  *  - Netscape uses the return value to identify when an object instance
+  *    of this plugin should be created.
+  */
+-char *
++const char *
+ NP_GetMIMEDescription(void)
+ {
+     return NPP_GetMIMEDescription();
+--- vlc-1.1.12/projects/mozilla/vlcshell.cpp~	2011-07-12 19:11:26.000000000 +0100
++++ vlc-1.1.12/projects/mozilla/vlcshell.cpp	2011-11-17 20:21:46.000000000 +0000
+@@ -71,7 +71,7 @@ static LRESULT CALLBACK Manage( HWND p_h
+ /******************************************************************************
+  * UNIX-only API calls
+  *****************************************************************************/
+-char * NPP_GetMIMEDescription( void )
++const char * NPP_GetMIMEDescription( void )
+ {
+     static char mimetype[] = PLUGIN_MIMETYPES;
+     return mimetype;

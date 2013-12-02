@@ -1,0 +1,13 @@
+## Make.dosfstools
+
+dosfstools:
+	@echo Compiling dosfstools
+	rm -rf $(BUILD)/dosfstools
+	mkdir -p $(BUILD)/dosfstools
+	tar xjf $(ARCHIVE)/dosfstools-* -C $(BUILD)/dosfstools
+	$(REALLY) rm -f $(PREFIX)/share/man/man8/{mkfs,fsck}.vfat.8
+	( cd $(BUILD)/dosfstools/* \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) MANDIR=$(PREFIX)/share/man/man8 install )
+	du -hs $(BUILD)/dosfstools > $(MADE)/dosfstools
+	rm -rf $(BUILD)/dosfstools

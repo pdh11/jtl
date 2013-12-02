@@ -1,0 +1,7 @@
+## Make.koffice
+
+koffice: kde-libs kde-runtime libxslt libart graphviz doxygen \
+		libtiff imagemagick python wv2 ruby eigen lcms
+	$(MAKE) PROG=koffice PREFIX=$(PREFIX)/kde _gnucmake \
+		JTL_PATCH=koffice-2.3.3-jtl1.diff \
+                JTL_CMAKE="-DKDE4_BUILD_TESTS=OFF"

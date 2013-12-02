@@ -1,0 +1,30 @@
+## Make.mplayer
+#
+# 1.0rc2 doesn't like -j
+
+mplayer: gtk+ libdvdread libcaca libtheora lame xvidcore libdv \
+		ffmpeg a52dec libvorbis libmad fontconfig libcdio \
+		freetype mpeg2dec esound libfame jack alsa-lib \
+		alsa-utils x264 giflib x samba speex enca fribidi libpng \
+		libmng pulseaudio cdparanoia openal-soft lzo
+	rm -rf $(BUILD)/mplayer
+	mkdir -p $(BUILD)/mplayer
+	( [ -f $(ARCHIVE)/mplayer-*gz ] \
+		&& tar xzf $(ARCHIVE)/mplayer-*gz -C $(BUILD)/mplayer ) \
+	    || ( [ -f $(ARCHIVE)/mplayer-*bz2 ] \
+		&& tar xjf $(ARCHIVE)/mplayer-*bz2 -C $(BUILD)/mplayer ) \
+	    || ( echo No archive found for mplayer ; exit 1 )
+	# patch -p1 -d $(BUILD)/mplayer/* < patches/mplayer-1.0pre7-jtl1.diff
+	( cd $(BUILD)/mplayer/* \
+		&& chmod a+x configure \
+		&& yes | CFLAGS="$(JTL_CFLAGS) -fomit-frame-pointer" CXXFLAGS="$(JTL_CXXFLAGS) -fomit-frame-pointer" \
+			./configure --prefix=$(PREFIX) --enable-gui \
+			--confdir=$(JTL_SYSCONFDIR)/mplayer \
+		        --enable-radio --disable-caca \
+			--disable-ivtv --disable-arts --disable-png \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/mplayer > $(MADE)/mplayer
+	rm -rf $(BUILD)/mplayer
+	$(REALLY) mkdir -p $(PREFIX)/share/mplayer/Skin
+	$(REALLY) tar xjf $(ARCHIVE)/mplayerdefaultskin.tar.bz2 -C $(PREFIX)/share/mplayer/Skin

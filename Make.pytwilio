@@ -1,0 +1,4 @@
+## Make.pytwilio
+
+pytwilio: python pyjwt pyhttplib2
+	$(MAKE) PROG=pytwilio _pythonstyle

@@ -1,0 +1,5 @@
+## Make.polkit
+
+polkit: glib gobject-introspection libxslt
+	$(MAKE) PROG=polkit _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --with-authfw=shadow"

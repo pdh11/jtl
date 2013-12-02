@@ -1,0 +1,11 @@
+--- doxygen-1.4.6/qtools/qvaluestack.h~	2003-12-14 22:00:57.000000000 +0000
++++ doxygen-1.4.6/qtools/qvaluestack.h	2006-03-06 11:50:10.000000000 +0000
+@@ -54,7 +54,7 @@ public:
+     {
+ 	T elem( this->last() );
+ 	if ( !this->isEmpty() )
+-	    remove( this->fromLast() );
++	    QValueList<T>::remove( this->fromLast() );
+ 	return elem;
+     }
+     T& top() { return this->last(); }

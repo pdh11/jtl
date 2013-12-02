@@ -1,0 +1,16 @@
+## Make.sub-devfsd
+#
+
+sub-devfsd: sub-glibc
+	@echo Compiling devfsd for image
+	rm -rf $(BUILD)/sub-devfsd
+	mkdir -p $(BUILD)/sub-devfsd
+	tar xzf $(ARCHIVE)/devfsd-* -C $(BUILD)/sub-devfsd
+	( cd $(BUILD)/sub-devfsd/* \
+		&& $(MAKE) -f GNUmakefile )
+	install -s $(BUILD)/sub-devfsd/*/devfsd $(SUB_ROOT)/sbin/devfsd
+	cp $(BUILD)/sub-devfsd/*/devfsd.conf $(SUB_ROOT)/etc/devfsd.conf
+	mkdir -p $(SUB_ROOT)/usr/man/man8
+	cp $(BUILD)/sub-devfsd/*/devfsd.8 $(SUB_ROOT)/usr/man/man8
+	du -hs $(BUILD)/sub-devfsd > $(MADE)/sub-devfsd
+	rm -rf $(BUILD)/sub-devfsd

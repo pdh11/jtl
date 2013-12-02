@@ -1,0 +1,14 @@
+## Make.librsync
+
+librsync: zlib
+	@echo Compiling librsync
+	rm -rf $(BUILD)/librsync
+	mkdir -p $(BUILD)/librsync
+	tar xjf $(ARCHIVE)/librsync-*bz2 -C $(BUILD)/librsync
+	touch `find $(BUILD)/librsync -type f`
+	( cd $(BUILD)/librsync/* \
+		&& ./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/librsync > $(MADE)/librsync
+	rm -rf $(BUILD)/librsync

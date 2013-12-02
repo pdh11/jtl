@@ -1,0 +1,4 @@
+## Make.openal-soft
+
+openal-soft: cmake
+	$(MAKE) PROG=openal-soft _gnucmake

@@ -1,0 +1,4 @@
+## Make.libiodbc
+
+libiodbc: gtk+
+	$(MAKE) PROG=libiodbc _gnu -j1

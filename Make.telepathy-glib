@@ -1,0 +1,5 @@
+## Make.telepathy-glib
+
+telepathy-glib: glib gobject-introspection
+	$(MAKE) PROG=telepathy-glib _gnu \
+                JTL_TESTS_BOGUS=yup

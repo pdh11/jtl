@@ -1,0 +1,6 @@
+## Make.guile
+
+guile: libunistring gc libtool
+	$(MAKE) PROG=guile _gnu \
+		JTL_TESTS_BOGUS=2.0.2 \
+                have_makeinfo=no MAKEINFO=:

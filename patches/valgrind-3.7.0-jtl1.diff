@@ -1,0 +1,99 @@
+--- valgrind-3.7.0/configure~	2011-11-05 11:24:39.000000000 +0000
++++ valgrind-3.7.0/configure	2012-03-22 16:34:34.000000000 +0000
+@@ -6392,7 +6392,7 @@ $as_echo "#define GLIBC_2_13 1" >>confde
+ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
+ 	;;
+-     2.14)
++     2.14 | 2.15 | 2.16 | 2.17 | 2.18)
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: 2.14 family" >&5
+ $as_echo "2.14 family" >&6; }
+ 
+--- valgrind-3.8.1/coregrind/m_main.c~	2012-09-02 22:16:44.000000000 +0100
++++ valgrind-3.8.1/coregrind/m_main.c	2013-03-29 16:56:28.000000000 +0000
+@@ -2660,6 +2660,10 @@ void* memcpy(void *dest, const void *src
+ void* memcpy(void *dest, const void *src, SizeT n) {
+    return VG_(memcpy)(dest,src,n);
+ }
++void* memmove(void *dest, const void *src, SizeT n);
++void* memmove(void *dest, const void *src, SizeT n) {
++   return VG_(memmove)(dest,src,n);
++}
+ void* memset(void *s, int c, SizeT n);
+ void* memset(void *s, int c, SizeT n) {
+   return VG_(memset)(s,c,n);
+--- valgrind-3.8.1/coregrind/m_libcbase.c~	2012-08-17 07:59:57.000000000 +0100
++++ valgrind-3.8.1/coregrind/m_libcbase.c	2013-04-24 23:06:39.000000000 +0100
+@@ -607,9 +607,10 @@ void* VG_(memset) ( void *destV, Int c,
+       d += 4;
+       sz -= 4;
+    }
++   volatile char *dd = d;
+    while (sz >= 1) {
+-      d[0] = c;
+-      d++;
++      dd[0] = c;
++      dd++;
+       sz--;
+    }
+    return destV;
+--- a/VEX/priv/guest_amd64_toIR.c.jj	2012-10-16 09:53:54.000000000 +0200
++++ b/VEX/priv/guest_amd64_toIR.c	2012-10-16 11:06:26.007515653 +0200
+@@ -20117,6 +20117,14 @@ Long dis_ESC_0F (
+       delta = dis_movx_E_G ( vbi, pfx, delta, 2, sz, True );
+       return delta;
+ 
++   case 0xC0: { /* XADD Gb,Eb */ 
++      Bool decode_OK = False;
++      delta = dis_xadd_G_E ( &decode_OK, vbi, pfx, 1, delta );
++      if (!decode_OK)
++         goto decode_failure;
++      return delta;
++   }
++
+    case 0xC1: { /* XADD Gv,Ev */ 
+       Bool decode_OK = False;
+       delta = dis_xadd_G_E ( &decode_OK, vbi, pfx, sz, delta );
+@@ -26992,14 +27000,6 @@ DisResult disInstr_AMD64_WRK (
+ 
+       /* =-=-=-=-=-=-=-=-=- XADD -=-=-=-=-=-=-=-=-=-= */
+ 
+-      case 0xC0: { /* XADD Gb,Eb */ 
+-         Bool decode_OK = False;
+-         delta = dis_xadd_G_E ( &decode_OK, vbi, pfx, 1, delta );
+-         if (!decode_OK)
+-            goto decode_failure;
+-         break;
+-      }
+-
+       /* =-=-=-=-=-=-=-=-=- SGDT and SIDT =-=-=-=-=-=-=-=-=-=-= */
+ 
+       /* =-=-=-=-=-=-=-=-=- unimp2 =-=-=-=-=-=-=-=-=-=-= */
+--- valgrind-3.8.1/memcheck/mc_replace_strmem.c~	2012-09-17 18:52:35.000000000 +0100
++++ valgrind-3.8.1/memcheck/mc_replace_strmem.c	2013-04-27 15:51:56.000000000 +0100
+@@ -995,11 +995,11 @@ static inline void my_exit ( int x )
+       c4 = (c4 << 8) | c4; \
+       c4 = (c4 << 16) | c4; \
+       while ((a & 3) != 0 && n >= 1) \
+-         { *(UChar*)a = (UChar)c; a += 1; n -= 1; } \
++         { *(volatile UChar*)a = (UChar)c; a += 1; n -= 1; } \
+       while (n >= 4) \
+-         { *(UInt*)a = c4; a += 4; n -= 4; } \
++         { *(volatile UInt*)a = c4; a += 4; n -= 4; } \
+       while (n >= 1) \
+-         { *(UChar*)a = (UChar)c; a += 1; n -= 1; } \
++         { *(volatile UChar*)a = (UChar)c; a += 1; n -= 1; } \
+       return s; \
+    }
+ 
+--- valgrind-3.8.1/coregrind/vgdb.c~	2012-09-02 21:03:31.000000000 +0100
++++ valgrind-3.8.1/coregrind/vgdb.c	2013-08-22 23:53:25.000000000 +0100
+@@ -102,7 +102,7 @@ I_die_here : (PTRACEINVOKER) architectur
+ #include <sys/user.h>
+ #if defined(VGO_linux)
+ #  include <sys/prctl.h>
+-#  include <linux/ptrace.h>
++             //#  include <linux/ptrace.h>
+ #endif
+ #endif
+ 

@@ -1,0 +1,32 @@
+## Make.apache-base
+#
+# Basic Apache with only the built-in modules (and mod_ssl, which furtles with
+# the source grodily)
+#
+# WARNING: Apache will not overwrite older versions of libapr and libaprutil.
+# You need to manually delete them.
+
+apache-base: perl openssl gdbm apr apr-util expat
+	@echo Making Apache
+	rm -rf $(BUILD)/apache
+	mkdir -p $(BUILD)/apache
+	tar xjf $(ARCHIVE)/apache-[0-9]*bz2 -C $(BUILD)/apache
+	# patch -d $(BUILD)/apache/h* -p0 < patches/apache-2.0.54-jtl1.diff
+	( cd $(BUILD)/apache/h* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			LDFLAGS="-Wl,-rpath,$(PREFIX)/pgsql/lib" \
+			./configure --prefix=$(PREFIX) \
+			--sysconfdir=$(JTL_SYSCONFDIR) \
+			--localstatedir=$(JTL_VARDIR) \
+			--mandir=$(PREFIX)/share/man --with-mpm=worker \
+			--enable-layout=GNU --enable-proxy \
+			--enable-proxy-connect --enable-proxy-ftp \
+			--enable-proxy-http --enable-ssl --enable-http \
+			--enable-dav --enable-autoindex --enable-cgi \
+			--enable-cgid --enable-rewrite --enable-so \
+			--with-apr=$(PREFIX)/bin/apr-1-config \
+			--with-apr-util=$(PREFIX)/bin/apu-1-config \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/apache > $(MADE)/apache-base
+	rm -rf $(BUILD)/apache

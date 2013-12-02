@@ -1,0 +1,14 @@
+## Make.jam
+#
+
+jam:
+	@echo Making jam
+	rm -rf $(BUILD)/jam
+	mkdir -p $(BUILD)/jam
+	tar xjf $(ARCHIVE)/jam-*.tar.bz2 -C $(BUILD)/jam
+	( cd $(BUILD)/jam/* \
+		&& make CFLAGS="$(JTL_CFLAGS)" \
+		&& ./jam0 \
+		&& $(REALLY) ./jam0 -sBINDIR=$(PREFIX)/bin install )
+	du -hs $(BUILD)/jam > $(MADE)/jam
+	rm -rf $(BUILD)/jam

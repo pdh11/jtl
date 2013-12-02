@@ -1,0 +1,8 @@
+## Make.amarok
+
+amarok: kde-libs kde-runtime taglib flac xine-lib gmock \
+		graphviz \
+		sdl libvisual libvisual-plugins libusb doxygen pkgconfig ruby \
+		taglib-extras loudmouth mysql qtscriptgenerator qca cmake
+	$(MAKE) PROG=amarok PREFIX=$(PREFIX)/kde _gnucmake \
+                JTL_CMAKE="-DKDE4_BUILD_TESTS=OFF"

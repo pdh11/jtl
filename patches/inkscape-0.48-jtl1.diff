@@ -1,0 +1,14 @@
+--- inkscape-0.48.0/po/POTFILES.skip	2010-08-14 13:17:28.000000000 +0100
++++ inkscape-0.48.0/po/POTFILES.skip~	2010-08-14 13:17:03.000000000 +0100
+@@ -30,3 +30,11 @@ src/ui/dialog/session-player.cpp
+ src/ui/dialog/whiteboard-connect.cpp
+ src/ui/dialog/whiteboard-sharewithchat.cpp
+ src/ui/dialog/whiteboard-sharewithuser.cpp
++
++share/extensions/generate_voronoi.py
++share/extensions/render_alphabetsoup.py
++share/extensions/render_barcode_datamatrix.py
++share/extensions/uniconv-ext.py
++share/extensions/webslicer_create_group.py
++share/extensions/webslicer_export.py
++share/extensions/wireframe_sphere.py

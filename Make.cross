@@ -1,0 +1,1070 @@
+## Make.cross
+#
+# Container for generic cross-compiling
+#
+
+cross:
+	@#Dummy target
+
+#############################
+#
+# Cross-toolchain
+#
+$(JTL_CROSS)-do-toolchain: cross-$(JTL_CROSS)-gcc cross-$(JTL_CROSS)-gdb \
+		cross-$(JTL_CROSS)-boost cross-$(JTL_CROSS)-pkgconfig \
+		cross-$(JTL_CROSS)-flac \
+		cross-$(JTL_CROSS)-mpg123 cross-$(JTL_CROSS)-libupnp \
+		cross-$(JTL_CROSS)-e2fsprogs
+	touch $(MADE)/$(JTL_CROSS)-toolchain
+
+# cross-$(JTL_CROSS)-taglib ## remove till we figure out cross-cmake
+
+##
+#
+# cross-binutils
+#
+cross-$(JTL_CROSS)-binutils:
+	@echo Making cross-$(JTL_CROSS)-binutils
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-binutils
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-binutils
+	tar xf $(ARCHIVE)/binutils-* -C $(BUILD)/cross-$(JTL_CROSS)-binutils
+	#patch -d $(BUILD)/cross-$(JTL_CROSS)-binutils/b* -p1 \
+	# 	< patches/binutils-2.17.50.0.2-jtl1.diff
+	( cd $(BUILD)/cross-$(JTL_CROSS)-binutils/* \
+		&& CFLAGS="$(JTL_CFLAGS)" ./configure \
+			--target=$(JTL_CROSS) \
+			--prefix=$(PREFIX) --enable-static --disable-shared \
+			--with-gnu-ld --disable-nls --host=$(JTL_ARCH) \
+			--build=$(JTL_ARCH) --disable-werror \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-binutils \
+		> $(MADE)/cross-$(JTL_CROSS)-binutils
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-binutils
+
+##
+#
+# headers for cross-compiler
+#
+cross-$(JTL_CROSS)-headers:
+	@echo Making cross-$(JTL_CROSS)-headers
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-headers
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-headers
+	tar xf $(ARCHIVE)/linux-[1-9]*.tar.* \
+		-C $(BUILD)/cross-$(JTL_CROSS)-headers
+	( cd $(BUILD)/cross-$(JTL_CROSS)-headers/* ; \
+		cp arch/$(JTL_CROSS2)/$(JTL_CONFIGPATH)defconfig .config )
+	yes '' | make -C $(BUILD)/cross-$(JTL_CROSS)-headers/* \
+			ARCH=$(JTL_CROSS2) oldconfig
+	$(REALLY) make -C $(BUILD)/cross-$(JTL_CROSS)-headers/* ARCH=$(JTL_CROSS2) \
+		INSTALL_HDR_PATH=$(PREFIX)/$(JTL_CROSS) headers_install
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-headers \
+		> $(MADE)/cross-$(JTL_CROSS)-headers
+	$(REALLY) rm -rf $(BUILD)/cross-$(JTL_CROSS)-headers &
+
+##
+#
+# Temporary directory for Stage 1 install (only Stage 2 install is
+# done to $PREFIX)
+#
+TEMP_INSTALL:=$(BUILD)/cross-$(JTL_CROSS)-glibc/install
+
+##
+#
+# C-only GCC for building glibc
+#
+# NB this and the glibc recipe form a matched pair: this one makes the build
+# directory, the glibc one removes it
+#
+cross-$(JTL_CROSS)-gcc-stage1:
+	@echo
+	@echo Making cross-$(JTL_CROSS)-gcc Stage 1
+	@echo
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-glibc
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-glibc/build
+	tar xzf $(ARCHIVE)/gcc-4*.tar.gz \
+		 -C $(BUILD)/cross-$(JTL_CROSS)-glibc
+	patch -d $(BUILD)/cross-$(JTL_CROSS)-glibc/gcc* -p1 \
+		< patches/gcc-4.6.2-jtl1.diff
+	mkdir -p $(TEMP_INSTALL)/$(JTL_CROSS)/bin
+	for i in as ld ar ranlib strip ; do \
+		ln -sf $(PREFIX)/bin/$(JTL_CROSS)-$$i \
+			$(TEMP_INSTALL)/$(JTL_CROSS)/bin/$$i ; \
+	done
+	( cd $(BUILD)/cross-$(JTL_CROSS)-glibc/build \
+		&& CFLAGS="-Dinhibit_libc -D__gthr_posix_h" \
+			CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
+			../gcc*/configure \
+			--disable-threads --target=$(JTL_CROSS) \
+			--prefix=$(TEMP_INSTALL) \
+			--enable-languages="c" --disable-libgomp \
+			--disable-libmudflap --disable-libssp \
+			--disable-libquadmath \
+			--enable-static --disable-shared --enable-tls \
+			--infodir=$(PREFIX)/share/info \
+			--mandir=$(PREFIX)/share/man \
+			$(JTL_CROSSGCCFLAGS) $(JTL_CROSSGCCFLAGS0) \
+		&& $(MAKE) LIBGCC2_DEBUG_CFLAGS="-DJTL_BOOTSTRAP" \
+			CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" all \
+		&& $(MAKE) install )
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-glibc/build \
+		> $(MADE)/cross-$(JTL_CROSS)-gcc-stage1
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-glibc/build
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-glibc/gcc* &
+
+##
+#
+# glibc
+#
+# Because we don't have a C compiler yet, we build a temporary C-only one for
+# building glibc only.
+#
+cross-$(JTL_CROSS)-glibc: cross-$(JTL_CROSS)-binutils \
+		cross-$(JTL_CROSS)-headers cross-$(JTL_CROSS)-gcc-stage1
+	@
+	@echo Making cross-$(JTL_CROSS)-glibc
+	@
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-glibc/build
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-glibc/build
+	tar xf $(ARCHIVE)/glibc-2*.tar.* -C $(BUILD)/cross-$(JTL_CROSS)-glibc
+	tar xf $(ARCHIVE)/glibc-ports-2*.tar.* -C $(BUILD)/cross-$(JTL_CROSS)-glibc/glibc*
+	patch -d $(BUILD)/cross-$(JTL_CROSS)-glibc/glibc* -p1 < patches/glibc-2.16-jtl1.diff
+	#patch -d $(BUILD)/cross-$(JTL_CROSS)-glibc/glibc*/glibc-ports* -p1 < patches/glibc-ports-2.14.1-jtl1.diff
+	mkdir -p $(TEMP_INSTALL)/$(JTL_CROSS)/include
+	cp -dpR $(PREFIX)/$(JTL_CROSS)/include/{linux,asm,asm-generic} \
+		$(TEMP_INSTALL)/$(JTL_CROSS)/include
+	# A --disable-shared gcc doesn't have a libgcc_eh
+	ln -s libgcc.a `$(TEMP_INSTALL)/bin/$(JTL_CROSS)-gcc -print-file-name=libgcc.a | sed -e 's/libgcc.a/libgcc_eh.a/'` || true
+	( cd $(BUILD)/cross-$(JTL_CROSS)-glibc/build \
+		&& CC="$(TEMP_INSTALL)/bin/$(JTL_CROSS)-gcc $(JTL_CROSSCPPFLAGS)" \
+			CXX="$(TEMP_INSTALL)/bin/$(JTL_CROSS)-g++ $(JTL_CROSSCPPFLAGS)" \
+			CFLAGS="$(JTL_CROSSCFLAGS)" \
+			libc_cv_ssp=no \
+			../glibc*/configure \
+			--enable-kernel=2.6.39 \
+			--build=$(JTL_ARCH) \
+			--host=$(JTL_CROSS) \
+			--target=$(JTL_CROSS) \
+			--prefix=$(PREFIX)/$(JTL_CROSS) \
+			--with-headers=$(PREFIX)/$(JTL_CROSS)/include \
+			--enable-add-ons --disable-profile \
+			$(JTL_CROSSGLIBCFLAGS)  \
+		&& echo $(JTL_CROSSCONFIGMAKE) >> config.make \
+		&& $(MAKE) CC="$(TEMP_INSTALL)/bin/$(JTL_CROSS)-gcc $(JTL_CROSSCPPFLAGS)" \
+		&& $(REALLY) $(MAKE) MAKEINFO=: install )
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-glibc/build \
+		> $(MADE)/cross-$(JTL_CROSS)-glibc
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-glibc
+
+##
+#
+# hosted cross-compiler
+#
+cross-$(JTL_CROSS)-gcc: cross-$(JTL_CROSS)-binutils \
+		cross-$(JTL_CROSS)-headers cross-$(JTL_CROSS)-glibc
+	@echo Making cross-$(JTL_CROSS)-gcc
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-gcc
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-gcc/build
+	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/cross-$(JTL_CROSS)-gcc
+	patch -d $(BUILD)/cross-$(JTL_CROSS)-gcc/gcc* -p1 \
+		< patches/gcc-4.6.2-jtl1.diff
+	( cd $(BUILD)/cross-$(JTL_CROSS)-gcc/build \
+		&& CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
+			CXXFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
+			 ../gcc*/configure --target=$(JTL_CROSS) \
+			--prefix=$(PREFIX) $(JTL_CROSSGCCFLAGS) \
+			--enable-languages="c,c++" --enable-threads \
+			--disable-libmudflap --disable-libssp \
+			--enable-__cxa_atexit \
+			--infodir=$(PREFIX)/share/info \
+			--mandir=$(PREFIX)/share/man \
+		&& $(MAKE) CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
+			CXXFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
+		&& $(REALLY) make install )
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-gcc > $(MADE)/cross-$(JTL_CROSS)-gcc
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-gcc
+
+##
+#
+# cross-debugger (often includes simulator)
+#
+cross-$(JTL_CROSS)-gdb: cross-$(JTL_CROSS)-gcc expat
+	@echo Making cross-$(JTL_CROSS)-gdb
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-gdb
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-gdb
+	tar xjf $(ARCHIVE)/gdb-*.tar.bz2 -C $(BUILD)/cross-$(JTL_CROSS)-gdb
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-gdb/build
+	$(REALLY) touch $(PREFIX)/$(JTL_CROSS)/include/stdio.h
+	( cd $(BUILD)/cross-$(JTL_CROSS)-gdb/build \
+		&& ../gdb*/configure \
+			--build=$(JTL_ARCH) \
+			--host=$(JTL_ARCH) \
+			--target=$(JTL_CROSS) \
+			--prefix=$(PREFIX) \
+			--infodir=$(PREFIX)/share/info \
+			--mandir=$(PREFIX)/share/man \
+			--disable-werror \
+			$(JTL_CROSSGDBFLAGS) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-gdb \
+		> $(MADE)/cross-$(JTL_CROSS)-gdb
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-gdb
+
+##
+#
+# glibc for cross-compiler (full) NOT USED
+#
+
+cross-$(JTL_CROSS)-glibc-stage2:
+	@echo Making cross-$(JTL_CROSS)-glibc
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-glibc
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-glibc
+	tar xzf $(ARCHIVE)/glibc-2*.tar.gz -C $(BUILD)/cross-$(JTL_CROSS)-glibc
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-glibc/build
+	$(REALLY) touch $(PREFIX)/$(JTL_CROSS)/include/stdio.h
+	( cd $(BUILD)/cross-$(JTL_CROSS)-glibc/build \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCPPFLAGS)" \
+			CFLAGS="$(JTL_CROSSCFLAGS)" \
+			../glibc*/configure \
+			--enable-kernel=2.2.14 \
+			--build=$(JTL_ARCH) \
+			--host=$(JTL_CROSS) \
+			--target=$(JTL_CROSS) \
+			--prefix=$(PREFIX)/$(JTL_CROSS) \
+			--enable-add-ons --disable-profile \
+			$(JTL_CROSSGLIBCFLAGS)  \
+		&& echo $(JTL_CROSSCONFIGMAKE) >> config.make \
+		&& $(MAKE) CC="$(JTL_CROSS)-gcc $(JTL_CROSSCPPFLAGS)" \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-glibc \
+		> $(MADE)/cross-$(JTL_CROSS)-glibc
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-glibc
+
+JTL_SHARED_BOOST=link=shared
+
+##
+#
+# Boost for cross-compiler
+#
+cross-$(JTL_CROSS)-boost: cross-$(JTL_CROSS)-gcc cross-$(JTL_CROSS)-glibc \
+		cross-$(JTL_CROSS)-bzip2 cross-$(JTL_CROSS)-zlib
+	@echo Making cross-$(JTL_CROSS)-boost
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-boost
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-boost
+	tar xjf $(ARCHIVE)/boost*bz2 -C $(BUILD)/cross-$(JTL_CROSS)-boost
+	# patch -d $(BUILD)/cross-$(JTL_CROSS)-boost/* -p0 < patches/boost-1.34.1-jtl1.diff
+	cd $(BUILD)/cross-$(JTL_CROSS)-boost/* \
+		&& ./bootstrap.sh --prefix=$(PREFIX)/$(JTL_CROSS) \
+			--libdir=$(PREFIX)/$(JTL_CROSS)/lib \
+			--includedir=$(PREFIX)/$(JTL_CROSS)/include \
+		&& echo "using gcc : : $(JTL_CROSS)-g++ ;" > jtl-config.jam \
+		&& ./bjam -q --layout=system variant=release \
+			link=static $(JTL_SHARED_BOOST) threading=multi \
+			-sGXX=$(JTL_CROSS)-g++ --without-math \
+			--without-python --user-config=jtl-config.jam \
+			cxxflags="$(JTL_CROSSCFLAGS)" \
+		&& $(REALLY) rm -rf $(PREFIX)/$(JTL_CROSS)/include/boost \
+		&& $(REALLY) ./bjam -q --layout=system variant=release \
+			link=static $(JTL_SHARED_BOOST) threading=multi \
+			--user-config=jtl-config.jam --without-python \
+			-sGXX=$(JTL_CROSS)-g++ --without-math install
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-boost > $(MADE)/cross-$(JTL_CROSS)-boost
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-boost
+
+##
+#
+# pkg-config for packages available to cross-compiler
+#
+cross-$(JTL_CROSS)-pkgconfig:
+	$(MAKE) PROG=pkgconfig \
+		JTL_CONFIG="$(JTL_CONFIG) --with-pc-path=/usr/$(JTL_CROSS)/lib/pkgconfig --program-prefix=$(JTL_CROSS)-" \
+		JTL_TOUCH=cross-$(JTL_CROSS)-pkgconfig \
+		JTL_BUILD=cross-$(JTL_CROSS)-pkgconfig \
+		_gnu
+
+# -O1/-O2/-O9 ICEs arm gcc 4.3.2 (but not 4.4.2)
+#
+cross-$(JTL_CROSS)-flac: cross-$(JTL_CROSS)-glibc cross-$(JTL_CROSS)-gcc
+	$(MAKE) PROG=flac \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/$(JTL_CROSS) --host=$(JTL_CROSS) --disable-ogg --enable-static" \
+		JTL_TOUCH=cross-$(JTL_CROSS)-flac \
+		JTL_BUILD=cross-$(JTL_CROSS)-flac \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS)" \
+		JTL_PATCH=flac-1.2.1-jtl1.diff \
+		JTL_TESTS_BOGUS=bogus \
+		JTL_CXXFLAGS="$(JTL_CROSSCFLAGS)" _gnu
+
+cross-$(JTL_CROSS)-zlib: cross-$(JTL_CROSS)-glibc cross-$(JTL_CROSS)-gcc
+	CC=$(JTL_CROSS)-gcc RANLIB=$(JTL_CROSS)-ranlib \
+		AR="$(JTL_CROSS)-ar" \
+		$(MAKE) PROG=zlib \
+		JTL_CONFIG="--prefix=/usr/$(JTL_CROSS) --shared" \
+		JTL_BUILD=cross-$(JTL_CROSS)-zlib \
+		JTL_TOUCH=cross-$(JTL_CROSS)-zlib \
+		JTL_TESTS_BOGUS=cross \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS) -fPIC" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS) -fPIC" _gnu
+	CC=$(JTL_CROSS)-gcc RANLIB=$(JTL_CROSS)-ranlib \
+		AR="$(JTL_CROSS)-ar" \
+		$(MAKE) PROG=zlib \
+		JTL_CONFIG="--prefix=/usr/$(JTL_CROSS)" \
+		JTL_BUILD=cross-$(JTL_CROSS)-zlib \
+		JTL_TOUCH=cross-$(JTL_CROSS)-zlib \
+		JTL_TESTS_BOGUS=cross \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS)" \
+		JTL_CXXFLAGS="$(JTL_CROSSCFLAGS)" _gnu
+
+cross-$(JTL_CROSS)-bzip2: cross-$(JTL_CROSS)-glibc cross-$(JTL_CROSS)-gcc
+	@echo Compiling cross-$(JTL_CROSS)-bzip2
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-bzip2
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-bzip2
+	tar xzf $(ARCHIVE)/bzip2-* -C $(BUILD)/cross-$(JTL_CROSS)-bzip2
+	patch -d $(BUILD)/cross-$(JTL_CROSS)-bzip2/* -p1 -F5 < patches/bzip2-1.0.5-jtl1.diff
+	( cd $(BUILD)/cross-$(JTL_CROSS)-bzip2/* \
+		&& $(MAKE) PREFIX=$(PREFIX)/$(JTL_CROSS) bzip2 bzip2recover \
+			CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+		&& $(REALLY) rm -f $(PREFIX)/$(JTL_CROSS)/bin/{bzegrep,bzfgrep,bzless,bzcmp} \
+		&& $(REALLY) make PREFIX=$(PREFIX)/$(JTL_CROSS) install)
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-bzip2 > $(MADE)/cross-$(JTL_CROSS)-bzip2
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-bzip2
+
+# --enable-shared runs into libtool problems
+#
+cross-$(JTL_CROSS)-taglib: cross-$(JTL_CROSS)-zlib cmake
+	CC=$(JTL_CROSS)-gcc \
+	CXX=$(JTL_CROSS)-g++ \
+		$(MAKE) PROG=taglib \
+		zlib="-L/usr/$(JTL_CROSS)/lib -lz" \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/$(JTL_CROSS) --host=$(JTL_CROSS) --enable-static --disable-shared" \
+		JTL_TOUCH=cross-$(JTL_CROSS)-taglib \
+		JTL_BUILD=cross-$(JTL_CROSS)-taglib \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS) -DNDEBUG" \
+		JTL_CXXFLAGS="$(JTL_CROSSCFLAGS) -DNDEBUG" _gnucmake
+
+# -O1/-O2/-O9 ICEs arm gcc 4.3.2
+#
+cross-$(JTL_CROSS)-mpg123: cross-$(JTL_CROSS)-glibc cross-$(JTL_CROSS)-gcc
+	$(MAKE) PROG=mpg123 \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/$(JTL_CROSS) --host=$(JTL_CROSS) --enable-static --with-audio=oss --enable-modules=no" \
+		JTL_TOUCH=cross-$(JTL_CROSS)-mpg123 \
+		JTL_BUILD=cross-$(JTL_CROSS)-mpg123 \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS) -O0" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS) -O0" _gnu
+
+cross-$(JTL_CROSS)-libupnp: cross-$(JTL_CROSS)-glibc cross-$(JTL_CROSS)-gcc
+	$(MAKE) PROG=libupnp \
+		JTL_CONFIG="$(JTL_CONFIG) --prefix=/usr/$(JTL_CROSS) --host=$(JTL_CROSS) --enable-static" \
+		JTL_BUILD=cross-$(JTL_CROSS)-libupnp \
+		JTL_TOUCH=cross-$(JTL_CROSS)-libupnp \
+		JTL_TESTS_BOGUS=bogus \
+		JTL_CFLAGS="$(JTL_CROSSCFLAGS)" \
+		JTL_CXXFLAGS="$(JTL_CROSSCXXFLAGS)" _gnu
+
+# For cross-compiling native GCC
+cross-$(JTL_CROSS)-gmp: cross-$(JTL_CROSS)-glibc cross-$(JTL_CROSS)-gcc
+	@echo Cross-compiling gmp
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-gmp
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-gmp
+	tar xzf $(ARCHIVE)/gmp-* -C $(BUILD)/cross-$(JTL_CROSS)-gmp
+	patch -d $(BUILD)/cross-$(JTL_CROSS)-gmp/* -p1 \
+	 	< patches/gmp-4.2.4-jtl1.diff
+	( cd $(BUILD)/cross-$(JTL_CROSS)-gmp/* \
+		&& rm mpn/arm/addmul_1.asm \
+		&& rm mpn/arm/invert_limb.asm \
+		&& rm mpn/arm/mul_1.asm \
+		&& rm mpn/arm/submul_1.asm \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			 ac_cv_func_setvbuf_reversed=no ./configure \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--prefix=/usr/$(JTL_CROSS) \
+		&& make \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-gmp > $(MADE)/cross-$(JTL_CROSS)-gmp
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-gmp
+
+# For cross-compiling native GCC
+cross-$(JTL_CROSS)-mpfr: cross-$(JTL_CROSS)-glibc cross-$(JTL_CROSS)-gcc \
+		cross-$(JTL_CROSS)-gmp
+	@echo Cross-compiling mpfr
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-mpfr
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-mpfr
+	tar xzf $(ARCHIVE)/mpfr-* -C $(BUILD)/cross-$(JTL_CROSS)-mpfr
+	patch -d $(BUILD)/cross-$(JTL_CROSS)-mpfr/* -p1 \
+	 	< patches/mpfr-2.4.1-jtl1.diff
+	( cd $(BUILD)/cross-$(JTL_CROSS)-mpfr/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			 ac_cv_func_setvbuf_reversed=no ./configure \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--prefix=/usr/$(JTL_CROSS) \
+		&& make \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-mpfr > $(MADE)/cross-$(JTL_CROSS)-mpfr
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-mpfr
+
+# Libraries are needed for cross-compiling util-linux
+cross-$(JTL_CROSS)-e2fsprogs: cross-$(JTL_CROSS)-glibc cross-$(JTL_CROSS)-gcc
+	@echo Cross-compiling e2fsprogs
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-e2fsprogs
+	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-e2fsprogs
+	tar xzf $(ARCHIVE)/e2fsprogs* -C $(BUILD)/cross-$(JTL_CROSS)-e2fsprogs
+	( cd $(BUILD)/cross-$(JTL_CROSS)-e2fsprogs/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS) -DPATH_MAX=2048" \
+			STRIP=$(JTL_CROSS)-strip \
+			AR=$(JTL_CROSS)-ar \
+			RANLIB=$(JTL_CROSS)-ranlib \
+			./configure --prefix=/usr/$(JTL_CROSS) \
+			--host=$(JTL_CROSS) \
+			--with-gnu-ld --disable-e2initrd-helper \
+			--disable-nls --enable-fsck --disable-debugfs \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) $(MAKE) install-libs )
+	du -hs $(BUILD)/cross-$(JTL_CROSS)-e2fsprogs \
+		 > $(MADE)/cross-$(JTL_CROSS)-e2fsprogs
+	rm -rf $(BUILD)/cross-$(JTL_CROSS)-e2fsprogs
+
+################################
+#
+# Cross-compiled root
+#
+$(JTL_CROSS)-do-bootstrap: \
+		$(JTL_CROSS)-autoconf \
+		$(JTL_CROSS)-automake \
+		$(JTL_CROSS)-bash \
+		$(JTL_CROSS)-binutils \
+		$(JTL_CROSS)-coreutils \
+		$(JTL_CROSS)-e2fsprogs \
+		$(JTL_CROSS)-gcc \
+		$(JTL_CROSS)-glibc \
+		$(JTL_CROSS)-grep \
+		$(JTL_CROSS)-gzip \
+		$(JTL_CROSS)-init \
+		$(JTL_CROSS)-make \
+		$(JTL_CROSS)-nano \
+		$(JTL_CROSS)-ncurses \
+		$(JTL_CROSS)-patch \
+		$(JTL_CROSS)-sed \
+		$(JTL_CROSS)-tar \
+		$(JTL_CROSS)-util-linux \
+		$(JTL_CROSS)-zlib
+	@echo Making $(JTL_CROSS)-bootstrap
+	for i in $(CROSS_ROOT)/bin/* $(CROSS_ROOT)/usr/bin/* \
+		 $(CROSS_ROOT)/lib/*.so $(CROSS_ROOT)/lib64/*.so ; do \
+		[ -L $$i ] || ( $(REALLY) $(JTL_CROSS)-strip $$i ; \
+				echo Stripped $$i ) ; \
+	done 2>&1 | grep -v "File format not recognized"
+	# cd $(CROSS_ROOT)/dev && $(REALLY) /dev/MAKEDEV std hda hdb console
+	$(REALLY) rm -f $(CROSS_ROOT)/dev/ptmx
+	$(REALLY) mknod $(CROSS_ROOT)/dev/ptmx c 5 2
+	mkdir -p $(CROSS_ROOT)/root $(CROSS_ROOT)/etc $(CROSS_ROOT)/dev/pts
+	touch $(CROSS_ROOT)/etc/fstab
+	$(REALLY) cp /etc/hosts $(CROSS_ROOT)/etc/hosts
+	#cd $(CROSS_ROOT) && ( tar cf - --exclude=$(JTL_CROSS)-jtl-root.tar.gz * | gzip -9 > $(JTL_CROSS)-jtl-root.tar.gz )
+	@echo
+	@echo '*** Done'
+	@echo
+	@touch $(MADE)/$(JTL_CROSS)-do-bootstrap
+
+##
+#
+# Autoconf
+#
+$(JTL_CROSS)-autoconf: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling autoconf for $(JTL_CROSS)
+	rm -rf $(BUILD)/$(JTL_CROSS)-autoconf
+	mkdir -p $(BUILD)/$(JTL_CROSS)-autoconf
+	tar xf $(ARCHIVE)/autoconf-* -C $(BUILD)/$(JTL_CROSS)-autoconf
+	( cd $(BUILD)/$(JTL_CROSS)-autoconf/* \
+		&& NM=$(JTL_CROSS)-nm RANLIB=$(JTL_CROSS)-ranlib \
+			AR=$(JTL_CROSS)-ar CC=$(JTL_CROSS)-gcc \
+			./configure $(JTL_CROSS) --prefix=/usr \
+			--disable-nls \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-autoconf > $(MADE)/$(JTL_CROSS)-autoconf
+	rm -rf $(BUILD)/$(JTL_CROSS)-autoconf
+
+##
+#
+# Automake
+#
+$(JTL_CROSS)-automake: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling automake
+	rm -rf $(BUILD)/$(JTL_CROSS)-automake
+	mkdir -p $(BUILD)/$(JTL_CROSS)-automake
+	tar xf $(ARCHIVE)/automake-* -C $(BUILD)/$(JTL_CROSS)-automake
+	( cd $(BUILD)/$(JTL_CROSS)-automake/* \
+		&& NM=$(JTL_CROSS)-nm RANLIB=$(JTL_CROSS)-ranlib \
+			AR=$(JTL_CROSS)-ar CC=$(JTL_CROSS)-gcc \
+			./configure $(JTL_CROSS) --prefix=/usr \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-automake > $(MADE)/$(JTL_CROSS)-automake
+	rm -rf $(BUILD)/$(JTL_CROSS)-automake
+
+##
+#
+# Bash
+#
+$(JTL_CROSS)-bash: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling bash for $(JTL_CROSS)
+	rm -rf $(BUILD)/$(JTL_CROSS)-bash
+	mkdir -p $(BUILD)/$(JTL_CROSS)-bash
+	tar xzf $(ARCHIVE)/bash-*gz -C $(BUILD)/$(JTL_CROSS)-bash
+	#patch -d $(BUILD)/$(JTL_CROSS)-bash/b* -p1 \
+	#	< patches/bash-3.0-jtl1.diff
+	( cd $(BUILD)/$(JTL_CROSS)-bash/* \
+		&& ac_cv_func_getpgrp_void=yes ac_cv_func_setvbuf_reversed=no \
+			ac_cv_sys_restartable_syscalls=yes \
+			bash_cv_have_mbstate_t=yes \
+			CFLAGS="$(JTL_CROSSCFLAGS)" \
+			CC=$(JTL_CROSS)-gcc \
+			 ./configure \
+			--build=$(JTL_ARCH) \
+			--host=$(JTL_CROSS) \
+			--prefix=/usr \
+			--without-bash-malloc \
+			--enable-static-link \
+			--disable-nls \
+		&& $(MAKE) -j1 \
+				LDFLAGS_FOR_BUILD= \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	$(REALLY) mkdir -p $(CROSS_ROOT)/bin
+	$(REALLY) mv $(CROSS_ROOT)/usr/bin/bash $(CROSS_ROOT)/bin/bash
+	$(REALLY) ln -sf /bin/bash $(CROSS_ROOT)/bin/sh
+	du -hs $(BUILD)/$(JTL_CROSS)-bash > $(MADE)/$(JTL_CROSS)-bash
+	rm -rf $(BUILD)/$(JTL_CROSS)-bash
+
+##
+#
+# (cross-compiled native) Binutils
+#
+$(JTL_CROSS)-binutils: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling native $(JTL_CROSS) binutils
+	rm -rf $(BUILD)/$(JTL_CROSS)-binutils
+	mkdir -p $(BUILD)/$(JTL_CROSS)-binutils/build
+	tar x -C $(BUILD)/$(JTL_CROSS)-binutils -f $(ARCHIVE)/binutils-*
+	$(REALLY) mkdir -p $(CROSS_ROOT)/usr/{lib,$(JTL_CROSS)}
+	cd $(CROSS_ROOT)/usr/$(JTL_CROSS) && $(REALLY) ln -sf ../lib lib
+	( cd $(BUILD)/$(JTL_CROSS)-binutils/bu* \
+		&& CC_FOR_TARGET="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			../bi*/configure --target=$(JTL_CROSS) \
+			--host=$(JTL_CROSS) \
+			--build=$(JTL_ARCH) --prefix=/usr \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-binutils > $(MADE)/$(JTL_CROSS)-binutils
+	rm -rf $(BUILD)/$(JTL_CROSS)-binutils
+
+##
+#
+# Coreutils
+#
+$(JTL_CROSS)-coreutils: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling coreutils for $(JTL_CROSS)
+	rm -rf $(BUILD)/$(JTL_CROSS)-coreutils
+	mkdir -p $(BUILD)/$(JTL_CROSS)-coreutils
+	tar xzf $(ARCHIVE)/coreutils-* -C $(BUILD)/$(JTL_CROSS)-coreutils
+	#patch -d $(BUILD)/$(JTL_CROSS)-coreutils/* -p1 -F5 \
+	#	< patches/coreutils-6.12-jtl1.diff
+	( cd $(BUILD)/$(JTL_CROSS)-coreutils/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" ac_cv_func_setvbuf_reversed=no \
+			AR=$(JTL_CROSS)-ar \
+			RANLIB=$(JTL_CROSS)-ranlib \
+			./configure --host=$(JTL_CROSS) --prefix=/usr \
+			--disable-nls \
+		&& $(MAKE) MANS= man1_MANS= man_MANS= \
+		&& $(REALLY) $(MAKE) MANS= man1_MANS= man_MANS= prefix=$(CROSS_ROOT)/usr install INSTALL_PROGRAM=/usr/bin/install )
+	$(REALLY) mkdir -p $(CROSS_ROOT)/bin
+	$(REALLY) mv -f $(CROSS_ROOT)/usr/bin/{chgrp,chmod,chown,cp,dd,ln,ls,mkdir,mknod,mv,rm,rmdir,sync,date,echo,false,pwd,sleep,stty,true,uname,cat} $(CROSS_ROOT)/bin
+	du -hs $(BUILD)/$(JTL_CROSS)-coreutils > $(MADE)/$(JTL_CROSS)-coreutils
+	rm -rf $(BUILD)/$(JTL_CROSS)-coreutils
+
+##
+#
+# e2fsprogs
+#
+$(JTL_CROSS)-e2fsprogs: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling e2fsprogs for $(JTL_CROSS)
+	rm -rf $(BUILD)/$(JTL_CROSS)-e2fsprogs
+	mkdir -p $(BUILD)/$(JTL_CROSS)-e2fsprogs
+	tar xzf $(ARCHIVE)/e2fsprogs* -C $(BUILD)/$(JTL_CROSS)-e2fsprogs
+	( cd $(BUILD)/$(JTL_CROSS)-e2fsprogs/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS) -DPATH_MAX=2048" \
+			STRIP=$(JTL_CROSS)-strip \
+			AR=$(JTL_CROSS)-ar \
+			RANLIB=$(JTL_CROSS)-ranlib \
+			./configure --prefix=/usr --host=$(JTL_CROSS) \
+			--with-gnu-ld --disable-e2initrd-helper \
+			--disable-nls --enable-fsck --disable-debugfs \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr \
+			root_prefix=$(CROSS_ROOT)/usr install install-libs )
+	du -hs $(BUILD)/$(JTL_CROSS)-e2fsprogs > $(MADE)/$(JTL_CROSS)-e2fsprogs
+	rm -rf $(BUILD)/$(JTL_CROSS)-e2fsprogs
+
+##
+#
+# gmp (for gcc)
+#
+# GMP 4.2.4 unconditionally uses umull on ARM, i.e. won't build for ARMv3,
+# unless we delete the assembler files involved
+#
+$(JTL_CROSS)-gmp: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling gmp
+	rm -rf $(BUILD)/$(JTL_CROSS)-gmp
+	mkdir -p $(BUILD)/$(JTL_CROSS)-gmp
+	tar xzf $(ARCHIVE)/gmp-* -C $(BUILD)/$(JTL_CROSS)-gmp
+	patch -d $(BUILD)/$(JTL_CROSS)-gmp/* -p1 \
+	 	< patches/gmp-4.2.4-jtl1.diff
+	( cd $(BUILD)/$(JTL_CROSS)-gmp/* \
+		&& rm mpn/arm/addmul_1.asm \
+		&& rm mpn/arm/invert_limb.asm \
+		&& rm mpn/arm/mul_1.asm \
+		&& rm mpn/arm/submul_1.asm \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			 ac_cv_func_setvbuf_reversed=no ./configure \
+			--target=$(JTL_CROSS) \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--prefix=/usr \
+		&& make \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-gmp > $(MADE)/$(JTL_CROSS)-gmp
+	rm -rf $(BUILD)/$(JTL_CROSS)-gmp
+
+##
+#
+# mpfr (for gcc)
+#
+$(JTL_CROSS)-mpfr: $(JTL_CROSS)-toolchain \
+		cross-$(JTL_CROSS)-gmp
+	@echo Cross-compiling mpfr
+	rm -rf $(BUILD)/$(JTL_CROSS)-mpfr
+	mkdir -p $(BUILD)/$(JTL_CROSS)-mpfr
+	tar xzf $(ARCHIVE)/mpfr-* -C $(BUILD)/$(JTL_CROSS)-mpfr
+	patch -d $(BUILD)/$(JTL_CROSS)-mpfr/* -p1 \
+	 	< patches/mpfr-2.4.1-jtl1.diff
+	( cd $(BUILD)/$(JTL_CROSS)-mpfr/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			 ac_cv_func_setvbuf_reversed=no ./configure \
+			--target=$(JTL_CROSS) \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--prefix=/usr \
+		&& make \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-mpfr > $(MADE)/$(JTL_CROSS)-mpfr
+	rm -rf $(BUILD)/$(JTL_CROSS)-mpfr
+
+##
+#
+# (cross-compiled native) GCC
+#
+$(JTL_CROSS)-gcc: $(JTL_CROSS)-toolchain $(JTL_CROSS)-binutils \
+		$(JTL_CROSS)-gmp $(JTL_CROSS)-mpfr \
+		cross-$(JTL_CROSS)-gmp \
+		cross-$(JTL_CROSS)-mpfr
+	@echo Cross-compiling native $(JTL_CROSS) gcc
+	rm -rf $(BUILD)/$(JTL_CROSS)-gcc
+	mkdir -p $(BUILD)/$(JTL_CROSS)-gcc/build
+	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/$(JTL_CROSS)-gcc
+	patch -d $(BUILD)/$(JTL_CROSS)-gcc/g* -p1 \
+		< patches/gcc-4.6.2-jtl1.diff
+	( cd $(BUILD)/$(JTL_CROSS)-gcc/build \
+		&& CC_FOR_TARGET="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS) -DSSIZE_MAX=LONG_MAX" \
+			CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS) -DSSIZE_MAX=LONG_MAX" \
+			 ../g*/configure --target=$(JTL_CROSS) \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			$(JTL_CROSSGCCFLAGS) \
+			--prefix=/usr --enable-languages=c \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	cd $(CROSS_ROOT)/usr/bin && $(REALLY) ln -sf gcc cc
+	$(REALLY) mkdir -p $(CROSS_ROOT)/lib
+	cd $(CROSS_ROOT)/lib && $(REALLY) ln -sf /usr/bin/cpp cpp
+	du -hs $(BUILD)/$(JTL_CROSS)-gcc > $(MADE)/$(JTL_CROSS)-gcc
+	rm -rf $(BUILD)/$(JTL_CROSS)-gcc
+
+##
+#
+# glibc
+#
+# On ARM, libc.so must be linked against libgcc_eh.a, but glibc seems not
+# to know that
+#
+$(JTL_CROSS)-glibc: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling glibc for $(JTL_CROSS)
+	rm -rf $(BUILD)/$(JTL_CROSS)-glibc
+	mkdir -p $(BUILD)/$(JTL_CROSS)-glibc
+	tar xf $(ARCHIVE)/glibc-2*tar.* -C $(BUILD)/$(JTL_CROSS)-glibc
+	patch -d $(BUILD)/$(JTL_CROSS)-glibc/* -p1 < patches/glibc-2.16-jtl1.diff
+	$(REALLY) mkdir -p $(CROSS_ROOT)/etc
+	$(REALLY) mkdir -p $(CROSS_ROOT)/usr/include
+	$(REALLY) touch $(CROSS_ROOT)/etc/ld.so.conf
+	mkdir -p $(BUILD)/$(JTL_CROSS)-glibc/build
+	( cd $(BUILD)/$(JTL_CROSS)-glibc/build \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			 ../g*/configure \
+			--enable-kernel=2.6.26 \
+			--build=$(JTL_ARCH) \
+			--host=$(JTL_CROSS) \
+			--target=$(JTL_CROSS) \
+			--prefix=/usr \
+			--enable-add-ons --disable-profile --disable-static \
+			$(JTL_CROSSGLIBCFLAGS) \
+		&& $(MAKE) \
+			libc.so-gnulib="-lgcc -lgcc_eh" \
+		&& $(REALLY) $(MAKE) MAKEINFO=: install_root=$(CROSS_ROOT) install )
+	$(REALLY) rm -rf $(CROSS_ROOT)/include/{asm,asm-generic,linux}
+	$(REALLY) mkdir -p $(CROSS_ROOT)/include
+	$(REALLY) cp -dR $(PREFIX)/$(JTL_CROSS)/include/{asm,asm-generic,linux} \
+		$(CROSS_ROOT)/usr/include
+	du -hs $(BUILD)/$(JTL_CROSS)-glibc > $(MADE)/$(JTL_CROSS)-glibc
+	rm -rf $(BUILD)/$(JTL_CROSS)-glibc
+
+##
+#
+# grep
+#
+$(JTL_CROSS)-grep: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling grep
+	rm -rf $(BUILD)/$(JTL_CROSS)-grep
+	mkdir -p $(BUILD)/$(JTL_CROSS)-grep
+	tar xzf $(ARCHIVE)/grep*gz -C $(BUILD)/$(JTL_CROSS)-grep
+	( cd $(BUILD)/$(JTL_CROSS)-grep/* \
+		&& jm_cv_func_working_realloc=yes \
+			jm_cv_func_working_malloc=yes \
+			CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			./configure --prefix=/usr --disable-nls \
+			--host=$(JTL_CROSS) --disable-perl-regexp \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-grep > $(MADE)/$(JTL_CROSS)-grep
+	rm -rf $(BUILD)/$(JTL_CROSS)-grep
+
+##
+#
+# gzip
+#
+$(JTL_CROSS)-gzip: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling gzip
+	rm -rf $(BUILD)/$(JTL_CROSS)-gzip
+	mkdir -p $(BUILD)/$(JTL_CROSS)-gzip
+	tar xzf $(ARCHIVE)/gzip-* -C $(BUILD)/$(JTL_CROSS)-gzip
+	( cd $(BUILD)/$(JTL_CROSS)-gzip/* \
+		&& NM=$(JTL_CROSS)-nm RANLIB=$(JTL_CROSS)-ranlib \
+			AR=$(JTL_CROSS)-ar \
+			CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			./configure $(JTL_CROSS) --prefix=/usr \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-gzip > $(MADE)/$(JTL_CROSS)-gzip
+	rm -rf $(BUILD)/$(JTL_CROSS)-gzip
+
+##
+#
+# inetutils
+#
+$(JTL_CROSS)-inetutils: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling inetutils
+	rm -rf $(BUILD)/$(JTL_CROSS)-inetutils
+	mkdir -p $(BUILD)/$(JTL_CROSS)-inetutils
+	tar xzf $(ARCHIVE)/inetutils-* -C $(BUILD)/$(JTL_CROSS)-inetutils
+	patch -d $(BUILD)/$(JTL_CROSS)-inetutils -p0 < patches/inetutils-1.4.2-jtl1.diff
+	( cd $(BUILD)/$(JTL_CROSS)-inetutils/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			./configure \
+			--target=$(JTL_CROSS) \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--prefix=/usr --libexecdir=/usr/sbin \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(CROSS_ROOT)/usr libexecdir=$(CROSS_ROOT)/usr/sbin \
+			install )
+	du -hs $(BUILD)/$(JTL_CROSS)-inetutils > $(MADE)/$(JTL_CROSS)-inetutils
+	rm -rf $(BUILD)/$(JTL_CROSS)-inetutils
+
+##
+#
+# init
+#
+$(JTL_CROSS)-init: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling init
+	rm -rf $(BUILD)/$(JTL_CROSS)-init
+	mkdir -p $(BUILD)/$(JTL_CROSS)-init
+	tar xzf $(ARCHIVE)/sysvinit-* -C $(BUILD)/$(JTL_CROSS)-init
+	$(REALLY) mkdir -p $(CROSS_ROOT)/usr/share/man/man{1,2,3,4,5,6,7,8} \
+		$(CROSS_ROOT)/proc \
+		$(CROSS_ROOT)/etc \
+		$(CROSS_ROOT)/{bin,sbin} \
+		$(CROSS_ROOT)/tmp \
+		$(CROSS_ROOT)/dev/pts \
+		$(CROSS_ROOT)/var/log \
+		$(CROSS_ROOT)/mnt \
+		$(CROSS_ROOT)/usr/src/jtl/{build,made}
+	$(REALLY) rm -f $(CROSS_ROOT)/usr/src/jtl/archive
+	$(REALLY) ln -sf /archive $(CROSS_ROOT)/usr/src/jtl/archive
+	$(REALLY) mkdir -p $(CROSS_ROOT)/usr/include
+	( cd $(BUILD)/$(JTL_CROSS)-init/*/src \
+		&& $(MAKE) "CC=$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+		&& $(REALLY) $(MAKE) ROOT=$(CROSS_ROOT) install )
+	$(REALLY) rm -f $(CROSS_ROOT)/dev/initctl
+	$(REALLY) mknod -m 600 $(CROSS_ROOT)/dev/initctl p
+	$(REALLY) cp -dpR etc/* $(CROSS_ROOT)/etc
+	$(REALLY) cp -dpR M* etc patches $(CROSS_ROOT)/usr/src/jtl
+	# echo >> $(CROSS_ROOT)/usr/lib/gcc-lib/$(JTL_CROSS)/3.3.5/include/syslimits.h
+	$(REALLY) rm -rf $(CROSS_ROOT)/etc/CVS $(CROSS_ROOT)/etc/*~
+	$(REALLY) bash -c 'echo "root::0:0:root:/root:/bin/bash" > $(CROSS_ROOT)/etc/passwd'
+	$(REALLY) bash -c 'echo "root::0:root" > $(CROSS_ROOT)/etc/group'
+	$(REALLY) bash -c 'cd $(CROSS_ROOT)/etc && rm -f localtime && ln -s ../usr/share/zoneinfo/Europe/London localtime'
+	$(REALLY) mkdir -p $(CROSS_ROOT)/var/run $(CROSS_ROOT)/root
+	$(REALLY) touch $(CROSS_ROOT)/var/mtab
+	$(REALLY) bash -c 'cd $(CROSS_ROOT)/etc && ln -sf ../var/mtab mtab'
+	du -hs $(BUILD)/$(JTL_CROSS)-init > $(MADE)/$(JTL_CROSS)-init
+	rm -rf $(BUILD)/$(JTL_CROSS)-init
+
+##
+#
+# kernel
+#
+# Currently we apply the -vrs ARM patch
+#
+$(JTL_CROSS)-kernel: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling kernel
+	rm -rf $(BUILD)/$(JTL_CROSS)-kernel
+	mkdir -p $(BUILD)/$(JTL_CROSS)-kernel
+	tar xzf $(ARCHIVE)/linux-2.4*.tar.gz -C $(BUILD)/$(JTL_CROSS)-kernel
+ifeq ($(CROSS),arm)
+	gunzip -c $(ARCHIVE)/linux-*vrs*diff.gz | \
+		patch -p1 -d $(BUILD)/$(JTL_CROSS)-kernel/linux*
+endif
+	cp patches/linux-2.4*-config-$(JTL_CROSS)-nfs-boot \
+		$(BUILD)/$(JTL_CROSS)-kernel/linux-2.4.26/.config
+	yes "" | $(MAKE) -C $(BUILD)/$(JTL_CROSS)-kernel/* ARCH=$(JTL_CROSS) \
+		CROSS_COMPILE=$(JTL_CROSS)- oldconfig
+	$(MAKE) -C $(BUILD)/$(JTL_CROSS)-kernel/* ARCH=$(JTL_CROSS) \
+		CROSS_COMPILE=$(JTL_CROSS)- dep
+	$(MAKE) -C $(BUILD)/$(JTL_CROSS)-kernel/* ARCH=$(JTL_CROSS) \
+		CROSS_COMPILE=$(JTL_CROSS)- vmlinux
+	mkdir -p $(CROSS_ROOT)/boot
+	find $(BUILD)/$(JTL_CROSS)-kernel/linux*/{,arch/$(JTL_CROSS)/boot} \
+		-maxdepth 1 -name vmlinux -o -name System.map -o -name zImage \
+		-o -name image | xargs -i cp \{} $(CROSS_ROOT)/boot
+	du -hs $(BUILD)/$(JTL_CROSS)-kernel > $(MADE)/$(JTL_CROSS)-kernel
+	rm -rf $(BUILD)/$(JTL_CROSS)-kernel
+
+##
+#
+# make
+#
+$(JTL_CROSS)-make: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling make
+	rm -rf $(BUILD)/$(JTL_CROSS)-make
+	mkdir -p $(BUILD)/$(JTL_CROSS)-make
+	tar xzf $(ARCHIVE)/make-* -C $(BUILD)/$(JTL_CROSS)-make
+	( cd $(BUILD)/$(JTL_CROSS)-make/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			 ac_cv_func_setvbuf_reversed=no ./configure \
+			--target=$(JTL_CROSS) \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--prefix=/usr \
+		&& make \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-make > $(MADE)/$(JTL_CROSS)-make
+	rm -rf $(BUILD)/$(JTL_CROSS)-make
+
+##
+#
+# nano
+#
+$(JTL_CROSS)-nano: $(JTL_CROSS)-toolchain $(JTL_CROSS)-ncurses
+	@echo Cross-compiling nano
+	rm -rf $(BUILD)/$(JTL_CROSS)-nano
+	mkdir -p $(BUILD)/$(JTL_CROSS)-nano
+	tar xzf $(ARCHIVE)/nano-* -C $(BUILD)/$(JTL_CROSS)-nano
+	# patch -d $(BUILD)/$(JTL_CROSS)-nano -p0 < patches/nano-1.2.5-jtl1.diff
+	( cd $(BUILD)/$(JTL_CROSS)-nano/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS) -I$(CROSS_ROOT)/usr/include" \
+			 ac_cv_header_regex_h=no ./configure \
+			--target=$(JTL_CROSS) \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--prefix=/usr \
+		&& $(MAKE) LIBS=$(CROSS_ROOT)/usr/lib/libncurses.a \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-nano > $(MADE)/$(JTL_CROSS)-nano
+	rm -rf $(BUILD)/$(JTL_CROSS)-nano
+
+##
+#
+# ncurses
+#
+$(JTL_CROSS)-ncurses: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling ncurses
+	rm -rf $(BUILD)/$(JTL_CROSS)-ncurses
+	mkdir -p $(BUILD)/$(JTL_CROSS)-ncurses
+	tar xzf $(ARCHIVE)/ncurses-* -C $(BUILD)/$(JTL_CROSS)-ncurses
+	( cd $(BUILD)/$(JTL_CROSS)-ncurses/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			RANLIB=$(JTL_CROSS)-ranlib \
+			BUILD_CC=gcc ./configure --target=$(JTL_CROSS) \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--without-debug --without-cxx \
+			--without-cxx-binding --prefix=/usr \
+			--with-install-prefix=$(CROSS_ROOT) \
+			--without-termcap \
+		&& $(MAKE) -j1 libs \
+		&& $(REALLY) $(MAKE) install.libs )
+	cd $(CROSS_ROOT)/usr/lib && $(REALLY) ln -sf libncurses.a libtermcap.a
+	du -hs $(BUILD)/$(JTL_CROSS)-ncurses > $(MADE)/$(JTL_CROSS)-ncurses
+	rm -rf $(BUILD)/$(JTL_CROSS)-ncurses
+
+##
+#
+# netkit-combo
+#
+$(JTL_CROSS)-netkit-combo: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling netkit-combo
+	rm -rf $(BUILD)/$(JTL_CROSS)-netkit
+	mkdir -p $(BUILD)/$(JTL_CROSS)-netkit
+	tar xzf $(ARCHIVE)/netkit-* -C $(BUILD)/$(JTL_CROSS)-netkit
+	patch -d $(BUILD)/$(JTL_CROSS)-netkit -p0 \
+		< patches/netkit-combo-0.17-jtl1.diff
+	( cd $(BUILD)/$(JTL_CROSS)-netkit/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+		  	./configure --prefix=$(PREFIX) --without-pam \
+			--without-shadow \
+		&& for i in $(NETKIT_COMBO) ; do \
+			$(MAKE) -C $$i CXX=g++ ; \
+		   done \
+		&& for i in $(NETKIT_COMBO) ; do \
+			$(REALLY) $(MAKE) -C $$i CXX=g++ install ; \
+		   done )
+	du -hs $(BUILD)/$(JTL_CROSS)-netkit > $(MADE)/$(JTL_CROSS)-netkit-combo
+	rm -rf $(BUILD)/$(JTL_CROSS)-netkit
+
+##
+#
+# patch
+#
+$(JTL_CROSS)-patch: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling patch
+	rm -rf $(BUILD)/$(JTL_CROSS)-patch
+	mkdir -p $(BUILD)/$(JTL_CROSS)-patch
+	tar xzf $(ARCHIVE)/patch*gz -C $(BUILD)/$(JTL_CROSS)-patch
+	( cd $(BUILD)/$(JTL_CROSS)-patch/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			./configure --host=$(JTL_CROSS) \
+			--target=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-patch > $(MADE)/$(JTL_CROSS)-patch
+	rm -rf $(BUILD)/$(JTL_CROSS)-patch
+
+##
+#
+# sed
+#
+$(JTL_CROSS)-sed: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling sed
+	rm -rf $(BUILD)/$(JTL_CROSS)-sed
+	mkdir -p $(BUILD)/$(JTL_CROSS)-sed
+	tar xzf $(ARCHIVE)/sed* -C $(BUILD)/$(JTL_CROSS)-sed
+	( cd $(BUILD)/$(JTL_CROSS)-sed/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			am_cv_func_working_getline=yes ./configure \
+			--prefix=/usr \
+			--build=$(JTL_ARCH) --host=$(JTL_CROSS) \
+			--disable-nls \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install-strip )
+	du -hs $(BUILD)/$(JTL_CROSS)-sed > $(MADE)/$(JTL_CROSS)-sed
+	rm -rf $(BUILD)/$(JTL_CROSS)-sed
+
+##
+#
+# sysklogd
+#
+$(JTL_CROSS)-sysklogd: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling sysklogd
+	rm -rf $(BUILD)/$(JTL_CROSS)-sysklogd
+	mkdir -p $(BUILD)/$(JTL_CROSS)-sysklogd
+	tar xzf $(ARCHIVE)/sysklogd-* -C $(BUILD)/$(JTL_CROSS)-sysklogd
+	patch -d $(BUILD)/$(JTL_CROSS)-sysklogd/* -p1 \
+		< patches/sysklogd-1.4.1-jtl1.diff
+	( cd $(BUILD)/$(JTL_CROSS)-sysklogd/* \
+		&& $(MAKE) "CC=$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+		&& $(REALLY) $(MAKE) "CC=$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			BINDIR=$(CROSS_ROOT)/usr/sbin \
+			MANDIR=$(CROSS_ROOT)/usr/man install_exec )
+	du -hs $(BUILD)/$(JTL_CROSS)-sysklogd > $(MADE)/$(JTL_CROSS)-sysklogd
+	rm -rf $(BUILD)/$(JTL_CROSS)-sysklogd
+
+##
+#
+# tar
+#
+$(JTL_CROSS)-tar: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling tar
+	rm -rf $(BUILD)/$(JTL_CROSS)-tar
+	mkdir -p $(BUILD)/$(JTL_CROSS)-tar
+	tar xzf $(ARCHIVE)/tar-* -C $(BUILD)/$(JTL_CROSS)-tar
+	( cd $(BUILD)/$(JTL_CROSS)-tar/* \
+		&& NM=$(JTL_CROSS)-nm RANLIB=$(JTL_CROSS)-ranlib \
+			AR=$(JTL_CROSS)-ar \
+			CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			 ./configure --prefix=/usr \
+			--target=$(JTL_CROSS) --host=$(JTL_CROSS) \
+			--build=$(JTL_ARCH)  \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install ) || exit 1
+	du -hs $(BUILD)/$(JTL_CROSS)-tar > $(MADE)/$(JTL_CROSS)-tar
+	rm -rf $(BUILD)/$(JTL_CROSS)-tar
+
+##
+#
+# util-linux
+#
+# Patch to avoid inexplicable distrust of the ARM and Sparc (only) mount.h
+#
+# disable-schedutils in 2.13pre7 because ionice doesn't like ARM.
+#
+$(JTL_CROSS)-util-linux: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling util-linux
+	rm -rf $(BUILD)/$(JTL_CROSS)-util-linux
+	mkdir -p $(BUILD)/$(JTL_CROSS)-util-linux
+	$(REALLY) mkdir -p $(CROSS_ROOT)/sbin
+	tar xzf $(ARCHIVE)/util-linux-*gz -C $(BUILD)/$(JTL_CROSS)-util-linux
+	#cat patches/util-linux*.diff \
+	#	| patch -p1 -d $(BUILD)/$(JTL_CROSS)-util-linux/*
+	( cd $(BUILD)/$(JTL_CROSS)-util-linux/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			CFLAGS="-DNAME_MAX=4096 -DLINE_MAX=2048" ./configure \
+			--host=$(JTL_CROSS) --build=$(JTL_ARCH) \
+			--enable-login-utils --disable-schedutils --prefix=/ \
+			--disable-use-tty-group --disable-wall \
+			--without-ncurses \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) DESTDIR=$(CROSS_ROOT) install )
+	du -hs $(BUILD)/$(JTL_CROSS)-util-linux \
+		> $(MADE)/$(JTL_CROSS)-util-linux
+	rm -rf $(BUILD)/$(JTL_CROSS)-util-linux
+
+##
+#
+# zlib
+#
+$(JTL_CROSS)-zlib: $(JTL_CROSS)-toolchain
+	@echo Cross-compiling zlib
+	rm -rf $(BUILD)/$(JTL_CROSS)-zlib
+	mkdir -p $(BUILD)/$(JTL_CROSS)-zlib
+	tar xf $(ARCHIVE)/zlib*tar* -C $(BUILD)/$(JTL_CROSS)-zlib
+	( cd $(BUILD)/$(JTL_CROSS)-zlib/* \
+		&& CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS)" \
+			./configure \
+			--prefix=/usr --shared \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) prefix=$(CROSS_ROOT)/usr install )
+	du -hs $(BUILD)/$(JTL_CROSS)-zlib > $(MADE)/$(JTL_CROSS)-zlib
+	rm -rf $(BUILD)/$(JTL_CROSS)-zlib

@@ -1,0 +1,4 @@
+## Make.cvs2svn
+
+cvs2svn: cvs subversion
+	$(MAKE) PROG=cvs2svn _pythonstyle

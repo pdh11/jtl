@@ -1,0 +1,4 @@
+## Make.sdparm
+
+sdparm:
+	$(MAKE) PROG=sdparm _gnu

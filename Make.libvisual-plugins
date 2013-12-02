@@ -1,0 +1,4 @@
+## Make.libvisual-plugins
+
+libvisual-plugins: libvisual esound jack gtk+ gstreamer x alsa-lib
+	$(MAKE) PROG=libvisual-plugins _gnu

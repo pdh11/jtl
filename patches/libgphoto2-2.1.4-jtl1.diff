@@ -1,0 +1,10 @@
+--- libgphoto2-2.1.4/camlibs/ptp2/library.c~	2004-01-18 19:47:02.000000000 +0000
++++ libgphoto2-2.1.4/camlibs/ptp2/library.c	2004-07-20 14:12:11.000000000 +0100
+@@ -309,6 +309,7 @@ static struct {
+ 	 * PTP and "normal" (i.e. Canon) mode
+ 	 * Canon PS G3: A. Marinichev, 20 nov 2002
+ 	 */
++	{"Canon:PowerShot S60 (PTP mode)",      0x04a9, 0x30B2},
+ 	{"Canon:PowerShot S45 (PTP mode)",      0x04a9, 0x306d},
+ 		/* 0x306c is S45 in normal (canon) mode */
+ 	{"Canon:PowerShot G3 (PTP mode)",       0x04a9, 0x306f},

@@ -1,0 +1,13 @@
+## Make.gnome-panel
+#
+# Tests attempt external DTD fetch
+
+gnome-panel: glib gtk+ libglade libwnck scrollkeeper pkgconfig \
+		gconf mozilla libgweather evolution-data-server pango \
+		gnome-desktop gnome-menus dbus-glib librsvg \
+		libgweather dconf
+	$(MAKE) PROG=gnome-panel _gnu \
+		JTL_CFLAGS="$(JTL_CFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+		JTL_CXXFLAGS="$(JTL_CXXFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+		JTL_TESTS_BOGUS=bogus \
+                JTL_PATCH=gnome-panel-3.8.0.diff

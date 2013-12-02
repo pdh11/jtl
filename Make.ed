@@ -1,0 +1,6 @@
+## Make.ed
+#
+# Doesn't deal with --sysconfdir
+
+ed:
+	$(MAKE) PROG=ed _gnu

@@ -1,0 +1,4 @@
+## Make.intltool
+
+intltool: perl_xml_parser
+	$(MAKE) PROG=intltool _gnu

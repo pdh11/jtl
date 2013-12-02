@@ -1,0 +1,23 @@
+## Make.samba
+#
+# CTDBDIR because 3.2.4-3.3.2 does -I$(CTDBDIR)/include
+
+samba: readline openldap krb5 popt valgrind cups avahi libtirpc talloc
+	@echo Compiling samba
+	rm -rf $(BUILD)/samba
+	mkdir -p $(BUILD)/samba
+	tar xjf $(ARCHIVE)/samba-*bz2 -C $(BUILD)/samba
+	patch -d $(BUILD)/samba/* -p1 < patches/samba-4.1.2.diff
+	( cd $(BUILD)/samba/* \
+		&& CFLAGS="$(JTL_CFLAGS)" \
+                        LIBS="-Wl,--as-needed -ltirpc -lc" \
+			 ./configure --prefix=$(PREFIX) \
+			--enable-fhs --sysconfdir=/etc \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+			--localstatedir=/var --with-privatedir=/etc/samba \
+			--with-configdir=/etc \
+		&& $(MAKE) CTDBDIR=/usr \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/samba > $(MADE)/samba
+	rm -rf $(BUILD)/samba

@@ -1,0 +1,10 @@
+## Make.subversion
+
+subversion: python apache-base neon apr apr-util db3 openssl krb5 expat swig \
+		sqlite libproxy
+	LDFLAGS="-Wl,-rpath,$(PREFIX)/pgsql/lib" \
+		$(MAKE) PROG=subversion \
+                JTL_CONFIG="$(JTL_CONFIG) --with-apxs --with-ssl --with-apr=$(PREFIX)/bin/apr-1-config --with-apr-util=$(PREFIX)/bin/apu-1-config --with-swig=$(PREFIX)/bin/swig" \
+                JTL_MAKE="-j1 all swig-py swig-pl" \
+                JTL_INSTALL="-j1 install install-swig-py install-swig-pl" _gnu \
+                JTL_TESTS_BOGUS=1.7.5-client-fails

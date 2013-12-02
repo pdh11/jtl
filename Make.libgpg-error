@@ -1,0 +1,4 @@
+## Make.libgpg-error
+
+libgpg-error:
+	$(MAKE) PROG=libgpg-error _gnu

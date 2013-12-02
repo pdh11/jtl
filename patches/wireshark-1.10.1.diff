@@ -1,0 +1,10 @@
+--- wireshark-1.10.1/doc/reordercap.pod~	2013-08-11 20:34:23.000000000 +0100
++++ wireshark-1.10.1/doc/reordercap.pod	2013-08-11 20:34:58.000000000 +0100
+@@ -39,5 +39,7 @@ the same way B<reordercap> handles this.
+ 
+ When the B<-n> option is used, B<reordercap> will not write out the output
+ file if it finds that the input file is already in order.
++
++=back
+ 
+ =head1 SEE ALSO

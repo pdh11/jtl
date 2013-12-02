@@ -1,0 +1,4 @@
+## Make.pyserial
+
+pyserial: python
+	$(MAKE) PROG=pyserial _pythonstyle

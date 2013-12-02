@@ -1,0 +1,6 @@
+## Make.fakeroot
+#
+
+fakeroot:
+	$(MAKE) PROG=fakeroot _gnu \
+		JTL_TESTS_BOGUS=bogus

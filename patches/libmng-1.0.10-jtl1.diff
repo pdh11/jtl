@@ -1,0 +1,26 @@
+--- libmng-1.0.10/makefiles/configure.in~	2005-01-30 10:28:00.000000000 +0000
++++ libmng-1.0.10/makefiles/configure.in	2012-05-31 18:42:12.000000000 +0100
+@@ -1,12 +1,12 @@
+ dnl Process this file with autoconf to produce a configure script.
+ 
+-AC_INIT
++AC_INIT(libmng, 1.0.10)
+ AC_CONFIG_SRCDIR([libmng.h])
+ AC_PREREQ(2.52)
+ 
+ dnl this call will define PACKAGE and VERSION
+ dnl please use this as the primary reference for the version number
+-AM_INIT_AUTOMAKE(libmng, 1.0.9)
++AM_INIT_AUTOMAKE
+ 
+ dnl pass the version string on the the makefiles
+ AC_SUBST(PACKAGE)
+@@ -15,7 +15,7 @@ AC_SUBST(VERSION)
+ dnl Checks for programs.
+ AC_PROG_CC
+ AC_ISC_POSIX
+-AM_C_PROTOTYPES
++dnl AM_C_PROTOTYPES
+ if test "x$U" != "x"; then
+   AC_MSG_ERROR(Compiler not ANSI compliant)
+ fi

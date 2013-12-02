@@ -1,0 +1,4 @@
+## Make.bittorrent
+
+bittorrent: python_twisted zope pycrypto
+	$(MAKE) PROG=bittorrent _pythonstyle

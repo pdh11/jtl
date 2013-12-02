@@ -1,0 +1,11 @@
+--- modutils-2.4.27/genksyms/lex.l~	2002-03-24 05:01:03.000000000 +0000
++++ modutils-2.4.27/genksyms/lex.l	2004-08-15 19:34:05.000000000 +0100
+@@ -425,7 +425,7 @@ repeat:
+ 	    {
+ 	      /* Put back the token we just read so's we can find it again
+ 		 after registering the expression.  */
+-	      unput(token);
++	      yyunput(token, yytext);
+ 
+ 	      lexstate = ST_NORMAL;
+ 	      token = EXPRESSION_PHRASE;

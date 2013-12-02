@@ -1,0 +1,7 @@
+## Make.mx
+#
+# It's a toolkit for Clutter
+
+mx: gtk+ clutter
+	$(MAKE) PROG=mx _gnu \
+                JTL_PATCH=mx-1.4.7-jtl1.diff

@@ -1,0 +1,18 @@
+## Make.x11-ssh-askpass
+#
+# x-style
+
+x11-ssh-askpass: x openssh
+	@echo Making X-style x11-ssh-askpass
+	rm -rf $(BUILD)/x11-ssh-askpass
+	mkdir -p $(BUILD)/x11-ssh-askpass
+	tar xjf $(ARCHIVE)/x11-ssh-askpass-*bz2 -C $(BUILD)/x11-ssh-askpass
+	( cd $(BUILD)/x11-ssh-askpass/* \
+		&& ./configure --prefix=$(PREFIX) \
+		&& xmkmf \
+		&& $(MAKE) Makefiles \
+		&& $(MAKE) includes \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/x11-ssh-askpass > $(MADE)/x11-ssh-askpass
+	rm -rf $(BUILD)/x11-ssh-askpass

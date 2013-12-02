@@ -1,0 +1,5 @@
+## Make.matchbox
+
+matchbox: x
+	$(MAKE) PROG=matchbox JTL_CONFIG="--enable-xft" _gnu
+

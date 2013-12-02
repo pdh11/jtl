@@ -1,0 +1,935 @@
+--- inkscape-0.45.1/src/dialogs/object-attributes.cpp~	2007-01-16 02:45:42.000000000 +0000
++++ inkscape-0.45.1/src/dialogs/object-attributes.cpp	2008-03-07 19:46:56.000000000 +0000
+@@ -16,6 +16,7 @@
+ # include "config.h"
+ #endif
+ #include <glibmm/i18n.h>
++#include <string.h>
+ #include "helper/window.h"
+ #include "macros.h"
+ #include "sp-anchor.h"
+--- inkscape-0.45.1/src/dialogs/unclump.cpp~	2007-01-16 02:45:42.000000000 +0000
++++ inkscape-0.45.1/src/dialogs/unclump.cpp	2008-03-07 19:47:53.000000000 +0000
+@@ -14,7 +14,7 @@
+ #include <map>
+ #include "libnr/nr-matrix-ops.h"
+ #include "sp-item.h"
+-
++#include <algorithm>
+ 
+ // Taking bbox of an item is an expensive operation, and we need to do it many times, so here we
+ // cache the centers, widths, and heights of items
+--- inkscape-0.45.1/src/display/nr-arena-item.cpp~	2007-02-04 18:43:09.000000000 +0000
++++ inkscape-0.45.1/src/display/nr-arena-item.cpp	2008-03-07 19:49:51.000000000 +0000
+@@ -18,6 +18,7 @@
+ 
+ #include <libnr/nr-blit.h>
+ #include <libnr/nr-pixops.h>
++#include <string.h>
+ #include "nr-arena.h"
+ #include "nr-arena-item.h"
+ #include "gc-core.h"
+--- inkscape-0.45.1/src/display/curve.cpp~	2007-01-16 02:45:15.000000000 +0000
++++ inkscape-0.45.1/src/display/curve.cpp	2008-03-07 19:50:30.000000000 +0000
+@@ -17,6 +17,7 @@
+ 
+ 
+ #include <glib/gmem.h>
++#include <string.h>
+ #include <display/curve.h>
+ #include <libnr/n-art-bpath.h>
+ #include <libnr/nr-point-matrix-ops.h>
+--- inkscape-0.45.1/src/display/nr-filter.cpp~	2007-02-04 18:43:09.000000000 +0000
++++ inkscape-0.45.1/src/display/nr-filter.cpp	2008-03-07 19:50:53.000000000 +0000
+@@ -13,6 +13,7 @@
+ 
+ #include <glib.h>
+ #include <cmath>
++#include <string.h>
+ 
+ #include "display/nr-filter.h"
+ #include "display/nr-filter-primitive.h"
+--- inkscape-0.45.1/src/display/nr-filter-gaussian.cpp~	2007-02-04 18:43:09.000000000 +0000
++++ inkscape-0.45.1/src/display/nr-filter-gaussian.cpp	2008-03-07 19:52:35.000000000 +0000
+@@ -14,6 +14,7 @@
+  */
+ 
+ #include <cmath>
++#include <cstdlib>
+ #include <glib.h>
+ 
+ using std::isnormal;
+--- inkscape-0.45.1/src/inkjar/jar.cpp~	2007-01-16 02:46:06.000000000 +0000
++++ inkscape-0.45.1/src/inkjar/jar.cpp	2008-03-07 19:58:47.000000000 +0000
+@@ -42,7 +42,8 @@
+ #include <fcntl.h>
+ //#endif
+ 
+-
++#include <cstring>
++#include <stdlib.h>
+ #include <glib.h>
+ 
+ #include "jar.h"
+--- inkscape-0.45.1/src/io/gzipstream.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/io/gzipstream.cpp	2008-03-07 19:55:01.000000000 +0000
+@@ -14,7 +14,7 @@
+  */
+ 
+ #include "gzipstream.h"
+-
++#include <string.h>
+ 
+ namespace Inkscape
+ {
+--- inkscape-0.45.1/src/io/simple-sax.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/io/simple-sax.cpp	2008-03-07 19:55:19.000000000 +0000
+@@ -11,6 +11,7 @@
+ 
+ 
+ #include "simple-sax.h"
++#include <string.h>
+ 
+ namespace Inkscape {
+ namespace IO {
+--- inkscape-0.45.1/src/io/uristream.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/io/uristream.cpp	2008-03-07 19:55:35.000000000 +0000
+@@ -13,6 +13,7 @@
+ 
+ #include "uristream.h"
+ #include "sys.h"
++#include <string.h>
+ 
+ #ifdef WIN32
+ // For now to get at is_os_wide().
+--- inkscape-0.45.1/src/libavoid/connector.cpp~	2007-01-16 02:45:49.000000000 +0000
++++ inkscape-0.45.1/src/libavoid/connector.cpp	2008-03-07 20:02:28.000000000 +0000
+@@ -26,7 +26,8 @@
+ #include "libavoid/visibility.h"
+ #include "libavoid/debug.h"
+ #include "libavoid/router.h"
+-
++#include <stdlib.h>
++#include <cstdlib>
+ 
+ namespace Avoid {
+ 
+--- inkscape-0.45.1/src/libavoid/makepath.cpp~	2007-01-16 02:45:49.000000000 +0000
++++ inkscape-0.45.1/src/libavoid/makepath.cpp	2008-03-07 20:02:58.000000000 +0000
+@@ -33,6 +33,8 @@
+ #include "libavoid/router.h"
+ #include <vector>
+ #include <math.h>
++#include <limits.h>
++#include <algorithm>
+ 
+ namespace Avoid {
+ 
+--- inkscape-0.45.1/src/libavoid/router.cpp~	2007-01-16 02:45:49.000000000 +0000
++++ inkscape-0.45.1/src/libavoid/router.cpp	2008-03-07 20:03:11.000000000 +0000
+@@ -28,6 +28,7 @@
+ #include "libavoid/debug.h"
+ #include "libavoid/region.h"
+ #include "math.h"
++#include <stdlib.h>
+ 
+ //#define ORTHOGONAL_ROUTING
+ 
+--- inkscape-0.45.1/src/libavoid/visibility.cpp~	2007-01-16 02:45:49.000000000 +0000
++++ inkscape-0.45.1/src/libavoid/visibility.cpp	2008-03-07 20:03:28.000000000 +0000
+@@ -32,6 +32,7 @@
+ #include "libavoid/router.h"
+ 
+ #include <math.h>
++#include <algorithm>
+ 
+ #ifdef LINEDEBUG
+   #include "SDL_gfxPrimitives.h"
+--- inkscape-0.45.1/src/libnr/n-art-bpath.h~	2007-01-16 02:46:04.000000000 +0000
++++ inkscape-0.45.1/src/libnr/n-art-bpath.h	2008-03-07 19:21:27.000000000 +0000
+@@ -7,6 +7,7 @@
+ 
+ #include "libnr/nr-point.h"
+ #include "libnr/nr-path-code.h"
++#include <stdlib.h>
+ 
+ /**
+  * Old-style path segment.
+--- inkscape-0.45.1/src/libnr/nr-matrix.cpp~	2007-01-16 02:46:04.000000000 +0000
++++ inkscape-0.45.1/src/libnr/nr-matrix.cpp	2008-03-07 20:00:37.000000000 +0000
+@@ -12,7 +12,7 @@
+  */
+ 
+ #include "nr-matrix.h"
+-
++#include <stdlib.h>
+ 
+ 
+ /**
+--- inkscape-0.45.1/src/libnr/nr-pixblock.cpp~	2007-01-16 02:46:04.000000000 +0000
++++ inkscape-0.45.1/src/libnr/nr-pixblock.cpp	2008-03-07 20:01:01.000000000 +0000
+@@ -9,6 +9,7 @@
+  * This code is in the Public Domain
+  */
+ 
++#include <string.h>
+ #include <glib/gmem.h>
+ #include "nr-pixblock.h"
+ 
+--- inkscape-0.45.1/src/libnrtype/Layout-TNG.h~	2007-01-16 02:45:32.000000000 +0000
++++ inkscape-0.45.1/src/libnrtype/Layout-TNG.h	2008-03-07 19:16:24.000000000 +0000
+@@ -18,6 +18,7 @@
+ #include <glibmm/ustring.h>
+ #include <pango/pango-break.h>
+ #include <vector>
++#include <algorithm>
+ 
+ #ifdef HAVE_CAIRO_PDF
+ namespace Inkscape {
+--- inkscape-0.45.1/src/livarot/float-line.cpp~	2007-01-16 02:45:48.000000000 +0000
++++ inkscape-0.45.1/src/livarot/float-line.cpp	2008-03-07 20:04:58.000000000 +0000
+@@ -14,6 +14,7 @@
+ #endif
+ #include "livarot/float-line.h"
+ #include "livarot/int-line.h"
++#include <stdio.h>
+ 
+ FloatLigne::FloatLigne()
+ {
+--- inkscape-0.45.1/src/livarot/int-line.cpp~	2007-01-16 02:45:48.000000000 +0000
++++ inkscape-0.45.1/src/livarot/int-line.cpp	2008-03-07 20:05:31.000000000 +0000
+@@ -11,6 +11,9 @@
+ 
+ #include <glib/gmem.h>
+ #include <cmath>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ #include "livarot/int-line.h"
+ #include "livarot/float-line.h"
+ #include "livarot/BitLigne.h"
+--- inkscape-0.45.1/src/pedro/pedroconfig.cpp~	2007-01-16 02:45:45.000000000 +0000
++++ inkscape-0.45.1/src/pedro/pedroconfig.cpp	2008-03-07 19:48:32.000000000 +0000
+@@ -49,6 +49,8 @@ We are expecting an xml file with this f
+ #include "pedrodom.h"
+ 
+ #include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
+ 
+ namespace Pedro
+ {
+--- inkscape-0.45.1/src/pedro/pedroxmpp.cpp~	2007-03-13 18:06:21.000000000 +0000
++++ inkscape-0.45.1/src/pedro/pedroxmpp.cpp	2008-03-07 19:48:54.000000000 +0000
+@@ -34,7 +34,7 @@
+ #include "pedroutil.h"
+ 
+ #include <map>
+-
++#include <algorithm>
+ 
+ 
+ namespace Pedro
+--- inkscape-0.45.1/src/svg/svg.h~	2007-01-16 02:45:33.000000000 +0000
++++ inkscape-0.45.1/src/svg/svg.h	2008-03-07 19:19:00.000000000 +0000
+@@ -14,6 +14,7 @@
+ #include <glib/gtypes.h>
+ #include "svg/svg-length.h"
+ #include <vector>
++#include <string>
+ 
+ struct NArtBpath;
+ struct NRMatrix;
+--- inkscape-0.45.1/src/svg/gnome-canvas-bpath-util.cpp~	2007-01-16 02:45:33.000000000 +0000
++++ inkscape-0.45.1/src/svg/gnome-canvas-bpath-util.cpp	2008-03-07 20:07:10.000000000 +0000
+@@ -12,6 +12,7 @@
+ 
+ #include <glib/gmem.h>
+ #include <glib/gmessages.h>
++#include <string.h>
+ 
+ #include "libnr/n-art-bpath.h"
+ #include "gnome-canvas-bpath-util.h"
+--- inkscape-0.45.1/src/svg/itos.cpp~	2007-01-16 02:45:33.000000000 +0000
++++ inkscape-0.45.1/src/svg/itos.cpp	2008-03-07 20:07:24.000000000 +0000
+@@ -15,6 +15,7 @@
+ 
+ // Standard include files
+ #include <string>		// for string
++#include <algorithm>
+ 
+ using namespace std;
+ 
+--- inkscape-0.45.1/src/svg/svg-affine.cpp~	2007-01-16 02:45:33.000000000 +0000
++++ inkscape-0.45.1/src/svg/svg-affine.cpp	2008-03-07 20:08:16.000000000 +0000
+@@ -17,6 +17,7 @@
+ # include "config.h"
+ #endif
+ 
++#include <string.h>
+ #include <glib/gstrfuncs.h>
+ #include <libnr/nr-matrix-fns.h>
+ #include <libnr/nr-matrix-ops.h>
+--- inkscape-0.45.1/src/svg/svg-length.cpp~	2007-01-16 02:45:33.000000000 +0000
++++ inkscape-0.45.1/src/svg/svg-length.cpp	2008-03-07 20:08:31.000000000 +0000
+@@ -16,6 +16,7 @@
+ # include "config.h"
+ #endif
+ 
++#include <string.h>
+ #include <math.h>
+ #include <glib/gstrfuncs.h>
+ #include "svg.h"
+--- inkscape-0.45.1/src/svg/svg-path.cpp~	2007-01-16 02:45:33.000000000 +0000
++++ inkscape-0.45.1/src/svg/svg-path.cpp	2008-03-07 20:08:46.000000000 +0000
+@@ -27,6 +27,7 @@
+ */
+ 
+ #include <cassert>
++#include <string.h>
+ #include <glib/gmem.h>
+ #include <glib/gmessages.h>
+ #include <glib/gstrfuncs.h>
+--- inkscape-0.45.1/src/ui/widget/style-swatch.cpp~	2007-01-19 03:02:25.000000000 +0000
++++ inkscape-0.45.1/src/ui/widget/style-swatch.cpp	2008-03-07 19:57:27.000000000 +0000
+@@ -27,6 +27,7 @@
+ #include "widgets/widget-sizes.h"
+ #include "helper/units.h"
+ #include "inkscape.h"
++#include <string.h>
+ 
+ enum {
+     SS_FILL,
+--- inkscape-0.45.1/src/widgets/dash-selector.cpp~	2007-01-16 02:45:18.000000000 +0000
++++ inkscape-0.45.1/src/widgets/dash-selector.cpp	2008-03-07 20:09:05.000000000 +0000
+@@ -20,7 +20,7 @@
+ #endif
+ #include <libnr/nr-macros.h>
+ #include <gtk/gtk.h>
+-
++#include <string.h>
+ #include <glibmm/i18n.h>
+ #include "../style.h"
+ #include "../dialogs/dialog-events.h"
+--- inkscape-0.45.1/src/widgets/layer-selector.cpp~	2007-01-16 02:45:18.000000000 +0000
++++ inkscape-0.45.1/src/widgets/layer-selector.cpp	2008-03-07 20:09:47.000000000 +0000
+@@ -14,6 +14,7 @@
+ #endif
+ 
+ #include <glibmm/i18n.h>
++#include <cstring>
+ 
+ #include "desktop-handles.h"
+ 
+--- inkscape-0.45.1/src/widgets/sp-color-wheel.cpp~	2007-01-16 02:45:18.000000000 +0000
++++ inkscape-0.45.1/src/widgets/sp-color-wheel.cpp	2008-03-07 20:10:10.000000000 +0000
+@@ -14,6 +14,7 @@
+  */
+ 
+ #include <gtk/gtksignal.h>
++#include <string.h>
+ #include "sp-color-wheel.h"
+ 
+ #include "libnr/nr-rotate-ops.h"
+--- inkscape-0.45.1/src/widgets/sp-xmlview-attr-list.cpp~	2007-01-16 02:45:18.000000000 +0000
++++ inkscape-0.45.1/src/widgets/sp-xmlview-attr-list.cpp	2008-03-07 20:10:27.000000000 +0000
+@@ -16,6 +16,7 @@
+ #endif
+ #include "helper/sp-marshal.h"
+ #include <glibmm/i18n.h>
++#include <string.h>
+ #include "../xml/node-event-vector.h"
+ #include "sp-xmlview-attr-list.h"
+ 
+--- inkscape-0.45.1/src/widgets/sp-xmlview-tree.cpp~	2007-01-16 02:45:18.000000000 +0000
++++ inkscape-0.45.1/src/widgets/sp-xmlview-tree.cpp	2008-03-07 20:10:43.000000000 +0000
+@@ -13,6 +13,7 @@
+ 
+ #include "../xml/node-event-vector.h"
+ #include "sp-xmlview-tree.h"
++#include <string.h>
+ 
+ struct NodeData {
+ 	SPXMLViewTree * tree;
+--- inkscape-0.45.1/src/widgets/spw-utilities.cpp~	2007-01-16 02:45:18.000000000 +0000
++++ inkscape-0.45.1/src/widgets/spw-utilities.cpp	2008-03-07 20:10:58.000000000 +0000
+@@ -16,7 +16,7 @@
+ # include "config.h"
+ #endif
+ 
+-
++#include <string.h>
+ #include <gtk/gtk.h>
+  
+ #include "selection.h"
+--- inkscape-0.45.1/src/xml/node-fns.cpp~	2007-01-16 02:45:36.000000000 +0000
++++ inkscape-0.45.1/src/xml/node-fns.cpp	2008-03-07 20:11:34.000000000 +0000
+@@ -3,6 +3,7 @@
+ #endif
+ 
+ #include <map>
++#include <string.h>
+ 
+ #include "xml/node-iterators.h"
+ #include "algorithms/find-if-before.h"
+--- inkscape-0.45.1/src/xml/croco-node-iface.cpp~	2007-01-16 02:45:36.000000000 +0000
++++ inkscape-0.45.1/src/xml/croco-node-iface.cpp	2008-03-07 20:11:57.000000000 +0000
+@@ -1,6 +1,7 @@
+ #include "xml/croco-node-iface.h"
+ #include "xml/node.h"
+ #include <glib/gstrfuncs.h>
++#include <cstring>
+ 
+ static char const *
+ local_part(char const *const qname)
+--- inkscape-0.45.1/src/graphlayout/graphlayout.cpp~	2007-02-03 13:24:01.000000000 +0000
++++ inkscape-0.45.1/src/graphlayout/graphlayout.cpp	2008-03-07 20:06:44.000000000 +0000
+@@ -15,6 +15,7 @@
+ #include <vector>
+ #include <algorithm>
+ #include <float.h>
++#include <string.h>
+ 
+ #include "desktop.h"
+ #include "inkscape.h"
+--- inkscape-0.45.1/src/verbs.h~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/verbs.h	2008-03-07 19:15:52.000000000 +0000
+@@ -20,6 +20,7 @@
+ #include "helper/helper-forward.h"
+ #include "forward.h"
+ #include <glibmm/ustring.h>
++#include <string.h>
+ 
+ /** \brief This anonymous enum is used to provide a list of the Verbs
+            which are defined staticly in the verb files.  There may be
+--- inkscape-0.45.1/src/desktop-style.cpp~	2007-03-16 23:26:16.000000000 +0000
++++ inkscape-0.45.1/src/desktop-style.cpp	2008-03-07 19:18:21.000000000 +0000
+@@ -34,7 +34,7 @@
+ #include "sp-pattern.h"
+ #include "xml/repr.h"
+ #include "libnrtype/font-style-to-pos.h"
+-
++#include <string.h>
+ 
+ #include "desktop-style.h"
+ 
+--- inkscape-0.45.1/src/event-context.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/event-context.cpp	2008-03-07 19:19:20.000000000 +0000
+@@ -30,6 +30,7 @@
+ #include <gdk/gdkkeysyms.h>
+ #include <gtk/gtkmain.h>
+ #include <gtk/gtkmenu.h>
++#include <string.h>
+ 
+ #include "display/sp-canvas.h"
+ #include "xml/node-event-vector.h"
+--- inkscape-0.45.1/src/message-stack.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/message-stack.cpp	2008-03-07 19:19:56.000000000 +0000
+@@ -10,6 +10,7 @@
+  */
+ 
+ #include <glib/gstrfuncs.h>
++#include <string.h>
+ #include "message-stack.h"
+ 
+ namespace Inkscape {
+--- inkscape-0.45.1/src/node-context.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/node-context.cpp	2008-03-07 19:20:17.000000000 +0000
+@@ -15,6 +15,7 @@
+ # include "config.h"
+ #endif
+ #include <gdk/gdkkeysyms.h>
++#include <string.h>
+ #include "macros.h"
+ #include <glibmm/i18n.h>
+ #include "display/sp-canvas-util.h"
+--- inkscape-0.45.1/src/pen-context.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/pen-context.cpp	2008-03-07 19:20:40.000000000 +0000
+@@ -16,6 +16,7 @@
+  */
+ 
+ #include <gdk/gdkkeysyms.h>
++#include <string.h>
+ 
+ #include "pen-context.h"
+ #include "sp-namedview.h"
+--- inkscape-0.45.1/src/sp-guide.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/sp-guide.cpp	2008-03-07 19:22:44.000000000 +0000
+@@ -26,6 +26,8 @@
+ #include <glibmm/i18n.h>
+ #include <xml/repr.h>
+ #include <remove-last.h>
++#include <string.h>
++
+ using std::vector;
+ 
+ enum {
+--- inkscape-0.45.1/src/remove-last.h~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/remove-last.h	2008-03-07 19:22:59.000000000 +0000
+@@ -3,6 +3,7 @@
+ 
+ #include <vector>
+ #include <glib.h>
++#include <algorithm>
+ 
+ template<class T>
+ inline void remove_last(std::vector<T> &seq, T const &elem)
+--- inkscape-0.45.1/src/sp-item-update-cns.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/sp-item-update-cns.cpp	2008-03-07 19:23:37.000000000 +0000
+@@ -3,6 +3,8 @@
+ #include "sp-guide-constraint.h"
+ #include <sp-guide.h>
+ #include <sp-item.h>
++#include <algorithm>
++
+ using std::find;
+ using std::vector;
+ 
+--- inkscape-0.45.1/src/marker.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/marker.cpp	2008-03-07 19:23:58.000000000 +0000
+@@ -15,6 +15,7 @@
+ 
+ #include "config.h"
+ 
++#include <string.h>
+ 
+ #include "libnr/nr-matrix-fns.h"
+ #include "libnr/nr-matrix-ops.h"
+--- inkscape-0.45.1/src/sp-star.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/sp-star.cpp	2008-03-07 19:25:10.000000000 +0000
+@@ -17,6 +17,7 @@
+ #include "config.h"
+ 
+ #include <glibmm/i18n.h>
++#include <string.h>
+ 
+ #include "svg/svg.h"
+ #include "attributes.h"
+--- inkscape-0.45.1/src/sp-symbol.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/sp-symbol.cpp	2008-03-07 19:25:24.000000000 +0000
+@@ -12,7 +12,7 @@
+  */
+ 
+ #include "config.h"
+-
++#include <string.h>
+ #include "libnr/nr-matrix-fns.h"
+ #include "libnr/nr-matrix-ops.h"
+ #include "display/nr-arena-group.h"
+--- inkscape-0.45.1/src/sp-tspan.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/sp-tspan.cpp	2008-03-07 19:25:45.000000000 +0000
+@@ -28,6 +28,7 @@
+ #endif
+ 
+ #include <livarot/Path.h>
++#include <string.h>
+ #include "svg/stringstream.h"
+ #include "attributes.h"
+ #include "sp-use-reference.h"
+--- inkscape-0.45.1/src/sp-use-reference.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/sp-use-reference.cpp	2008-03-07 19:26:01.000000000 +0000
+@@ -16,7 +16,7 @@
+ #include "sp-shape.h"
+ #include "sp-text.h"
+ #include "uri.h"
+-
++#include <string.h>
+ 
+ 
+ bool SPUseReference::_acceptObject(SPObject * const obj) const
+--- inkscape-0.45.1/src/streams-gzip.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/streams-gzip.cpp	2008-03-07 19:26:22.000000000 +0000
+@@ -10,6 +10,7 @@
+  */
+ 
+ #include "streams-gzip.h"
++#include <string.h>
+ 
+ namespace Inkscape {
+ 
+--- inkscape-0.45.1/src/streams-zlib.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/streams-zlib.cpp	2008-03-07 19:26:50.000000000 +0000
+@@ -10,6 +10,7 @@
+  */
+ 
+ #include <vector>
++#include <cstring>
+ #include "streams-zlib.h"
+ 
+ namespace Inkscape {
+--- inkscape-0.45.1/src/tools-switch.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/tools-switch.cpp	2008-03-07 19:34:54.000000000 +0000
+@@ -18,7 +18,7 @@
+ #include "desktop.h"
+ #include "desktop-handles.h"
+ #include <glibmm/i18n.h>
+-
++#include <string.h>
+ #include <xml/repr.h>
+ 
+ #include "select-context.h"
+--- inkscape-0.45.1/src/gc.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/gc.cpp	2008-03-07 20:12:20.000000000 +0000
+@@ -14,6 +14,7 @@
+ #include <glib/gmessages.h>
+ #include <sigc++/functors/ptr_fun.h>
+ #include <glibmm/main.h>
++#include <cstring>
+ 
+ namespace Inkscape {
+ namespace GC {
+--- inkscape-0.45.1/src/composite-undo-stack-observer.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/composite-undo-stack-observer.cpp	2008-03-07 20:12:36.000000000 +0000
+@@ -14,6 +14,7 @@
+ 
+ #include "composite-undo-stack-observer.h"
+ #include "xml/event.h"
++#include <algorithm>
+ 
+ namespace Inkscape {
+ 
+--- inkscape-0.45.1/src/inkview.cpp~	2007-01-16 02:46:08.000000000 +0000
++++ inkscape-0.45.1/src/inkview.cpp	2008-03-07 20:12:57.000000000 +0000
+@@ -38,6 +38,7 @@
+ #include <string.h>
+ #include <sys/stat.h>
+ #include <locale.h>
++#include <cstring>
+ 
+ #include <glib/gmem.h>
+ #include <libnr/nr-macros.h>
+--- inkscape-0.46/src/widgets/sp-xmlview-attr-list.h~   2008-03-11 04:20:13.0000
+00000 +0000
++++ inkscape-0.46/src/widgets/sp-xmlview-attr-list.h    2008-10-13 18:40:39.0000
+00000 +0100
+@@ -13,6 +13,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <gtk/gtk.h>
+ #include <gtk/gtkclist.h>
+ #include "../xml/repr.h"
+ 
+--- inkscape-0.46/src/sp-image.cpp~	2008-03-11 04:19:56.000000000 +0000
++++ inkscape-0.46/src/sp-image.cpp	2009-03-19 19:17:33.000000000 +0000
+@@ -19,6 +19,7 @@
+ 
+ #include <cstring>
+ #include <string>
++#include <png.h>
+ #include <libnr/nr-matrix-fns.h>
+ //#define GDK_PIXBUF_ENABLE_BACKEND 1
+ //#include <gdk-pixbuf/gdk-pixbuf-io.h>
+@@ -41,7 +42,6 @@
+ #include "libnr/nr-matrix-fns.h"
+ 
+ #include "io/sys.h"
+-#include <png.h>
+ #if ENABLE_LCMS
+ #include "color-profile-fns.h"
+ #include "color-profile.h"
+--- inkscape-0.46/src/main.cpp~	2008-03-11 04:20:50.000000000 +0000
++++ inkscape-0.46/src/main.cpp	2009-03-19 19:20:18.000000000 +0000
+@@ -28,6 +28,7 @@
+ #endif
+ #include "path-prefix.h"
+ 
++#include <png.h>
+ #include <gtk/gtkmessagedialog.h>
+ 
+ #ifdef HAVE_IEEEFP_H
+@@ -111,7 +112,6 @@ using Inkscape::Extension::Internal::Pri
+ 
+ #include "main-cmdlineact.h"
+ 
+-#include <png.h>
+ #include <errno.h>
+ 
+ enum {
+--- inkscape-0.46/src/dialogs/export.cpp~	2008-03-11 04:19:54.000000000 +0000
++++ inkscape-0.46/src/dialogs/export.cpp	2009-03-19 19:26:31.000000000 +0000
+@@ -20,6 +20,7 @@
+ # include "config.h"
+ #endif
+ 
++#include <png.h>
+ #include <gtk/gtk.h>
+ #include <gtkmm/box.h>
+ #include <gtkmm/buttonbox.h>
+@@ -60,7 +61,6 @@
+ #include "io/sys.h"
+ 
+ #include "helper/png-write.h"
+-#include <png.h>
+ 
+ 
+ #define SP_EXPORT_MIN_SIZE 1.0
+--- inkscape-0.46/src/xml/event.cpp~	2008-03-11 04:19:47.000000000 +0000
++++ inkscape-0.46/src/xml/event.cpp	2009-03-29 17:45:59.000000000 +0100
+@@ -14,6 +14,7 @@
+  */
+ 
+ #include <glib.h> // g_assert()
++#include <stdio.h>
+ 
+ #include "event.h"
+ #include "event-fns.h"
+--- inkscape-0.46/src/io/inkscapestream.h~	2008-03-11 04:20:06.000000000 +0000
++++ inkscape-0.46/src/io/inkscapestream.h	2009-03-29 17:35:35.000000000 +0100
+@@ -13,6 +13,7 @@
+ 
+ 
+ #include <glibmm.h>
++#include <stdio.h>
+ 
+ namespace Inkscape
+ {
+--- inkscape-0.46/src/io/sys.cpp~	2008-03-11 04:20:06.000000000 +0000
++++ inkscape-0.46/src/io/sys.cpp	2009-03-29 17:38:23.000000000 +0100
+@@ -21,6 +21,7 @@
+ #endif
+ #include <glibmm/ustring.h>
+ #include <gtk/gtkmessagedialog.h>
++#include <cstdio>
+ 
+ #include "prefs-utils.h"
+ #include "sys.h"
+--- inkscape-0.46/src/io/uristream.cpp~	2009-03-29 17:14:03.000000000 +0100
++++ inkscape-0.46/src/io/uristream.cpp	2009-03-29 17:39:12.000000000 +0100
+@@ -16,6 +16,7 @@
+ #include <string.h>
+ #include <string>
+ #include <cstring>
++#include <cstdio>
+ 
+ #ifdef WIN32
+ // For now to get at is_os_wide().
+--- inkscape-0.46/src/dom/io/domstream.h~	2008-03-11 04:19:31.000000000 +0000
++++ inkscape-0.46/src/dom/io/domstream.h	2009-03-29 17:27:52.000000000 +0100
+@@ -32,6 +32,7 @@
+ 
+ 
+ #include <dom/dom.h>
++#include <stdio.h>
+ 
+ namespace org
+ {
+--- inkscape-0.46/src/dom/svg/svgtypes.h~	2008-03-11 04:19:30.000000000 +0000
++++ inkscape-0.46/src/dom/svg/svgtypes.h	2009-03-29 17:33:51.000000000 +0100
+@@ -48,7 +48,7 @@
+ 
+ 
+ #include <math.h>
+-
++#include <stdio.h>
+ 
+ 
+ namespace org {
+--- inkscape-0.46/src/dom/domimpl.cpp~	2008-03-11 04:19:31.000000000 +0000
++++ inkscape-0.46/src/dom/domimpl.cpp	2009-03-29 17:27:20.000000000 +0100
+@@ -29,6 +29,7 @@
+ 
+ 
+ #include "domimpl.h"
++#include <stdio.h>
+ 
+ namespace org
+ {
+--- inkscape-0.46/src/dom/xpathtoken.h~	2008-03-11 04:19:32.000000000 +0000
++++ inkscape-0.46/src/dom/xpathtoken.h	2009-03-29 17:28:36.000000000 +0100
+@@ -34,6 +34,7 @@
+ #include "dom.h"
+ 
+ #include <math.h>
++#include <stdio.h>
+ 
+ #include <vector>
+ 
+--- inkscape-0.46/src/libavoid/vertices.h~	2008-03-11 04:20:37.000000000 +0000
++++ inkscape-0.46/src/libavoid/vertices.h	2009-03-29 17:20:43.000000000 +0100
+@@ -27,6 +27,7 @@
+ #include <set>
+ #include <map>
+ #include <iostream>
++#include <stdio.h>
+ #include "libavoid/geomtypes.h"
+ 
+ namespace Avoid {
+--- inkscape-0.46/src/libnr/nr-matrix-fns.cpp~	2008-03-11 04:20:03.000000000 +0000
++++ inkscape-0.46/src/libnr/nr-matrix-fns.cpp	2009-03-29 17:43:28.000000000 +0100
+@@ -1,4 +1,5 @@
+ #include <libnr/nr-matrix-fns.h>
++#include <stdio.h>
+ 
+ namespace NR {
+ 
+--- inkscape-0.46/src/libnr/nr-matrix.cpp~	2009-03-29 17:14:03.000000000 +0100
++++ inkscape-0.46/src/libnr/nr-matrix.cpp	2009-03-29 17:43:50.000000000 +0100
+@@ -14,7 +14,7 @@
+ #include <cstdlib>
+ #include "nr-matrix.h"
+ #include <stdlib.h>
+-
++#include <stdio.h>
+ 
+ /**
+  *  Multiply two NRMatrices together, storing the result in d.
+--- inkscape-0.46/src/2geom/svg-path-parser.h~	2008-03-11 04:19:38.000000000 +0000
++++ inkscape-0.46/src/2geom/svg-path-parser.h	2009-03-29 17:40:22.000000000 +0100
+@@ -35,6 +35,7 @@
+ #include <vector>
+ #include <iterator>
+ #include <stdexcept>
++#include <stdio.h>
+ #include "exception.h"
+ #include "point.h"
+ #include "svg-path.h"
+--- inkscape-0.46/src/2geom/sbasis-math.cpp~	2008-03-11 04:19:38.000000000 +0000
++++ inkscape-0.46/src/2geom/sbasis-math.cpp	2009-03-29 17:51:18.000000000 +0100
+@@ -37,12 +37,12 @@
+ #include "sbasis-math.h"
+ //#define ZERO 1e-3
+ 
++#include <stdio.h>
++#include <math.h>
+ 
+ namespace Geom {
+ 
+ 
+-#include <stdio.h>
+-#include <math.h>
+ 
+ //-|x|-----------------------------------------------------------------------
+ Piecewise<SBasis> abs(SBasis const &f){
+--- inkscape-0.46/src/streams-handles.cpp~	2008-03-11 04:20:00.000000000 +0000
++++ inkscape-0.46/src/streams-handles.cpp	2009-03-29 17:24:41.000000000 +0100
+@@ -13,6 +13,7 @@
+ #include "uri.h"
+ 
+ #include <iostream>
++#include <cstdio>
+ 
+ namespace Inkscape {
+ 
+--- inkscape-0.46/src/streams-zlib.cpp~	2009-03-29 17:14:03.000000000 +0100
++++ inkscape-0.46/src/streams-zlib.cpp	2009-03-29 17:24:59.000000000 +0100
+@@ -14,6 +14,7 @@
+ #include <string.h>
+ #include <vector>
+ #include <cstring>
++#include <cstdio>
+ #include "streams-zlib.h"
+ 
+ namespace Inkscape {
+--- inkscape-0.46/src/dom/io/uristream.cpp~	2008-03-11 04:19:31.000000000 +0000
++++ inkscape-0.46/src/dom/io/uristream.cpp	2009-03-29 21:59:02.000000000 +0100
+@@ -41,7 +41,7 @@
+ 
+ 
+ #include "uristream.h"
+-
++#include <string.h>
+ 
+ 
+ namespace org
+--- inkscape-0.46/configure.ac~	2008-03-11 04:47:01.000000000 +0000
++++ inkscape-0.46/configure.ac	2009-10-14 23:01:07.000000000 +0100
+@@ -465,12 +465,21 @@ dnl ******************************
+ dnl Libpoppler checking
+ dnl ******************************
+ 
++AC_ARG_ENABLE(poppler,
++	AC_HELP_STRING([--enable-poppler], [Enable libpoppler PDF import]),
++	[enable_poppler=$enableval], [enable_poppler=yes])
++
+ AC_ARG_ENABLE(poppler-cairo,
+ 	AC_HELP_STRING([--enable-poppler-cairo], [Enable libpoppler-cairo for rendering PDF preview]),
+ 	[enable_poppler_cairo=$enableval], [enable_poppler_cairo=yes])
+ 
+ POPPLER_CFLAGS=""
++
++if test "x$enable_poppler" = "xyes"; then
+ PKG_CHECK_MODULES(POPPLER, poppler >= 0.5.9, poppler=yes, poppler=no)
++else
++poppler=no
++fi
+ 
+ if test "x$poppler" = "xyes"; then
+ 	dnl Working libpoppler
+--- inkscape-0.46/share/templates/Makefile.am~	2008-03-11 04:21:04.000000000 +0000
++++ inkscape-0.46/share/templates/Makefile.am	2009-10-14 23:10:44.000000000 +0100
+@@ -15,7 +15,6 @@ templates_DATA = \
+ 	DVD_cover_slim_300dpi.svg \
+ 	DVD_cover_superslim_300dpi.svg \
+ 	DVD_cover_ultraslim_300dpi.svg \
+-	default.svg \
+ 	default.ca.svg \
+ 	default.cs.svg \
+ 	default.de.svg \
+--- inkscape-0.46/config.h.in~	2008-03-11 04:47:22.000000000 +0000
++++ inkscape-0.46/config.h.in	2009-10-14 23:02:15.000000000 +0100
+@@ -1,5 +1,8 @@
+ /* config.h.in.  Generated from configure.ac by autoheader.  */
+ 
++/* Define if building universal (internal helper macro) */
++#undef AC_APPLE_UNIVERSAL_BUILD
++
+ /* Use binreloc thread support? */
+ #undef BR_PTHREADS
+ 
+@@ -155,19 +158,19 @@
+ /* Define to 1 if you have the `strtoul' function. */
+ #undef HAVE_STRTOUL
+ 
+-/* Define to 1 if `fordblks' is member of `struct mallinfo'. */
++/* Define to 1 if `struct mallinfo' is a member of `fordblks'. */
+ #undef HAVE_STRUCT_MALLINFO_FORDBLKS
+ 
+-/* Define to 1 if `fsmblks' is member of `struct mallinfo'. */
++/* Define to 1 if `struct mallinfo' is a member of `fsmblks'. */
+ #undef HAVE_STRUCT_MALLINFO_FSMBLKS
+ 
+-/* Define to 1 if `hblkhd' is member of `struct mallinfo'. */
++/* Define to 1 if `struct mallinfo' is a member of `hblkhd'. */
+ #undef HAVE_STRUCT_MALLINFO_HBLKHD
+ 
+-/* Define to 1 if `uordblks' is member of `struct mallinfo'. */
++/* Define to 1 if `struct mallinfo' is a member of `uordblks'. */
+ #undef HAVE_STRUCT_MALLINFO_UORDBLKS
+ 
+-/* Define to 1 if `usmblks' is member of `struct mallinfo'. */
++/* Define to 1 if `struct mallinfo' is a member of `usmblks'. */
+ #undef HAVE_STRUCT_MALLINFO_USMBLKS
+ 
+ /* Define to 1 if you have the <sys/filio.h> header file. */
+@@ -219,6 +222,9 @@
+ /* Define to the one symbol short name of this package. */
+ #undef PACKAGE_TARNAME
+ 
++/* Define to the home page for this package. */
++#undef PACKAGE_URL
++
+ /* Define to the version of this package. */
+ #undef PACKAGE_VERSION
+ 
+@@ -276,9 +282,17 @@
+ /* Use Xft font database */
+ #undef WITH_XFT
+ 
+-/* Define to 1 if your processor stores words with the most significant byte
+-   first (like Motorola and SPARC, unlike Intel and VAX). */
+-#undef WORDS_BIGENDIAN
++/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
++   significant byte first (like Motorola and SPARC, unlike Intel). */
++#if defined AC_APPLE_UNIVERSAL_BUILD
++# if defined __BIG_ENDIAN__
++#  define WORDS_BIGENDIAN 1
++# endif
++#else
++# ifndef WORDS_BIGENDIAN
++#  undef WORDS_BIGENDIAN
++# endif
++#endif
+ 
+ /* Define to `int' if <sys/types.h> does not define. */
+ #undef mode_t

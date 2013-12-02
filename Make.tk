@@ -1,0 +1,25 @@
+## Make.tk
+#
+# The sed line to get around a bash-3.1 incompatibility in tcl-8.4.12:
+# http://www.diy-linux.org/pipermail/diy-linux-dev/2005-December/000692.html
+
+tk: tcl x
+	@echo Compiling tk
+	rm -rf $(BUILD)/tk
+	mkdir -p $(BUILD)/tk
+	tar xjf $(ARCHIVE)/tcl-*bz2 -C $(BUILD)/tk
+	tar xjf $(ARCHIVE)/tk-*bz2 -C $(BUILD)/tk
+	( cd $(BUILD)/tk/tcl*/unix \
+	        && sed -i.bak "s/relid'/relid/" configure \
+		&& ./configure --prefix=$(PREFIX) \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& cd $(BUILD)/tk/tk*/unix \
+	        && sed -i.bak "s/relid'/relid/" configure \
+		&& ./configure --prefix=$(PREFIX) \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/tk > $(MADE)/tk
+	rm -rf $(BUILD)/tk

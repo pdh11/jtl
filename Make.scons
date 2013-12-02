@@ -1,0 +1,12 @@
+## Make.scons
+
+scons: python
+	@echo Making GNU scons
+	rm -rf $(BUILD)/scons
+	mkdir -p $(BUILD)/scons
+	tar xjf $(ARCHIVE)/scons-*bz2 -C $(BUILD)/scons
+	( cd $(BUILD)/scons/* \
+		&& python setup.py build \
+		&& $(REALLY) python setup.py install --standard-lib --no-version-script --no-install-man )
+	du -hs $(BUILD)/scons > $(MADE)/scons
+	rm -rf $(BUILD)/scons

@@ -1,0 +1,5 @@
+## Make.libtool
+
+libtool:
+	$(MAKE) PROG=libtool JTL_CONFIG="--enable-shared --enable-static --sysconfdir=$(JTL_SYSCONFDIR)" _gnu \
+		JTL_TESTS_BOGUS=2.2.8

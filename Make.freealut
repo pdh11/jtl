@@ -1,0 +1,4 @@
+## Make.freealut
+
+freealut: openal-soft
+	$(MAKE) PROG=freealut _gnu

@@ -1,0 +1,4 @@
+## Make.openquicktime
+
+openquicktime:
+	$(MAKE) PROG=openquicktime _gnu JTL_PATCH=openquicktime-1.0-jtl1.diff

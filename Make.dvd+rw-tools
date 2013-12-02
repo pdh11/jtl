@@ -1,0 +1,14 @@
+## Make.dvd+rw-tools
+#
+# 7.1 doesn't realise it needs to include <limits.h>
+
+dvd+rw-tools:
+	@echo Compiling dvd+rw-tools
+	$(REALLY) rm -rf $(BUILD)/dvd+rw-tools
+	mkdir -p $(BUILD)/dvd+rw-tools
+	tar xjf $(ARCHIVE)/dvd+rw-tools-*.bz2 -C $(BUILD)/dvd+rw-tools
+	( cd $(BUILD)/dvd+rw-tools/* \
+		&& $(MAKE) CXXFLAGS="-include limits.h $(JTL_CXXFLAGS)" \
+		&& $(REALLY) $(MAKE) prefix=/usr install )
+	du -hs $(BUILD)/dvd+rw-tools > $(MADE)/dvd+rw-tools
+	$(REALLY) rm -rf $(BUILD)/dvd+rw-tools

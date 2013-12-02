@@ -1,0 +1,4 @@
+## Make.tofrodos
+
+tofrodos:
+	$(MAKE) PROG=tofrodos _gnu

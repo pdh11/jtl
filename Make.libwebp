@@ -1,0 +1,4 @@
+## Make.libwebp
+
+libwebp: libpng libtiff libjpeg
+	$(MAKE) PROG=libwebp _gnu

@@ -1,0 +1,7 @@
+## Make.libtheora
+#
+# make install doesn't cope with -j in 1.0alpha5
+
+libtheora: libogg sdl libvorbis
+	$(MAKE) PROG=libtheora -j1 _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --disable-examples"

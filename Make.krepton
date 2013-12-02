@@ -1,0 +1,4 @@
+## Make.krepton
+
+krepton: kde-libs
+	$(MAKE) PROG=krepton JTL_CONFIG="$(JTL_CONFIG) --enable-libsuffix=" _gnu

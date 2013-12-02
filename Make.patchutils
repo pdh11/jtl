@@ -1,0 +1,5 @@
+## Make.patchutils
+
+patchutils:
+	$(MAKE) PROG=patchutils _gnu \
+                JTL_TESTS_BOGUS=0.3.2

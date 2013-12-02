@@ -1,0 +1,6 @@
+## Make.gcr
+
+gcr: glib gobject-introspection libgcrypt libtasn1 gtk+ gnupg p11-kit \
+        intltool perl_xml_parser
+	$(MAKE) PROG=gcr _gnu \
+                JTL_TESTS_BOGUS=3.4.0

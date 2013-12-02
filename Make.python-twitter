@@ -1,0 +1,4 @@
+## Make.python-twitter
+
+python-twitter: pyhttplib2 python-oauth2 simplejson
+	$(MAKE) PROG=python-twitter _pythonstyle

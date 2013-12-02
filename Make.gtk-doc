@@ -1,0 +1,5 @@
+## Make.gtk-doc
+
+gtk-doc: glib perl python libxslt docbook-xsl scrollkeeper gnome-doc-utils
+	$(MAKE) PROG=gtk-doc _gnu \
+		JTL_TESTS_BOGUS=yup

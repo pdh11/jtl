@@ -1,0 +1,5 @@
+## Make.cogl
+
+cogl: glib gobject-introspection pango x
+	$(MAKE) PROG=cogl _gnu \
+                JTL_TESTS_BOGUS=1.8.0

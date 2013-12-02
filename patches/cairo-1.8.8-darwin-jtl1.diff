@@ -1,0 +1,48 @@
+--- src/Makefile~	2010-01-21 21:40:46.000000000 +0000
++++ src/Makefile	2010-01-21 21:45:29.000000000 +0000
+@@ -416,7 +416,7 @@ AUTOMAKE = ${SHELL} /usr/src/jtl/build/c
+ AWK = gawk
+ CAIROPERF_LIBS = 
+ CAIRO_CFLAGS =  -I/usr/arm-apple-darwin9/include/pixman-1          -Wall -Wextra -Wsign-compare -Werror-implicit-function-declaration -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wpacked -Wswitch-enum -Wmissing-format-attribute -Wstrict-aliasing=2 -Winit-self -Wunsafe-loop-optimizations -Wdeclaration-after-statement -Wold-style-definition -Wno-missing-field-initializers -Wno-unused-parameter -Wno-attributes -Wno-long-long -Winline -fno-strict-aliasing -fno-common -Wp,-D_FORTIFY_SOURCE=2        
+-CAIRO_LIBS =  -L/usr/arm-apple-darwin9/lib -lpixman-1       -Xlinker -framework -Xlinker ApplicationServices     -lz -lz     
++CAIRO_LIBS =  -L/usr/arm-apple-darwin9/lib -lpixman-1       -Xlinker -framework -Xlinker CoreGraphics -Wl,-framework,CoreFoundation -Wl,-framework,System     -lz -lz     
+ CAIRO_LIBTOOL_VERSION_INFO = 10802:8:10800
+ CAIRO_NONPKGCONFIG_CFLAGS =        
+ CAIRO_NONPKGCONFIG_LIBS =   -lz -lz     
+--- src/cairo-quartz-image.h~	2008-12-12 12:48:05.000000000 +0000
++++ src/cairo-quartz-image.h	2010-01-21 21:42:09.000000000 +0000
+@@ -40,7 +40,7 @@
+ 
+ #if CAIRO_HAS_QUARTZ_IMAGE_SURFACE
+ 
+-#include <Carbon/Carbon.h>
++#include <CoreGraphics/CoreGraphics.h>
+ 
+ CAIRO_BEGIN_DECLS
+ 
+--- src/cairo-quartz-surface.c~	2009-02-13 10:08:39.000000000 +0000
++++ src/cairo-quartz-surface.c	2010-01-21 21:47:53.000000000 +0000
+@@ -152,10 +152,10 @@ static void quartz_ensure_symbols(void)
+     CGContextGetAllowsFontSmoothingPtr = dlsym(RTLD_DEFAULT, "CGContextGetAllowsFontSmoothing");
+     CGContextSetAllowsFontSmoothingPtr = dlsym(RTLD_DEFAULT, "CGContextSetAllowsFontSmoothing");
+ 
+-    if (Gestalt(gestaltSystemVersion, &_cairo_quartz_osx_version) != noErr) {
++//    if (Gestalt(gestaltSystemVersion, &_cairo_quartz_osx_version) != noErr) {
+ 	// assume 10.4
+ 	_cairo_quartz_osx_version = 0x1040;
+-    }
++//    }
+ 
+     _cairo_quartz_symbol_lookup_done = TRUE;
+ }
+--- src/cairo-quartz-font.c~	2009-06-16 11:48:54.000000000 +0100
++++ src/cairo-quartz-font.c	2010-01-21 21:48:29.000000000 +0000
+@@ -798,7 +798,7 @@ _cairo_quartz_scaled_font_get_cg_font_re
+     return ffont->cgFont;
+ }
+ 
+-#ifndef __LP64__
++#if 0 //ndef __LP64__
+ /*
+  * compat with old ATSUI backend
+  */

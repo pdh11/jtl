@@ -1,0 +1,6 @@
+## Make.evolution_exchange
+#
+# Uses mozilla's SSL libraries
+
+evolution_exchange: evolution krb5 openldap
+	LDFLAGS=-Wl,-rpath,/usr/lib/mozilla $(MAKE) PROG=evolution_exchange _gnu

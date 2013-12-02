@@ -1,0 +1,22 @@
+## Make.zinf
+#
+# Doesn't deal with being run as a submake (doesn't cope with extra -w)
+
+zinf: id3lib zlib libogg libvorbis ncurses orbit \
+		gettext gtk+ freetype esound
+	rm -rf $(BUILD)/zinf
+	mkdir -p $(BUILD)/zinf
+	( [ -f $(ARCHIVE)/zinf-*gz ] \
+		&& tar xzf $(ARCHIVE)/zinf-*gz -C $(BUILD)/zinf ) \
+	    || ( [ -f $(ARCHIVE)/zinf-*bz2 ] \
+		&& tar xjf $(ARCHIVE)/zinf-*bz2 -C $(BUILD)/zinf ) \
+	    || ( echo No archive found for zinf ; exit 1 )
+	( cd $(BUILD)/zinf/* \
+		&& rm -f config.cache \
+		&& chmod a+x configure \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) \
+		&& /usr/bin/make MAKEFLAGS= \
+		&& $(REALLY) /usr/bin/make install )
+	du -hs $(BUILD)/zinf > $(MADE)/zinf
+	$(REALLY) rm -rf $(BUILD)/zinf

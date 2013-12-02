@@ -1,0 +1,19 @@
+## Make.faac
+
+faac: 
+	@echo Compiling faac
+	rm -rf $(BUILD)/faac
+	mkdir -p $(BUILD)/faac
+	tar xjf $(ARCHIVE)/faac-*bz2 -C $(BUILD)/faac
+	( cd $(BUILD)/faac/* \
+		&& ./bootstrap \
+		&& CFLAGS="$(JTL_CFLAGS)" ./configure --prefix=$(PREFIX) \
+			--sysconfdir=/etc \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+			--localstatedir=/var \
+			--enable-shared=yes --enable-static=no \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/faac > $(MADE)/faac
+	rm -rf $(BUILD)/faac

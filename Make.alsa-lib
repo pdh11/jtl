@@ -1,0 +1,4 @@
+## Make.alsa-lib
+
+alsa-lib:
+	$(MAKE) PROG=alsa-lib _gnu

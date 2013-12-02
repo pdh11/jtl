@@ -1,0 +1,6 @@
+## Make.shared-desktop-ontologies
+#
+# Shared desktop *what*?
+
+shared-desktop-ontologies: cmake
+	$(MAKE) PROG=shared-desktop-ontologies _gnucmake

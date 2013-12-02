@@ -1,0 +1,8 @@
+## Make.kde-bindings
+#
+
+kde-bindings: kde-libs kde-base-runtime qt python libxslt mozilla ruby sip \
+		kde-pimlibs soprano
+	$(MAKE) PROG=kdebindings JTL_TOUCH=kde-bindings PREFIX=$(PREFIX)/kde \
+		_gnucmake \
+		JTL_CMAKE="-DENABLE_KROSSRUBY=off -DENABLE_QTXMLPATTERNS_SMOKE=off"

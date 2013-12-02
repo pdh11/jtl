@@ -1,0 +1,5 @@
+## Make.libogg
+
+libogg:
+	$(MAKE) PROG=libogg _gnu
+

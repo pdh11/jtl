@@ -1,0 +1,4 @@
+## Make.rosegarden
+
+rosegarden: libpng zlib libjpeg kde-base jack fftw cmake
+	$(MAKE) PROG=rosegarden PREFIX=$(PREFIX)/kde _gnucmake

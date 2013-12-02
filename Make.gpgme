@@ -1,0 +1,6 @@
+## Make.gpgme
+
+gpgme: gnupg
+	$(MAKE) PROG=gpgme _gnu \
+		JTL_TESTS_BOGUS=1.3.0
+

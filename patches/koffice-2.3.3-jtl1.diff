@@ -1,0 +1,45 @@
+--- koffice-2.3.3/plugins/chartshape/kdchart/src/KDChartBackgroundAttributes.cpp~	2011-02-17 12:10:38.000000000 +0000
++++ koffice-2.3.3/plugins/chartshape/kdchart/src/KDChartBackgroundAttributes.cpp	2012-03-02 22:07:23.000000000 +0000
+@@ -150,7 +150,6 @@ QDebug operator<<(QDebug dbg, const KDCh
+ 	<< "visible="<<ba.isVisible()
+ 	<< "brush="<<ba.brush()
+ 	<< "pixmapmode="<<ba.pixmapMode()
+-	<< "pixmap="<<ba.pixmap()
+ 	<< ")";
+     return dbg;
+ }
+--- koffice-2.3.3/filters/kword/msword-odf/wv2/src/olestream.h~	2011-02-17 12:12:35.000000000 +0000
++++ koffice-2.3.3/filters/kword/msword-odf/wv2/src/olestream.h	2012-03-29 21:44:19.000000000 +0100
+@@ -23,7 +23,7 @@
+ #include "global.h"  // U8,... typedefs
+ #include <stack>
+ 
+-#include <glib/giochannel.h> // GSeekType
++#include <glib.h> // GSeekType
+ #include "wv2_export.h"
+ 
+ namespace wvWare {
+--- koffice-2.3.3/filters/kword/hancomword/pole.cpp~	2011-02-17 12:12:46.000000000 +0000
++++ koffice-2.3.3/filters/kword/hancomword/pole.cpp	2012-03-29 21:42:00.000000000 +0100
+@@ -869,8 +869,8 @@ void StorageIO::load()
+         unsigned k = 109;
+         unsigned mblock = header->mbat_start;
+         for (unsigned r = 0; r < header->num_mbat; r++) {
+-            unsigned long r = loadBigBlock(mblock, buffer2, bbat->blockSize);
+-            if (r != bbat->blockSize) {
++            unsigned long rr = loadBigBlock(mblock, buffer2, bbat->blockSize);
++            if (rr != bbat->blockSize) {
+                 delete[] buffer2;
+                 return;
+             }
+--- koffice-2.3.3/tools/okularodpgenerator/OkularOdpGenerator.cpp~	2011-02-17 12:12:29.000000000 +0000
++++ koffice-2.3.3/tools/okularodpgenerator/OkularOdpGenerator.cpp	2013-08-20 16:09:40.000000000 +0100
+@@ -120,7 +120,7 @@ void OkularOdpGenerator::generatePixmap(
+         pix = new QPixmap(page->thumbnail(QSize(request->width(), request->height())));
+     }
+ 
+-   request->page()->setPixmap( request->id(), pix );
++    request->page()->setPixmap( request->observer(), pix );
+ 
+     signalPixmapRequestDone( request );
+ }

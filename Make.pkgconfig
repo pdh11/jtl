@@ -1,0 +1,4 @@
+## Make.pkgconfig
+
+pkgconfig:
+	$(MAKE) PROG=pkgconfig _gnu

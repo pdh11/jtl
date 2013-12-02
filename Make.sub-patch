@@ -1,0 +1,14 @@
+## Make.sub-patch
+#
+
+sub-patch: sub-glibc
+	@echo Compiling patch for image
+	rm -rf $(BUILD)/sub-patch
+	mkdir -p $(BUILD)/sub-patch
+	tar xzf $(ARCHIVE)/patch*gz -C $(BUILD)/sub-patch
+	( cd $(BUILD)/sub-patch/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" LDFLAGS="$(JTL_SUBLIBS)" ./configure --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-patch > $(MADE)/sub-patch
+	rm -rf $(BUILD)/sub-patch

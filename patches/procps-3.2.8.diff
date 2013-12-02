@@ -1,0 +1,11 @@
+--- procps-3.2.8/Makefile~	2009-05-10 19:50:48.000000000 +0100
++++ procps-3.2.8/Makefile	2013-11-23 16:53:36.000000000 +0000
+@@ -174,7 +174,7 @@ INSTALL := $(BINFILES) $(MANFILES)
+ # want this rule first, use := on ALL, and ALL not filled in yet
+ all: do_all
+ 
+--include */module.mk
++-include proc/module.mk ps/module.mk
+ 
+ do_all:    $(ALL)
+ 

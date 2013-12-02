@@ -1,0 +1,4 @@
+## Make.attica
+
+attica: qt openssl cmake
+	$(MAKE) PROG=attica _gnucmake

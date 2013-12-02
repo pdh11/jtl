@@ -1,0 +1,27 @@
+--- gimp-2.8.8/plug-ins/common/file-mng.c~	2012-03-12 19:18:10.000000000 +0000
++++ gimp-2.8.8/plug-ins/common/file-mng.c	2013-11-24 10:52:44.000000000 +0000
+@@ -53,11 +53,6 @@
+ #endif
+ 
+ 
+-/* libpng and jpeglib are currently used in this plug-in. */
+-
+-#include <png.h>
+-#include <jpeglib.h>
+-
+ 
+ /* Grrr. The grrr is because the following have to be defined
+  * by the application as well for some reason, although they
+@@ -86,6 +81,12 @@
+ 
+ #include <libmng.h>
+ 
++
++/* libpng and jpeglib are currently used in this plug-in. */
++
++#include <png.h>
++#include <jpeglib.h>
++
+ #include "libgimp/gimp.h"
+ #include "libgimp/gimpui.h"
+ 

@@ -1,0 +1,57 @@
+## Make.xserver
+#
+# X server for non-headless machines; X and Mesa are intertwined
+
+xserver: hal talloc udev
+	touch $(MADE)/xserver
+
+xserver: xorg-server xdrivers
+
+xdrivers: xf86-input-mouse xf86-video-nouveau \
+		xf86-input-keyboard xf86-input-evdev
+	touch $(MADE)/xdrivers
+
+JTL_MESABUILD_i386:=linux-x86
+JTL_MESABUILD_i486:=linux-x86
+JTL_MESABUILD_i586:=linux-x86
+JTL_MESABUILD_i686:=linux-x86
+JTL_MESABUILD_x86_64:=linux-x86-64
+JTL_MESABUILD_sparc64:=linux-ultrasparc
+JTL_MESABUILD:=$(JTL_MESABUILD_$(JTL_ARCH))
+
+xorg-server: util-macros xf86driproto libdrm glproto randrproto \
+		renderproto fixesproto damageproto xcmiscproto xextproto \
+		xproto xtrans xf86miscproto xf86vidmodeproto xf86bigfontproto \
+		scrnsaverproto bigreqsproto resourceproto fontsproto \
+		inputproto xf86dgaproto videoproto compositeproto trapproto \
+		recordproto resourceproto xineramaproto evieext libxkbfile \
+		libXfont libXau libfontenc makedepend \
+		libxkbui libXxf86misc libXxf86vm libXaw libXmu libXt libXpm \
+		libXext libX11 libdrm hal libpciaccess dri2proto mesa
+	@echo Making xorg-server
+	rm -rf $(BUILD)/xorg-server
+	mkdir -p $(BUILD)/xorg-server
+	tar xjf $(ARCHIVE)/xorg-server-*bz2 -C $(BUILD)/xorg-server
+	# if [ x$(JTL_PATCH) != x ] ; then patch -d $(BUILD)/xorg-server/* -p1 -F5 < patches/$(JTL_PATCH) ; fi
+	tar xjf $(ARCHIVE)/MesaLib*bz2 -C $(BUILD)/xorg-server
+	( cd $(BUILD)/xorg-server/x* \
+		&& CFLAGS="$(JTL_CFLAGS) -I`readlink -f -n $(BUILD)/xorg-server/M*/include`" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX)/X11 \
+			--enable-install-setuid \
+			--with-mesa-source=$(BUILD)/xorg-server/M* \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	$(REALLY) /sbin/ldconfig
+	du -hs $(BUILD)/xorg-server > $(MADE)/xorg-server
+	( rm -rf $(BUILD)/xorg-server ; sync ) &
+
+libpciaccess:
+	$(MAKE) PROG=$@ _xgnu
+
+mesa: libdrm dri2proto glproto libXxf86vm libX11 libXext talloc \
+		libXfixes libXdamage libxcb
+	$(MAKE) PROG=MesaLib _xgnu \
+		JTL_CONFIG="--with-x --enable-xcb --with-gallium-drivers=nouveau,svga,swrast --enable-dri --with-dri-drivers=swrast" \
+		JTL_TOUCH=mesa \
+                JTL_TESTS_BOGUS=9.1.6 \
+                am__configure_deps=""

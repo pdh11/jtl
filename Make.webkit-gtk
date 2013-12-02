@@ -1,0 +1,6 @@
+## Make.webkit-gtk
+
+webkit-gtk: glib gtk+ libsoup gst-plugins-base geoclue icu
+	$(MAKE) PROG=webkitgtk _gnu \
+		JTL_TOUCH=webkit-gtk \
+                JTL_CONFIG="$(JTL_CONFIG) --with-gstreamer=1.0"

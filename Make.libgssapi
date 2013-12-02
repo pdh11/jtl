@@ -1,0 +1,4 @@
+## Make.libgssapi
+
+libgssapi: krb5
+	$(MAKE) PROG=libgssapi _gnu

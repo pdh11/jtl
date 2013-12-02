@@ -1,0 +1,18 @@
+--- freetype-2.1.9/include/freetype/freetype.h~	2004-06-19 21:50:08.000000000 +0100
++++ freetype-2.1.9/include/freetype/freetype.h	2004-07-26 18:38:09.000000000 +0100
+@@ -16,15 +16,6 @@
+ /***************************************************************************/
+ 
+ 
+-#ifndef FT_FREETYPE_H
+-#error "`ft2build.h' hasn't been included yet!"
+-#error "Please always use macros to include FreeType header files."
+-#error "Example:"
+-#error "  #include <ft2build.h>"
+-#error "  #include FT_FREETYPE_H"
+-#endif
+-
+-
+ #ifndef __FREETYPE_H__
+ #define __FREETYPE_H__
+ 

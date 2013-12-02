@@ -1,0 +1,4 @@
+## Make.libwacom
+
+libwacom: glib gobject-introspection
+	$(MAKE) PROG=libwacom _gnu

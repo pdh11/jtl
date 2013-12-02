@@ -1,0 +1,4 @@
+## Make.libdvdread
+
+libdvdread: libdvdcss
+	$(MAKE) PROG=libdvdread _gnu

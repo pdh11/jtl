@@ -1,0 +1,90 @@
+--- /dev/null	2006-09-03 18:40:47.000000000 +0100
++++ libmpeg3-1.8/jtl.make	2009-03-15 18:38:16.000000000 +0000
+@@ -0,0 +1,67 @@
++SRC:=	\
++	ifo.h \
++	mpeg3bits.c \
++	audio/ac3.c \
++	audio/dct.c \
++	audio/huffman.c \
++	audio/layer2.c \
++	audio/layer3.c \
++	audio/mpeg3audio.c \
++	audio/pcm.c \
++	audio/synthesizers.c \
++	audio/tables.c \
++	libmpeg3.c \
++	mpeg3atrack.c \
++	mpeg3css.c \
++	mpeg3demux.c \
++	mpeg3io.c \
++	mpeg3ifo.c \
++	mpeg3strack.c \
++	mpeg3title.c \
++	mpeg3tocutil.c \
++	mpeg3vtrack.c \
++	video/getpicture.c \
++	video/seek.c \
++	video/headers.c \
++	video/idct.c \
++	video/macroblocks.c \
++	video/mmxtest.c \
++	video/motion.c \
++	video/mpeg3cache.c \
++	video/mpeg3video.c \
++	video/output.c \
++	video/reconstruct.c \
++	video/slice.c \
++	video/subtitle.c \
++	video/vlc.c \
++	workarounds.c
++
++UTILS:=mpeg3dump mpeg3peek mpeg3toc mpeg3cat
++
++all: libmpeg3.so $(UTILS)
++
++libmpeg3.all.c: jtl.make $(SRC)
++	echo "#include <stdlib.h>" > $@
++	for i in $(SRC) ; do echo "#include \""$$i"\"" ; done >> $@
++
++CFLAGS:= -O2 -O9 -fPIC \
++	-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE \
++	-DHAVE_CSS \
++	-I. -I/usr/include/a52dec
++
++libmpeg3.o: libmpeg3.all.c
++	$(CC) $(CFLAGS) $< -c -o $@
++
++libmpeg3.i: libmpeg3.all.c
++	$(CC) -E $(CFLAGS) $< -o $@
++
++libmpeg3.so: libmpeg3.o
++	$(CC) -shared -o $@ $< -la52 -lpthread -lm
++
++%: %.c libmpeg3.so
++	$(CC) $(CFLAGS) $*.c -L. -lmpeg3 -o $@
++
++install: all
++	install -s libmpeg3.so /usr/lib
++	install -s $(UTILS) /usr/bin
++	install libmpeg3.h mpeg3private.h /usr/include
+--- libmpeg3-1.8/mpeg3tocutil.c~	2008-06-21 04:53:27.000000000 +0100
++++ libmpeg3-1.8/mpeg3tocutil.c	2009-03-15 18:23:14.000000000 +0000
+@@ -976,7 +976,7 @@ static int handle_video(mpeg3_t *file, 
+ }
+ 
+ 
+-static void handle_subtitle(mpeg3_t *file)
++static void handle_toc_subtitle(mpeg3_t *file)
+ {
+ 	int i, j;
+ 	int got_one = 1;
+@@ -1052,7 +1052,7 @@ int mpeg3_do_toc(mpeg3_t *file, int64_t 
+ // Got subtitle
+ 		if(file->demuxer->got_subtitle)
+ 		{
+-			handle_subtitle(file);
++			handle_toc_subtitle(file);
+ 		}
+ 
+ 

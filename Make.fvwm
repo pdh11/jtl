@@ -1,0 +1,4 @@
+## Make.fvwm
+
+fvwm: x
+	make PROG=fvwm _xstyle

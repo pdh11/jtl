@@ -1,0 +1,4 @@
+## Make.hicolor-icon-theme
+
+hicolor-icon-theme:
+	$(MAKE) PROG=hicolor-icon-theme _gnu

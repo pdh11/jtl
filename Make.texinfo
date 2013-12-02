@@ -1,0 +1,5 @@
+## Make.texinfo
+
+texinfo:
+	$(MAKE) PROG=texinfo _gnu \
+                JTL_TESTS_BOGUS=4.13a

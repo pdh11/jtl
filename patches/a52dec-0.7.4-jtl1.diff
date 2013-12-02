@@ -1,0 +1,11 @@
+--- a52dec-0.7.4/configure~	2002-07-28 04:50:42.000000000 +0100
++++ a52dec-0.7.4/configure	2006-09-20 13:37:16.000000000 +0100
+@@ -9640,7 +9640,7 @@ _ACEOF
+ 
+ 
+ 
+-LIBA52_CFLAGS="$LIBA52_CFLAGS -prefer-non-pic"
++# LIBA52_CFLAGS="$LIBA52_CFLAGS -prefer-non-pic"
+ 
+ # Check whether --enable-double or --disable-double was given.
+ if test "${enable_double+set}" = set; then

@@ -1,0 +1,4 @@
+## Make.lzo
+
+lzo:
+	$(MAKE) PROG=lzo _gnu

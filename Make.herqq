@@ -1,0 +1,4 @@
+## Make.herqq
+
+herqq: qt
+	$(MAKE) PROG=herqq _qmake

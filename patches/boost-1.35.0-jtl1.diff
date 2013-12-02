@@ -1,0 +1,55 @@
+--- Jamroot~	2008-03-25 20:47:24.000000000 +0000
++++ Jamroot	2008-04-14 15:36:07.000000000 +0100
+@@ -136,7 +136,7 @@ if ! ( $(build-type) in minimal complete
+ local default-build,minimal =
+     release
+     <threading>multi
+-    <link>shared
++    <link>shared <link>static
+     <runtime-link>shared
+     ;
+ local default-build,complete =
+@@ -309,7 +309,7 @@ rule tag ( name : type ? : property-set 
+         if $(layout) = versioned
+         {
+             local result = [ common.format-name
+-                <base> <toolset> <threading> <runtime> -$(BOOST_VERSION_TAG)
++                <base>
+                 -$(BUILD_ID)
+                 : $(name) : $(type) : $(property-set) ] ;
+             
+@@ -333,7 +333,7 @@ rule tag ( name : type ? : property-set 
+         else
+         {
+             return [ common.format-name
+-                <base> <threading> <runtime> -$(BUILD_ID)
++                <base> <runtime> -$(BUILD_ID)
+                 : $(name) : $(type) : $(property-set) ] ;
+         }
+     }
+--- libs/thread/build/Jamfile.v2~	2007-12-21 11:51:05.000000000 +0000
++++ libs/thread/build/Jamfile.v2	2008-04-14 15:53:44.000000000 +0100
+@@ -65,9 +65,9 @@ rule tag ( name : type ? : property-set 
+         local api = [ $(property-set).get <threadapi> ] ;
+         
+         # non native api gets additional tag
+-        if $(api) != [ default_threadapi ] {
+-            result = $(result)_$(api) ;
+-        }
++#        if $(api) != [ default_threadapi ] {
++#            result = $(result)_$(api) ;
++#        }
+     }
+     
+     # forward to the boost tagging rule
+--- tools/build/v2/tools/gcc.jam~	2008-03-15 18:55:28.000000000 +0000
++++ tools/build/v2/tools/gcc.jam	2008-04-14 15:41:10.000000000 +0100
+@@ -740,7 +740,7 @@ else if [ modules.peek : UNIX ]
+     case * :
+         {
+         flags gcc OPTIONS <threading>multi : -pthread ;
+-        flags gcc FINDLIBS-SA <threading>multi : rt ;
++#        flags gcc FINDLIBS-SA <threading>multi : rt ;
+         }
+     }
+ }

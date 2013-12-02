@@ -1,0 +1,4 @@
+## Make.expat
+
+expat:
+	$(MAKE) PROG=expat _gnu

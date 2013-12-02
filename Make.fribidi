@@ -1,0 +1,4 @@
+## Make.fribidi
+
+fribidi:
+	$(MAKE) PROG=fribidi _gnu

@@ -1,0 +1,11 @@
+--- postgresql-7.4.2/src/backend/utils/Gen_fmgrtab.sh~	2003-08-05 00:59:38.000000000 +0100
++++ postgresql-7.4.2/src/backend/utils/Gen_fmgrtab.sh	2004-03-24 22:05:18.000000000 +0000
+@@ -110,7 +110,7 @@ if [ $? -ne 0 ]; then
+ fi
+ 
+ $CPP $BKIOPTS $CPPTMPFILE | \
+-egrep '^[ ]*[0-9]' | \
++egrep '^[ 0-9]+' | \
+ sort -n > $RAWFILE
+ 
+ if [ $? -ne 0 ]; then

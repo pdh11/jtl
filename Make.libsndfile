@@ -1,0 +1,6 @@
+## Make.libsndfile
+#
+# Tests need python
+
+libsndfile: alsa-lib alsa-utils flac libvorbis python
+	$(MAKE) PROG=libsndfile _gnu

@@ -1,0 +1,7 @@
+## Make.dirswitch
+
+dirswitch:
+	$(CXX) $(JTL_CFLAGS) -Wall -Wextra -static patches/dirswitch.cpp -o build/dirswitch
+	$(REALLY) install -s -m 0755 -o root build/dirswitch $(PREFIX)/bin/dirswitch
+	rm build/dirswitch
+	touch $(MADE)/dirswitch

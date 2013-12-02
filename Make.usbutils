@@ -1,0 +1,4 @@
+## Make.usbutils
+
+usbutils: libusb
+	$(MAKE) PROG=usbutils _gnu

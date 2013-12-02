@@ -1,0 +1,7 @@
+## Make.gzip
+
+gzip:
+	$(MAKE) PROG=gzip _gnu
+	if [ $(PREFIX) = /usr ] ; then \
+	  $(REALLY) mv -f $(JTL_ROOT)/usr/bin/{gunzip,zcat,gzip} $(JTL_ROOT)/bin ; \
+	fi

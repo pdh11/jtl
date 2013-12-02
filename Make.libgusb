@@ -1,0 +1,4 @@
+## Make.libgusb
+
+libgusb: glib libusb
+	$(MAKE) PROG=libgusb _gnu

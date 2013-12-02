@@ -1,0 +1,60 @@
+## Make.tightvnc
+#
+# Makes the xf4vnc server, not the tightvnc (3.x) one
+#
+# xf4vnc do not release source patches or tarballs, nor are all releases tagged
+# in Sourceforge CVS. So we make patches; e.g.
+#
+# diff -I\$Source -I\$Header -I\$Date -I\$Revision -I\$Id -I\$XFree86 -x CVS -r -c2 --unidirectional-new-file xc xf4vnc/xc
+
+tightvnc: x
+	@echo Compiling tightvnc
+	rm -rf $(BUILD)/tightvnc
+	mkdir -p $(BUILD)/tightvnc
+	tar xj -C $(BUILD)/tightvnc -f $(ARCHIVE)/tightvnc-*bz2
+	( cd $(BUILD)/tightvnc/v* \
+		&& xmkmf \
+		&& $(MAKE) World \
+		&& $(REALLY) ./vncinstall $(PREFIX)/bin $(PREFIX)/share/man )
+	mv $(BUILD)/tightvnc/v*/include $(BUILD)/tightvnc/
+	mv $(BUILD)/tightvnc/v*/libvncauth $(BUILD)/tightvnc/
+	rm -rf $(BUILD)/tightvnc/v*
+	#
+	# VNC server builds from a patched X tree
+	#
+	tar xj -C $(BUILD)/tightvnc -f $(ARCHIVE)/X-*bz2
+	rm $(BUILD)/tightvnc/include/*
+	rm $(BUILD)/tightvnc/libvncauth/{Imakefile,*.c,*.h}
+	bunzip2 -c $(ARCHIVE)/xf4vnc-20030616.diff.bz2 | patch -p1 -d $(BUILD)/tightvnc
+	(cd $(BUILD)/tightvnc/libvncauth \
+		&& xmkmf \
+		&& $(MAKE) )
+	touch $(BUILD)/tightvnc/xc/programs/Xserver/hw/xfree86/drivers/vncfb/vncfb.man
+	echo '#define DefaultGcc2i386Opt $(JTL_CFLAGS)' > $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define HasZlib YES'      >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define HasFreetype2 YES' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define HasPam NO' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define Freetype2Dir $(PREFIX)' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define HasExpat     YES' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define HasLibpng    YES' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define HasFontconfig YES' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define BuildXft1Library NO' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define SharedOldX NO' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define NormalOldX NO' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define BuildXaw6 NO' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define XvncServer   YES' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define BuildXF86DRI NO'  >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define XF86Server   NO'  >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define XsunServer   NO'  >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define XnestServer  NO'  >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define XprtServer   NO'  >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define XVirtualFramebufferServer NO' >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define BuildFonts   NO'  >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define BuildNls     NO'  >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define BuildDocs    NO'  >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	echo '#define BuildClients NO'  >> $(BUILD)/tightvnc/xc/config/cf/host.def
+	( cd $(BUILD)/tightvnc/xc \
+		&& $(MAKE) -j1 WORLDOPTS= World \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/tightvnc > $(MADE)/tightvnc
+	rm -rf $(BUILD)/tightvnc

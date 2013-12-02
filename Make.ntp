@@ -1,0 +1,5 @@
+## Make.ntp
+
+ntp: readline
+	$(MAKE) PROG=ntp _gnu \
+		JTL_PATCH=ntp-4.2.6-jtl1.diff

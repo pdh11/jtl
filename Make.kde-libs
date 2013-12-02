@@ -1,0 +1,12 @@
+## Make.kde-libs
+#
+
+kde-libs: qt openssl libxml2 graphviz doxygen openldap libart libxslt \
+		sudo cups cmake strigi bzip2 openssl alsa-lib attica \
+		avahi giflib libpng libjpeg krb5 automoc shared-mime-info \
+		soprano perl zlib enchant jasper phonon libdbusmenu-qt \
+		shared-desktop-ontologies docbook-xsl docbookx herqq
+	$(MAKE) PROG=kdelibs _gnucmake \
+		JTL_TOUCH=kde-libs PREFIX=$(PREFIX)/kde \
+		JTL_PATCH=kdelibs-4.5.0-jtl1.diff \
+		PATH=/usr/qt/bin:$(PATH)

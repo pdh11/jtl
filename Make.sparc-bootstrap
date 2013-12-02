@@ -1,0 +1,9 @@
+## Make.sparc-bootstrap
+#
+
+sparc-bootstrap: sparc-toolchain
+	$(MAKE) JTL_CROSS=sparc JTL_CROSSCFLAGS="-m32 -O" \
+		sparc-do-bootstrap elftoaout
+	mkdir -p sparc-root/tftpboot
+	elftoaout sparc-root/boot/vmlinux -o sparc-root/tftpboot/vmlinux-sparc
+	@touch $(MADE)/sparc-bootstrap

@@ -1,0 +1,5 @@
+## Make.gstreamer
+
+gstreamer: glib flex valgrind python perl bison pkgconfig libxml2 \
+		gobject-introspection
+	$(MAKE) PROG=gstreamer _gnu

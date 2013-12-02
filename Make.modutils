@@ -1,0 +1,17 @@
+## Make.modutils
+
+modutils: flex
+	@echo Making modutils
+	rm -rf $(BUILD)/modutils
+	mkdir -p $(BUILD)/modutils
+	tar xzf $(ARCHIVE)/modutils-*gz -C $(BUILD)/modutils
+	patch -d $(BUILD)/modutils -p0 < patches/modutils-2.4.27-jtl1.diff
+	( cd $(BUILD)/modutils/* \
+		&& ./configure --prefix=$(PREFIX) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	if [ "$(PREFIX)" = "/usr" ]; then \
+		$(REALLY) mv -f /usr/sbin/{genksyms,depmod,insmod,rmmod,lsmod,modinfo,modprobe,kallsyms,ksyms} /sbin ; \
+	fi
+	du -hs $(BUILD)/modutils > $(MADE)/modutils
+	rm -rf $(BUILD)/modutils

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+find $1 -perm +777 -a -exec sh -c 'file {} | grep -q "not stripped"' \; -a -exec sh -c 'ls -l {} ; strip {} ; ls -l {}' \;

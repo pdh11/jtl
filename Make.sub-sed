@@ -1,0 +1,13 @@
+## Make.sub-sed
+
+sub-sed: sub-glibc
+	@echo Compiling sed for image
+	rm -rf $(BUILD)/sub-sed
+	mkdir -p $(BUILD)/sub-sed
+	tar xzf $(ARCHIVE)/sed* -C $(BUILD)/sub-sed
+	( cd $(BUILD)/sub-sed/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" LDFLAGS="$(JTL_SUBLIBS)" ./configure $(JTL_ARCH)-linux --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install-strip )
+	du -hs $(BUILD)/sub-sed > $(MADE)/sub-sed
+	rm -rf $(BUILD)/sub-sed

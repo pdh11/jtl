@@ -1,0 +1,13 @@
+## Make.avifile
+#
+# xvidcore needs -lpthread -lm but doesn't know that
+
+avifile: unzip xvidcore libogg libvorbis sdl libjpeg lame a52dec libmad \
+		ffmpeg libquicktime mjpegtools
+	$(MAKE) PROG=avifile JTL_PATCH=avifile-0.7.45-jtl1.diff _gnu \
+		JTL_TESTS_BOGUS=bogus \
+		LDFLAGS="-lpthread -lm" \
+		JTL_CONFIG="$(JTL_CONFIG) --without-qt --with-ogg-prefix=/usr --with-vorbis-prefix=/usr"
+
+# $(REALLY) mkdir -p $(PREFIX)/lib/win32
+# $(REALLY) unzip -o $(ARCHIVE)/x86-binary/binaries-* -d $(PREFIX)/lib/win32

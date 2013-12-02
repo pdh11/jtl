@@ -1,0 +1,8 @@
+## Make.qca
+#
+# Qt Crypto
+
+qca: qt
+	$(MAKE) PROG=qca _gnu \
+		JTL_CONFIG="--prefix=$(PREFIX) --qtdir=$(PREFIX)/qt" \
+                JTL_PATCH=qca-2.0.2-jtl1.diff

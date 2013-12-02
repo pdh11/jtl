@@ -1,0 +1,4 @@
+## Make.gsettings-desktop-schemas
+
+gsettings-desktop-schemas: glib gobject-introspection intltool
+	$(MAKE) PROG=gsettings-desktop-schemas -j1 _gnu

@@ -1,0 +1,7 @@
+## Make.popt
+#
+# Popt's tests need a static libpopt
+
+popt:
+	$(MAKE) PROG=popt JTL_CONFIG="--sysconfdir=$(JTL_SYSCONFDIR) --enable-shared --mandir=$(PREFIX)/share/man --infodir=$(PREFIX)/share/info" _gnu \
+		JTL_TESTS_BOGUS=bogus

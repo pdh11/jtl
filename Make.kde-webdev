@@ -1,0 +1,4 @@
+## Make.kde-webdev
+
+kde-webdev: kde-libs kde-runtime qt libxslt
+	$(MAKE) PROG=kdewebdev JTL_TOUCH=kde-webdev PREFIX=$(PREFIX)/kde _gnucmake

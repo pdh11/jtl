@@ -1,0 +1,16 @@
+## Make.mailsync
+
+mailsync: openssl
+	@echo Making mailsync
+	rm -rf $(BUILD)/mailsync
+	mkdir -p $(BUILD)/mailsync
+	tar xjf $(ARCHIVE)/imap-* -C $(BUILD)/mailsync
+	( cd $(BUILD)/mailsync/i* \
+		&& $(MAKE) slx SSLTYPE=unix.nopwd SSLINCLUDE=/usr/include/openssl SSLDIR=/usr/ssl )
+	tar xjf $(ARCHIVE)/mailsync-*bz2 -C $(BUILD)/mailsync
+	( cd $(BUILD)/mailsync/m* \
+		&& LDFLAGS="-lcrypt" ./configure --prefix=$(PREFIX) --with-c-client=`ls -d \`pwd\`/../i*/c-client` --with-openssl \
+		&& $(MAKE) \
+		&& $(REALLY) make install )
+	du -hs $(BUILD)/mailsync > $(MADE)/mailsync
+	rm -rf $(BUILD)/mailsync

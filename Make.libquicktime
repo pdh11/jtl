@@ -1,0 +1,5 @@
+## Make.libquicktime
+
+libquicktime: gtk+ libpng lame libvorbis libjpeg ffmpeg faac faad2
+	$(MAKE) PROG=libquicktime _gnu \
+                JTL_PATCH=libquicktime-1.2.4.diff

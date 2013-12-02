@@ -1,0 +1,4 @@
+## Make.clutter-gtk
+
+clutter-gtk: clutter gtk+
+	$(MAKE) PROG=clutter-gtk _gnu

@@ -1,0 +1,4 @@
+## Make.gnome-icon-theme
+
+gnome-icon-theme: hicolor-icon-theme icon-naming-utils perl_xml_parser
+	$(MAKE) PROG=gnome-icon-theme _gnu

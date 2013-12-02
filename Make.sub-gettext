@@ -1,0 +1,14 @@
+## Make.sub-gettext
+#
+
+sub-gettext: sub-glibc
+	@echo Compiling gettext for image
+	rm -rf $(BUILD)/sub-gettext
+	mkdir -p $(BUILD)/sub-gettext
+	tar xzf $(ARCHIVE)/gettext*gz -C $(BUILD)/sub-gettext
+	( cd $(BUILD)/sub-gettext/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" LDFLAGS="$(JTL_SUBLIBS)" ./configure --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-gettext > $(MADE)/sub-gettext
+	rm -rf $(BUILD)/sub-gettext

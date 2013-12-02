@@ -1,0 +1,13 @@
+--- gwenview-4.9.0/lib/CMakeLists.txt~	2012-07-11 09:12:21.000000000 +0100
++++ gwenview-4.9.0/lib/CMakeLists.txt	2013-02-02 20:30:15.000000000 +0000
+@@ -25,6 +25,10 @@ if ("${jpeglib_version}" EQUAL 80)
+     set(GV_JPEG_DIR libjpeg-80)
+ endif ("${jpeglib_version}" EQUAL 80)
+ 
++if ("${jpeglib_version}" EQUAL 90)
++    set(GV_JPEG_DIR libjpeg-80)
++endif ("${jpeglib_version}" EQUAL 90)
++
+ if ("${GV_JPEG_DIR}" STREQUAL "")
+     message(FATAL_ERROR "Unknown libjpeg version: ${jpeglib_version}")
+ endif ("${GV_JPEG_DIR}" STREQUAL "")

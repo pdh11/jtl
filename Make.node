@@ -1,0 +1,6 @@
+## Make.node
+
+node: openssl
+	$(MAKE) PROG=node _gnu \
+                JTL_CONFIG="--prefix=/usr" \
+                JTL_TESTS_BOGUS=not-really-make

@@ -1,0 +1,7 @@
+## Make.zenity
+#
+# Tests attempt external DTD fetch
+
+zenity: glib intltool perl perl_xml_parser gtk+ libglade libnotify
+	$(MAKE) PROG=zenity _gnu \
+		JTL_TESTS_BOGUS=bogus

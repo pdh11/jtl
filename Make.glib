@@ -1,0 +1,9 @@
+## Make.glib
+
+glib: pkgconfig gettext libelf
+	$(MAKE) PROG=glib _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --with-pcre=system --disable-maintainer-mode" \
+		JTL_TESTS_BOGUS=2.28.2-timeout-rounding
+
+# \
+#                JTL_PATCH=glib-2.34.3-jtl1.diff

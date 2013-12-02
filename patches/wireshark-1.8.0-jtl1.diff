@@ -1,0 +1,10 @@
+--- wireshark-1.8.0/Makefile.in~	2012-06-21 19:21:46.000000000 +0100
++++ wireshark-1.8.0/Makefile.in	2012-07-17 00:01:34.000000000 +0100
+@@ -1051,6 +1051,7 @@ wireshark_LDADD = \
+ 	@LIBGNUTLS_LIBS@		\
+ 	@LIBSMI_LDFLAGS@		\
+ 	@PORTAUDIO_LIBS@		\
++	-lgmodule-2.0 \
+ 	@GTK_LIBS@ -lm
+ 
+ wireshark_CFLAGS = $(AM_CLEAN_CFLAGS) $(py_dissectors_dir)

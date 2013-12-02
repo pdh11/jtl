@@ -1,0 +1,23 @@
+## Make.xemacs
+#
+# --without-png as 21.4.22 doesn't like libpng 1.5
+
+xemacs: ncurses texinfo x openssl libtiff libjpeg libpng
+	@echo Compiling xemacs
+	rm -rf $(BUILD)/xemacs
+	mkdir -p $(BUILD)/xemacs
+	for i in $(ARCHIVE)/xemacs-2*.tar.bz2 ; do \
+		tar xjf $$i -C $(BUILD)/xemacs || exit 1 ; \
+	done
+	( cd $(BUILD)/xemacs/* \
+		&& ./configure --prefix=$(PREFIX) --cflags="$(JTL_CFLAGS)" \
+			--without-gpm --without-database --with-database=no \
+			--with-msw=no --without-mule --without-png \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) -j1 MAKEINFO="makeinfo --no-validate --no-warn --force" \
+		&& $(REALLY) $(MAKE) install )
+	$(REALLY) tar xjf $(ARCHIVE)/xemacs-sumo-* -C $(PREFIX)/lib/xemacs
+	# $(REALLY) tar xjf $(ARCHIVE)/xemacs-mule-sumo-* -C $(PREFIX)/lib/xemacs
+	du -hs $(BUILD)/xemacs > $(MADE)/xemacs
+	rm -rf $(BUILD)/xemacs

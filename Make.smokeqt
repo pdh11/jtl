@@ -1,0 +1,4 @@
+## Make.smokeqt
+
+smokeqt: qt smokegen cmake phonon qimageblitz
+	$(MAKE) PROG=smokeqt PREFIX=$(PREFIX)/kde _gnucmake

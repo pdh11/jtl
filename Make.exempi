@@ -1,0 +1,5 @@
+## Make.exempi
+
+exempi: glib expat zlib boost valgrind
+	$(MAKE) PROG=exempi _gnu \
+		JTL_TESTS_BOGUS=2.1.1

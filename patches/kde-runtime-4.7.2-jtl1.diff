@@ -1,0 +1,11 @@
+--- kde-runtime-4.7.2/kioslave/nfs/CMakeLists.txt~	2011-05-20 21:32:25.000000000 +0100
++++ kde-runtime-4.7.2/kioslave/nfs/CMakeLists.txt	2011-10-30 18:39:34.000000000 +0000
+@@ -4,7 +4,7 @@ set(kio_nfs_PART_SRCS kio_nfs.cpp mount_
+ kde4_add_plugin(kio_nfs ${kio_nfs_PART_SRCS})
+ 
+ 
+-target_link_libraries(kio_nfs   ${KDE4_KIO_LIBS})
++target_link_libraries(kio_nfs   ${KDE4_KIO_LIBS} tirpc crypto crypt)
+ 
+ install(TARGETS kio_nfs  DESTINATION ${PLUGIN_INSTALL_DIR} )
+ 

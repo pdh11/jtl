@@ -1,0 +1,6 @@
+## Make.cups
+
+cups: perl python gnutls openldap libtiff libpng dbus libjpeg pkgconfig krb5
+	$(MAKE) PROG=cups JTL_CFLAGS="$(JTL_CFLAGS) -D_GNU_SOURCE" _gnu \
+		JTL_TESTS_BOGUS=bogus
+

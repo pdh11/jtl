@@ -1,0 +1,4 @@
+## Make.python-twisted
+
+python-twisted: zope python
+	$(MAKE) PROG=python-twisted _pythonstyle

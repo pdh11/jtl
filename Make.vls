@@ -1,0 +1,4 @@
+## Make.vls
+
+vls: libdvdread libdvdcss
+	$(MAKE) PROG=vls JTL_CONFIG="--enable-shared --disable-static --sysconfdir=/etc --disable-debug" CCFLAGS="$(JTL_CFLAGS) -DCONFIG_PATH='\"/etc/videolan/vls\"'" _gnu

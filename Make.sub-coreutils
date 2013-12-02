@@ -1,0 +1,20 @@
+## Make.sub-coreutils
+#
+
+sub-coreutils: sub-glibc
+	@echo Compiling coreutils for image
+	rm -rf $(BUILD)/sub-coreutils
+	mkdir -p $(BUILD)/sub-coreutils
+	tar xzf $(ARCHIVE)/coreutils-* -C $(BUILD)/sub-coreutils
+	mkdir -p $(SUB_ROOT)/{bin,sbin}
+	( cd $(BUILD)/sub-coreutils/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" LDFLAGS="$(JTL_SUBLIBS)" ./configure i386-linux --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	mv -f $(SUB_ROOT)/usr/bin/{chgrp,chmod,chown,cp,dd,df,ln,ls,mkdir,mknod,mv,rm,rmdir,sync} \
+		$(SUB_ROOT)/bin
+	mv -f $(SUB_ROOT)/usr/bin/{cat,date,echo,false,pwd,sleep,stty,true,uname} $(SUB_ROOT)/bin 
+	[ -f $(SUB_ROOT)/usr/bin/su ] && mv $(SUB_ROOT)/usr/bin/su $(SUB_ROOT)/bin || true
+	rm -f $(SUB_ROOT)/usr/bin/hostname
+	du -hs $(BUILD)/sub-coreutils > $(MADE)/sub-coreutils
+	rm -rf $(BUILD)/sub-coreutils

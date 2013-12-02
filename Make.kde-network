@@ -1,0 +1,4 @@
+## Make.kde-network
+
+kde-network: kde-libs kde-runtime libv4l
+	$(MAKE) PROG=kdenetwork JTL_TOUCH=kde-network PREFIX=$(PREFIX)/kde _gnucmake

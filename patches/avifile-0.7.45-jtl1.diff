@@ -1,0 +1,176 @@
+--- avifile-0.7-0.7.45/plugins/libmp3lame_audioenc/mp3encoder.cpp~	2006-03-05 20:45:26.000000000 +0000
++++ avifile-0.7-0.7.45/plugins/libmp3lame_audioenc/mp3encoder.cpp	2006-03-28 16:06:10.000000000 +0100
+@@ -30,7 +30,7 @@ class MP3Encoder: public IAudioEncoder
+ 	short  nCodecDelay;
+     };
+ public:
+-    MP3Encoder::MP3Encoder(const CodecInfo& info, const WAVEFORMATEX* format)
++    MP3Encoder(const CodecInfo& info, const WAVEFORMATEX* format)
+ 	:IAudioEncoder(info)
+     {
+ 	in_fmt=*format;
+--- avifile-0.7-0.7.45/include/avm_map.h~	2004-02-19 11:39:56.000000000 +0000
++++ avifile-0.7-0.7.45/include/avm_map.h	2007-03-04 18:39:58.000000000 +0000
+@@ -45,7 +45,7 @@ protected:
+ 
+     template <class Key1, class Value1> struct binary_tree_node
+     {
+-	avm_map::pair<Key1, Value1>* entry;
++	typename avm_map::template pair<Key1, Value1>* entry;
+ 	binary_tree_node<Key1, Value1>* left;
+ 	Key1 minval;
+ 	binary_tree_node<Key1, Value1>* right;
+--- avifile-0.7-0.7.45/samples/qtvidcap/v4lxif.cpp~	2005-03-23 16:16:09.000000000 +0000
++++ avifile-0.7-0.7.45/samples/qtvidcap/v4lxif.cpp	2008-02-02 21:29:15.000000000 +0000
+@@ -1115,7 +1115,7 @@ v4l1if::v4l1if(const char* mem, const ch
+ 		     major,minor, XDGA_MAJOR_VERSION,XDGA_MINOR_VERSION);
+ 		have_dga= false;
+ 	    } else {
+-		XF86DGAGetVideoLL(disp, DefaultScreen(disp), (int*)&base, &width, &bank, &ram);
++		XF86DGAGetVideoLL(disp, DefaultScreen(disp), (unsigned int*)&base, &width, &bank, &ram);
+ 		if (!base)
+ 		    avml(AVML_WARN,
+ 			 "v4l1: can not allocate frame buffer base: %p\n", base);
+--- avifile-0.7-0.7.45/samples/qtvidcap/kv4lsetup.cpp~	2005-03-23 15:18:21.000000000 +0000
++++ avifile-0.7-0.7.45/samples/qtvidcap/kv4lsetup.cpp	2008-02-02 21:32:04.000000000 +0000
+@@ -229,7 +229,7 @@ int main(int argc, char* argv[])
+     if (XF86DGAQueryExtension(dpy, &foo, &bar)) {
+ 	XF86DGAQueryDirectVideo(dpy, XDefaultScreen(dpy),&flags);
+ 	if (flags & XF86DGADirectPresent) {
+-	    XF86DGAGetVideoLL(dpy,XDefaultScreen(dpy),(int*)&base,&width,&foo,&bar);
++	    XF86DGAGetVideoLL(dpy,XDefaultScreen(dpy),(unsigned int*)&base,&width,&foo,&bar);
+ 	    set_bpl  = width * set_bpp/8;
+ 	    set_base = base;
+ 	    if (verbose == 2) {
+--- avifile-0.7-0.7.45/lib/common/Args.cpp~	2003-02-06 20:39:12.000000000 +0000
++++ avifile-0.7-0.7.45/lib/common/Args.cpp	2010-01-24 16:02:18.000000000 +0000
+@@ -259,31 +259,33 @@ static void parse_suboptions(const Args:
+     }
+     for (unsigned i = 0; i < arr.size(); i++)
+     {
+-	char* par = strchr(arr[i], '=');
++	avm::string arg = arr[i];
++
++	const char* par = strchr(arr[i].c_str(), '=');
+ 	if (par)
+ 	{
+-	    *par = 0;
++	    arg.erase(par - arr[i].c_str());
+ 	    par++;
+ 	}
+ 
+ 	for (unsigned j = 0; o[j].type != Args::Option::NONE; j++)
+ 	{
+-	    if ((o[j].oshort && strcmp(o[j].oshort, arr[i]) == 0)
+-		|| (o[j].olong && strcmp(o[j].olong, arr[i]) == 0))
++	    if ((o[j].oshort && strcmp(o[j].oshort, arg) == 0)
++		|| (o[j].olong && strcmp(o[j].olong, arg) == 0))
+ 	    {
+ 		switch(o[j].type)
+ 		{
+ 		case Args::Option::BOOL:
+-		    read_bool(&o[j], arr[i], par, r);
++		    read_bool(&o[j], arg, par, r);
+ 		    break;
+ 		case Args::Option::DOUBLE:
+-		    read_double(&o[j], arr[i], par, r);
++		    read_double(&o[j], arg, par, r);
+ 		    break;
+ 		case Args::Option::INT:
+-		    read_int(&o[j], arr[i], par, r);
++		    read_int(&o[j], arg, par, r);
+ 		    break;
+ 		case Args::Option::STRING:
+-		    read_string(&o[j], arr[i], par, r);
++		    read_string(&o[j], arg, par, r);
+ 		    break;
+ 		default:
+ 		    ;
+@@ -335,16 +337,17 @@ static void parse_codec(const Args::Opti
+ 	    {
+ 		for (unsigned j = 1; j < arr.size(); j++)
+ 		{
+-		    char* p = strchr(arr[j].c_str(), '=');
++		    avm::string arg = arr[j];
++		    const char* p = strchr(arr[j].c_str(), '=');
+ 		    int val = 0;
+ 		    bool valid = false;
+ 		    if (p)
+ 		    {
+-			*p++ = 0;
+-			if (sscanf(p, "%i", &val) > 0)
++			arg.erase(p - arr[j].c_str());
++			if (sscanf(p+1, "%i", &val) > 0)
+ 			    valid = true;
+ 		    }
+-		    const AttributeInfo* ai = ci[i]->FindAttribute(arr[j].c_str());
++		    const AttributeInfo* ai = ci[i]->FindAttribute(arg.c_str());
+ 		    if (ai)
+ 		    {
+ 			switch (ai->GetKind())
+@@ -353,11 +356,11 @@ static void parse_codec(const Args::Opti
+ 			    if (!valid)
+ 			    {
+ 				printf("  Option %s for %s needs integer value! (given: %s)\n",
+-				       arr[j].c_str(), cname, p);
++				       arg.c_str(), cname, p);
+ 				exit(1);
+ 			    }
+-			    printf("Setting %s = %d\n", arr[j].c_str(), val);
+-			    PluginSetAttrInt(*ci[i], arr[j].c_str(), val);
++			    printf("Setting %s = %d\n", arg.c_str(), val);
++			    PluginSetAttrInt(*ci[i], arg.c_str(), val);
+ 			    break;
+ 			case AttributeInfo::Select:
+ 			default:
+@@ -367,7 +370,7 @@ static void parse_codec(const Args::Opti
+ 		    else
+ 		    {
+ 			printf("  Unknown attribute name '%s' for '%s'\n",
+-			       arr[j].c_str(), cname);
++			       arg.c_str(), cname);
+ 			exit(1);
+ 		    }
+ 		}
+--- avifile-0.7-0.7.45/lib/aviplay/aviplay.cpp~	2005-11-04 21:56:33.000000000 +0000
++++ avifile-0.7-0.7.45/lib/aviplay/aviplay.cpp	2010-01-24 15:56:25.000000000 +0000
+@@ -242,9 +242,9 @@ void AviPlayer::construct()
+ 	//printf("VSTREAMTIME %f\n", m_pVideostream->GetTime());
+ 	// reading subtitles
+ 	avm::string fn = m_Filename;
+-	char* p = strrchr(fn.c_str(), '.');
+-	if (p)
+-            *p = 0;
++//	char* p = strrchr(fn.c_str(), '.');
++//	if (p)
++//            *p = 0;
+ 	InitSubtitles(m_Subfilename.size()
+ 		      ? m_Subfilename.c_str() : fn.c_str());
+ 
+--- avifile-0.7-0.7.45/lib/codeckeeper.cpp~	2004-03-10 13:27:38.000000000 +0000
++++ avifile-0.7-0.7.45/lib/codeckeeper.cpp	2010-01-24 16:03:12.000000000 +0000
+@@ -143,10 +143,10 @@ codec_plugin_t* plugin_open(const CodecI
+     {
+ 	char plgn[100];
+ 	strcpy(plgn, "avm_codec_plugin_");
+-	char* x = strrchr(name, '/');
++	const char* x = strrchr(name, '/');
+ 	strncat(plgn, x + 1, 50);
+-	x = strchr(plgn, '.');
+-	*x = 0;
++	char *xx = strchr(plgn, '.');
++	*xx = 0;
+ 	codec_plugin_t* plugin = (codec_plugin_t*) dlsym(pi->dlhandle, plgn);
+ 
+ 	if (!plugin || (plugin->version != PLUGIN_API_VERSION))
+--- avifile-0.7-0.7.45/lib/aviread/AsfNetworkInputStream.cpp~	2004-10-25 11:15:38.000000000 +0100
++++ avifile-0.7-0.7.45/lib/aviread/AsfNetworkInputStream.cpp	2012-03-28 20:11:06.000000000 +0100
+@@ -937,7 +937,7 @@ int AsfNetworkInputStream::readContent()
+ 	}
+ 
+ 	asf_packet* p;
+-	unsigned short& size = chhdr.size;
++	const unsigned short size(chhdr.size);
+ 	//printf("STREAMPACKET 0x%x  sz:%d  %lld   seq:%d part:%d  sc:%d\n", chhdr.kind, size, rsize, chhdr.seq, chhdr.partflag, chhdr.size_confirm);
+ 	switch (chhdr.kind)
+ 	{

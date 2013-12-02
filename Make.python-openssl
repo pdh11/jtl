@@ -1,0 +1,4 @@
+## Make.python-openssl
+
+python-openssl: python openssl
+	$(MAKE) PROG=python-openssl _pythonstyle

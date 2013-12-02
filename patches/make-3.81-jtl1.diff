@@ -1,0 +1,11 @@
+--- make-3.81/job.c~	2006-03-20 03:03:04.000000000 +0000
++++ make-3.81/job.c	2010-08-05 22:00:31.000000000 +0100
+@@ -1594,7 +1594,7 @@ new_job (struct file *file)
+       /* There are no more references in this line to worry about.
+ 	 Copy the remaining uninteresting text to the output.  */
+       if (out != in)
+-	strcpy (out, in);
++	  memmove(out, in, strlen(in)+1);
+ 
+       /* Finally, expand the line.  */
+       lines[i] = allocated_variable_expand_for_file (cmds->command_lines[i],

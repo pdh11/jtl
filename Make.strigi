@@ -1,0 +1,4 @@
+## Make.strigi
+
+strigi: zlib expat libxml2 exiv2 qt dbus clucene-core cmake
+	$(MAKE) PROG=strigi _gnucmake

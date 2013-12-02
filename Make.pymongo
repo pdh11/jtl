@@ -1,0 +1,4 @@
+## Make.pymongo
+
+pymongo: python
+	$(MAKE) PROG=pymongo _pythonstyle

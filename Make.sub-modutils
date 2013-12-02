@@ -1,0 +1,14 @@
+## Make.sub-modutils
+#
+
+sub-modutils: sub-glibc flex
+	@echo Compiling modutils for image
+	rm -rf $(BUILD)/sub-modutils
+	mkdir -p $(BUILD)/sub-modutils
+	tar xzf $(ARCHIVE)/modutils*.tar.gz -C $(BUILD)/sub-modutils
+	( cd $(BUILD)/sub-modutils/* \
+		&& CFLAGS="$(JTL_CFLAGS) $(JTL_SUBLIBS)" ./configure --prefix=/usr --disable-root-check \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install ) || exit 1
+	du -hs $(BUILD)/sub-modutils > $(MADE)/sub-modutils
+	rm -rf $(BUILD)/sub-modutils

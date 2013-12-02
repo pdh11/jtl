@@ -1,0 +1,8 @@
+## Make.libvorbis
+#
+# Crashes gcc-2.95.3 if compiled with -mno-ieee-fp (the default)
+
+libvorbis: libogg
+	$(MAKE) PROG=libvorbis _gnu \
+                JTL_TESTS_BOGUS=2.3.3-no-libm
+

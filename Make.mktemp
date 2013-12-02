@@ -1,0 +1,4 @@
+## Make.mktemp
+
+mktemp:
+	$(MAKE) PROG=mktemp _gnu

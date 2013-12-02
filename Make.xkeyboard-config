@@ -1,0 +1,4 @@
+## Make.xkeyboard-config
+
+xkeyboard-config: intltool perl_xml_parser
+	$(MAKE) PROG=xkeyboard-config _gnu

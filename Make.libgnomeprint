@@ -1,0 +1,5 @@
+## Make.libgnomeprint
+
+libgnomeprint: gtk+ glib libxml2 pango libart libgnomecups cups
+	$(MAKE) PROG=libgnomeprint _gnu \
+		JTL_PATCH=libgnomeprint-2.18.8-jtl1.diff

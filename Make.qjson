@@ -1,0 +1,5 @@
+## Make.qjson
+
+qjson: qt cmake
+	$(MAKE) PROG=qjson _gnucmake \
+                JTL_CMAKE="-DCMAKE_MODULES_INSTALL_DIR=/usr/share/cmake-2.8/Modules"

@@ -1,0 +1,8 @@
+## Make.rpm
+
+rpm: sqlite neon beecrypt libelf
+	$(MAKE) PROG=rpm _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-static --without-selinux" \
+		JTL_PATCH=rpm-4.4.2.3-jtl1.diff
+
+# --enable-sqlite3 CPPFLAGS=\"-I/usr/include/mozilla/nss -I/usr/include/mozilla/stable\" LDFLAGS=\"-L/usr/lib/mozilla -Wl,-rpath,/usr/lib/mozilla\""

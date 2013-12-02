@@ -1,0 +1,22 @@
+## Make.rsync
+#
+# As of 2.6.5 the patch that enables the mode I asked them to add is built-in.
+# Which is nice.
+
+rsync:
+	@echo Making rsync
+	rm -rf $(BUILD)/rsync
+	mkdir -p $(BUILD)/rsync
+	( [ -f $(ARCHIVE)/rsync-*gz ] \
+		&& tar xzf $(ARCHIVE)/rsync-*gz -C $(BUILD)/rsync ) \
+	    || ( [ -f $(ARCHIVE)/rsync-*bz2 ] \
+		&& tar xjf $(ARCHIVE)/rsync-*bz2 -C $(BUILD)/rsync ) \
+	    || ( echo No archive found for rsync ; exit 1 )
+	( cd $(BUILD)/rsync/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/rsync > $(MADE)/rsync
+	rm -rf $(BUILD)/rsync
+

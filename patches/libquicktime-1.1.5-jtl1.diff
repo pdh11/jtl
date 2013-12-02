@@ -1,0 +1,37 @@
+--- libquicktime-1.1.5/utils/gtk/lqt_gtk.c~	2009-03-11 14:25:50.000000000 +0000
++++ libquicktime-1.1.5/utils/gtk/lqt_gtk.c	2010-10-08 21:09:02.000000000 +0100
+@@ -941,9 +941,9 @@ lqtgtk_create_codec_config_window(lqt_co
+ 		   G_CALLBACK(codec_config_window_button_callback),
+ 		   (gpointer)ret);
+ 
+-  GTK_WIDGET_SET_FLAGS (ret->apply_button, GTK_CAN_DEFAULT);
+-  GTK_WIDGET_SET_FLAGS (ret->close_button, GTK_CAN_DEFAULT);
+-  GTK_WIDGET_SET_FLAGS (ret->restore_button, GTK_CAN_DEFAULT);
++//  GTK_WIDGET_SET_FLAGS (ret->apply_button, GTK_CAN_DEFAULT);
++//  GTK_WIDGET_SET_FLAGS (ret->close_button, GTK_CAN_DEFAULT);
++//  GTK_WIDGET_SET_FLAGS (ret->restore_button, GTK_CAN_DEFAULT);
+ 
+   gtk_widget_show(ret->apply_button);
+   gtk_widget_show(ret->close_button);
+@@ -1240,7 +1240,7 @@ lqtgtk_create_codec_info_window(const lq
+   ret->mainbox = gtk_vbox_new(0, 10);
+ 
+   ret->close_button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
+-  GTK_WIDGET_SET_FLAGS (ret->close_button, GTK_CAN_DEFAULT);
++//  GTK_WIDGET_SET_FLAGS (ret->close_button, GTK_CAN_DEFAULT);
+ 
+   g_signal_connect(G_OBJECT(ret->close_button), "clicked",
+                      G_CALLBACK(codec_info_window_button_callback),
+--- libquicktime-1.1.5/utils/gtk/libquicktime_config.c~	2008-12-30 16:05:36.000000000 +0000
++++ libquicktime-1.1.5/utils/gtk/libquicktime_config.c	2010-10-08 21:09:13.000000000 +0100
+@@ -112,8 +112,8 @@ static MainWindow * create_main_window()
+                    G_CALLBACK(main_window_button_callback),
+                    (gpointer)ret);
+ 
+-  GTK_WIDGET_SET_FLAGS (ret->close_button, GTK_CAN_DEFAULT);
+-  GTK_WIDGET_SET_FLAGS (ret->save_button, GTK_CAN_DEFAULT);
++//  GTK_WIDGET_SET_FLAGS (ret->close_button, GTK_CAN_DEFAULT);
++//  GTK_WIDGET_SET_FLAGS (ret->save_button, GTK_CAN_DEFAULT);
+   
+   gtk_widget_show(ret->close_button);
+   gtk_widget_show(ret->save_button);

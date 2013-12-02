@@ -1,0 +1,5 @@
+## Make.mscgen
+
+mscgen: gd freetype libpng libjpeg zlib
+	GDLIB_CFLAGS="-I/usr/include" GDLIB_LIBS="-lgd -lpng -lz" \
+		$(MAKE) PROG=mscgen _gnu

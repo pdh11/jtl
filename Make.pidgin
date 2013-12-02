@@ -1,0 +1,9 @@
+## Make.pidgin
+#
+# Uses mozilla's SSL libraries
+
+pidgin: x python glib gtk+ mozilla evolution gnutls tcl tk \
+		dbus perl gstreamer sqlite gconf pkgconfig perl_xml_parser \
+		startup-notification dbus-glib farsight
+	LDFLAGS=-Wl,-rpath,/usr/lib/mozilla $(MAKE) PROG=pidgin JTL_CONFIG="$(JTL_CONFIG) --enable-nss=yes --with-nspr-libs=/usr/lib/mozilla --with-nss-libs=/usr/lib/mozilla --with-nspr-includes=/usr/include/mozilla/nspr --with-nss-includes=/usr/include/mozilla/nss --disable-gtkspell --disable-meanwhile --disable-nm --disable-idn --disable-gstreamer --disable-vv" _gnu \
+		JTL_TESTS_BOGUS=2.6.2

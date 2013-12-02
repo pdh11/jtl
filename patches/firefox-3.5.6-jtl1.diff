@@ -1,0 +1,47 @@
+--- mozilla/xulrunner/confvars.sh~	2009-12-02 04:29:01.000000000 +0000
++++ mozilla/xulrunner/confvars.sh	2010-01-08 20:05:28.000000000 +0000
+@@ -36,12 +36,11 @@
+ #
+ # ***** END LICENSE BLOCK *****
+ 
+-MOZ_APP_NAME=xulrunner
+-MOZ_APP_DISPLAYNAME=XULRunner
++MOZ_APP_NAME=iceweasel
+ MOZ_UPDATER=1
+ MOZ_XULRUNNER=1
+ MOZ_ENABLE_LIBXUL=1
+-MOZ_APP_VERSION=$MOZILLA_VERSION
++MOZ_APP_VERSION=$FIREFOX_VERSION
+ MOZ_JAVAXPCOM=1
+ if test "$MOZ_STORAGE"; then
+   MOZ_PLACES=1
+--- mozilla-1.9.1/toolkit/crashreporter/google-breakpad/src/common/linux/dump_symbols.cc~	2009-12-02 04:28:58.000000000 +0000
++++ mozilla-1.9.1/toolkit/crashreporter/google-breakpad/src/common/linux/dump_symbols.cc	2010-01-29 17:49:10.000000000 +0000
+@@ -46,6 +46,7 @@
+ #include <list>
+ #include <vector>
+ #include <string.h>
++#include <stdio.h>
+ 
+ #include "common/linux/dump_symbols.h"
+ #include "common/linux/file_id.h"
+--- mozilla-1.9.1/toolkit/crashreporter/google-breakpad/src/client/linux/handler/exception_handler.cc~	2009-12-02 04:28:58.000000000 +0000
++++ mozilla-1.9.1/toolkit/crashreporter/google-breakpad/src/client/linux/handler/exception_handler.cc	2010-01-29 18:02:03.000000000 +0000
+@@ -38,6 +38,7 @@
+ #include <cstdlib>
+ #include <ctime>
+ #include <linux/limits.h>
++#include <stdio.h>
+ 
+ #include "client/linux/handler/exception_handler.h"
+ #include "common/linux/guid_creator.h"
+--- mozilla-1.9.1/toolkit/crashreporter/google-breakpad/src/client/linux/handler/minidump_generator.cc~	2009-12-02 04:28:58.000000000 +0000
++++ mozilla-1.9.1/toolkit/crashreporter/google-breakpad/src/client/linux/handler/minidump_generator.cc	2010-01-29 18:06:16.000000000 +0000
+@@ -41,6 +41,7 @@
+ #include <cstdlib>
+ #include <ctime>
+ #include <string.h>
++#include <stdio.h>
+ 
+ #include "common/linux/file_id.h"
+ #include "client/linux/handler/linux_thread.h"

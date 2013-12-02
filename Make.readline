@@ -1,0 +1,5 @@
+## Make.readline
+
+readline:
+	$(MAKE) PROG=readline JTL_MAKE=shared JTL_INSTALL=install-shared  _gnu
+

@@ -1,0 +1,6 @@
+## Make.gnusound
+#
+# Doesn't like modern ffmpeg
+
+gnusound: lame pkgconfig libvorbis flac jack libglade gtk+
+	ac_cv_header_ffmpeg_avformat_h=no $(MAKE) PROG=gnusound _gnu

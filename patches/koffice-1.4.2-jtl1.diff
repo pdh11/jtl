@@ -1,0 +1,79 @@
+--- koffice-1.4.2/krita/core/kis_filter.h~	2005-10-05 11:27:06.000000000 +0100
++++ koffice-1.4.2/krita/core/kis_filter.h	2006-03-27 15:18:25.000000000 +0100
+@@ -36,26 +36,6 @@
+ class KisFilterConfigurationWidget;
+ class KisPreviewDialog;
+ 
+-/**
+- * Convenience function that creates an instance of a filter and adds it to the
+- * filter registry of the specified view.
+- */
+-template<class F>
+-KisFilterSP createFilter(KisView* view)
+-{
+-       KisFilterSP kfi;
+-       if( view->filterRegistry()->exists( F::id() ) )
+-       {
+-               kfi = view->filterRegistry()->get( F::id() );
+-      } else {
+-               kfi = new F(view);
+-	       Q_CHECK_PTR(kfi);
+-               view->filterRegistry()->add(kfi);
+-       }
+-       return kfi;
+-}
+-
+-
+ 
+ /**
+  * Empty interface for passing filter configuration data
+--- koffice-1.4.2/krita/core/kis_filter_registry.h~	2005-10-05 11:27:06.000000000 +0100
++++ koffice-1.4.2/krita/core/kis_filter_registry.h	2006-03-27 15:18:23.000000000 +0100
+@@ -52,5 +52,25 @@ private:
+ //  	static KisFilterRegistry *m_singleton;
+ };
+ 
++/**
++ * Convenience function that creates an instance of a filter and adds it to the
++ * filter registry of the specified view.
++ */
++template<class F>
++KisFilterSP createFilter(KisView* view)
++{
++       KisFilterSP kfi;
++       if( view->filterRegistry()->exists( F::id() ) )
++       {
++               kfi = view->filterRegistry()->get( F::id() );
++      } else {
++               kfi = new F(view);
++	       Q_CHECK_PTR(kfi);
++               view->filterRegistry()->add(kfi);
++       }
++       return kfi;
++}
++
++
+ #endif // KIS_FILTERSPACE_REGISTRY_H_
+ 
+--- koffice-1.4.2/krita/core/kis_clipboard.h~	2005-10-05 11:27:05.000000000 +0100
++++ koffice-1.4.2/krita/core/kis_clipboard.h	2006-03-27 15:22:33.000000000 +0100
+@@ -35,7 +35,7 @@ class KisClipboard : public QObject {
+ 
+ public:
+ 
+-	virtual KisClipboard::~KisClipboard();
++	virtual ~KisClipboard();
+ 
+ 	static KisClipboard* instance();
+ 
+--- koffice-1.4.2/kspread/kspread_cell.h~	2005-10-05 11:31:33.000000000 +0100
++++ koffice-1.4.2/kspread/kspread_cell.h	2006-03-27 16:32:40.000000000 +0100
+@@ -596,7 +596,7 @@ public:
+      *
+      * @return the cell that decides the format for the cell in question.
+      */
+-    KSpreadCell *KSpreadCell::ultimateObscuringCell() const;
++    KSpreadCell *ultimateObscuringCell() const;
+ 
+     /**
+      * @return the obscuring cell list (might be empty)

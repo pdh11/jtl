@@ -1,0 +1,4 @@
+## Make.fcron
+
+fcron:
+	$(MAKE) PROG=fcron JTL_CONFIG="--with-pam=no --without-sendmail --with-editor=/usr/bin/xemacs --with-username=cron --with-groupname=cron --with-answer-all=no --with-boot-install=no" _gnu

@@ -1,0 +1,7 @@
+## Make.grep
+
+grep:
+	$(MAKE) PROG=grep _gnu JTL_TESTS_BOGUS=2.7
+	if [ $(PREFIX) = /usr ] ; then \
+	  $(REALLY) mv $(JTL_ROOT)/usr/bin/{egrep,fgrep,grep} $(JTL_ROOT)/bin ; \
+	fi	

@@ -1,0 +1,5 @@
+## Make.neon
+
+neon: openssl krb5 zlib expat pkgconfig
+	$(MAKE) PROG=neon JTL_CONFIG="$(JTL_CONFIG) --with-ssl=openssl --enable-threadsafe-ssl=posix" _gnu \
+		JTL_TESTS_BOGUS=bogus

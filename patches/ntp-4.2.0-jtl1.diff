@@ -1,0 +1,57 @@
+--- ntp-4.2.0/include/ntp_stdlib.h~	2003-07-17 11:27:16.000000000 +0100
++++ ntp-4.2.0/include/ntp_stdlib.h	2005-12-01 20:30:01.000000000 +0000
+@@ -7,6 +7,8 @@
+ 
+ #include "ntp_types.h"
+ #include "ntp_string.h"
++#include "ntp_fp.h"
++#include "ntp_refclock.h"
+ #include "l_stdlib.h"
+ 
+ /*
+--- ntp-4.2.0/include/ntpd.h~	2003-09-13 04:08:04.000000000 +0100
++++ ntp-4.2.0/include/ntpd.h	2005-12-01 20:35:48.000000000 +0000
+@@ -8,6 +8,7 @@
+ #include "ntp_select.h"
+ #include "ntp_malloc.h"
+ #include "ntp_refclock.h"
++#include "ntp_control.h"
+ #include "recvbuff.h"
+ 
+ #ifdef SYS_WINNT
+--- ntp-4.2.0/include/ntp_control.h~	2003-08-14 08:31:47.000000000 +0100
++++ ntp-4.2.0/include/ntp_control.h	2005-12-01 20:38:56.000000000 +0000
+@@ -2,6 +2,9 @@
+  * ntp_control.h - definitions related to NTP mode 6 control messages
+  */
+ 
++#ifndef NTP_CONTROL_H
++#define NTP_CONTROL_H 1
++
+ #include "ntp_types.h"
+ 
+ struct ntp_control {
+@@ -281,3 +284,5 @@ struct ctl_trap {
+ #define	TYPE_SYS	1
+ #define	TYPE_PEER	2
+ #define	TYPE_CLOCK	3
++
++#endif /* NTP_CONTROL_H */
+--- ntp-4.2.0/ntpd/ntp_config.c~	2003-10-07 09:35:14.000000000 +0100
++++ ntp-4.2.0/ntpd/ntp_config.c	2005-12-01 20:49:22.000000000 +0000
+@@ -15,7 +15,6 @@
+ #include "ntp_refclock.h"
+ #include "ntp_filegen.h"
+ #include "ntp_stdlib.h"
+-#include "ntp_config.h"
+ #include "ntp_cmdargs.h"
+ 
+ #include <stdio.h>
+@@ -39,6 +38,7 @@ extern HANDLE ResolverThreadHandle;
+ #endif /* SYS_WINNT */
+ 
+ #include <netdb.h>
++#include "ntp_config.h"
+ 
+ extern int priority_done;
+ 

@@ -1,0 +1,20 @@
+--- mscgen/src/parser/language.y~	2008-07-27 21:58:27.000000000 +0100
++++ mscgen/src/parser/language.y	2008-11-06 15:09:36.000000000 +0000
+@@ -247,7 +247,7 @@ optlist:     opt
+ 
+ opt:         optval TOK_EQUAL string
+ {
+-    $$ = MscAllocOpt($1, $3)
++    $$ = MscAllocOpt($1, $3);
+ };
+ 
+ optval:      TOK_OPT_HSCALE | TOK_OPT_WIDTH | TOK_OPT_ARCGRADIENT;
+@@ -322,7 +322,7 @@ attrlist:    attr
+ 
+ attr:         attrval TOK_EQUAL string
+ {
+-    $$ = MscAllocAttrib($1, $3)
++    $$ = MscAllocAttrib($1, $3);
+ };
+ 
+ attrval:      TOK_ATTR_LABEL | TOK_ATTR_URL | TOK_ATTR_ID | TOK_ATTR_IDURL | TOK_ATTR_LINE_COLOUR | TOK_ATTR_TEXT_COLOUR |

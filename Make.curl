@@ -1,0 +1,5 @@
+## Make.curl
+
+curl: perl groff bison openssl zlib openldap cyrus-sasl
+	$(MAKE) PROG=curl _gnu \
+		JTL_TESTS_BOGUS=bogus

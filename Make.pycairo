@@ -1,0 +1,4 @@
+## Make.pycairo
+
+pycairo: cairo gtk+ python pkgconfig
+	$(MAKE) PROG=pycairo _gnu

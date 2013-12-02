@@ -1,0 +1,16 @@
+## Make.kbd
+#
+# Can't use make _gnu as it reacts badly to $PROG
+
+kbd: mktemp
+	@echo Making kbd
+	$(REALLY) rm -rf $(BUILD)/kbd
+	mkdir -p $(BUILD)/kbd
+	tar xjf $(ARCHIVE)/kbd-*bz2 -C $(BUILD)/kbd
+	patch -d $(BUILD)/kbd/* -p1 -F5 < patches/kbd-1.15-jtl1.diff
+	( cd $(BUILD)/kbd/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ./configure --prefix=$(PREFIX) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/kbd > $(MADE)/kbd
+	$(REALLY) rm -rf $(BUILD)/kbd &

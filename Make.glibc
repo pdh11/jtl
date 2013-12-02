@@ -1,0 +1,33 @@
+## Make.glibc
+#
+# Install via a tarball, as some upgrades can't be completed otherwise
+
+glibc:
+	@echo Making glibc
+	$(REALLY) rm -rf $(BUILD)/glibc
+	mkdir -p $(BUILD)/glibc
+	tar xf $(ARCHIVE)/glibc-2*.tar.* -C $(BUILD)/glibc
+	# tar xzf $(ARCHIVE)/glibc-li*.tar.gz -C $(BUILD)/glibc/*
+	patch -d $(BUILD)/glibc/* -p1 < patches/glibc-2.17-jtl1.diff
+	mkdir -p $(BUILD)/glibc/{build,install}
+	export LANG=C TIMEOUTFACTOR=35 ; \
+		( cd $(BUILD)/glibc/build \
+		&& libc_cv_slibdir=/lib ../g*/configure --prefix=$(PREFIX) \
+			--enable-add-ons --enable-kernel=3.0.0 \
+			--enable-oldest-abi=2.15 --with-headers=/usr/include \
+			$(JTL_ARCH)-linux --enable-profile \
+			CFLAGS="$(JTL_CFLAGS)" \
+			ASFLAGS="$(JTL_CFLAGS)" \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install_root=$(BUILD)/glibc/install \
+			MAKEINFO=: \
+			install localedata/install-locales \
+                && $(REALLY) sh -c "mv $(BUILD)/glibc/install/usr/lib64 $(BUILD)/glibc/install/usr/lib || true" \
+		&& sync \
+		&& $(REALLY) tar cf $(BUILD)/glibc/install.tar \
+			 -C $(BUILD)/glibc/install . \
+		&& ( $(REALLY) tar xf $(BUILD)/glibc/install.tar -C $(JTL_ROOT) || true ) \
+		&& $(REALLY) /sbin/ldconfig )
+	$(REALLY) telinit u
+	du -hs $(BUILD)/glibc > $(MADE)/glibc
+	( $(REALLY) rm -rf $(BUILD)/glibc ; sync ) &

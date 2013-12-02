@@ -1,0 +1,15 @@
+## Make.sub-pcre
+#
+# 4.3 doesn't cope with -j
+
+sub-pcre: sub-glibc
+	@echo Compiling pcre for image
+	rm -rf $(BUILD)/sub-pcre
+	mkdir -p $(BUILD)/sub-pcre
+	tar xzf $(ARCHIVE)/pcre*gz -C $(BUILD)/sub-pcre
+	( cd $(BUILD)/sub-pcre/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" LDFLAGS="$(JTL_SUBLIBS)" ./configure --prefix=/usr --disable-nls \
+		&& $(MAKE) -j1 \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-pcre > $(MADE)/sub-pcre
+	rm -rf $(BUILD)/sub-pcre

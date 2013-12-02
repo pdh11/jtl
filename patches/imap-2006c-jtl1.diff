@@ -1,0 +1,11 @@
+--- imap-2006c/src/osdep/unix/env_unix.c~	2006-09-15 18:00:55.000000000 +0100
++++ imap-2006c/src/osdep/unix/env_unix.c	2007-11-09 22:53:43.000000000 +0000
+@@ -68,7 +68,7 @@ static char *myHomeDir = NIL;	/* home di
+ static char *myServerName = NIL;/* server name */
+ static char *myLocalHost = NIL;	/* local host name */
+ static char *myNewsrc = NIL;	/* newsrc file name */
+-static char *mailsubdir = NIL;	/* mailbox subdirectory name */
++static char *mailsubdir = "mail";	/* mailbox subdirectory name */
+ static char *sysInbox = NIL;	/* system inbox name */
+ static char *newsActive = NIL;	/* news active file */
+ static char *newsSpool = NIL;	/* news spool */

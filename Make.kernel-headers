@@ -1,0 +1,17 @@
+## Make.kernel-headers
+#
+# The behaviour of "make headers_install INSTALL_HDR_PATH=/usr" is to (a) do
+# exactly what you want and then (b) rm /usr/include/*.h -- in that order.
+
+kernel-headers:
+	@echo Extracting kernel headers
+	rm -rf $(BUILD)/kernel-headers
+	mkdir -p $(BUILD)/kernel-headers/install
+	tar xf $(ARCHIVE)/linux-[1-9]*.tar.* -C $(BUILD)/kernel-headers
+	patch -d $(BUILD)/kernel-headers/l* -p1 -F5 < patches/kernel-headers-2.6.32.3-jtl1.diff
+	yes "" | $(MAKE) -C $(BUILD)/kernel-headers/l* oldconfig
+	$(MAKE) -C $(BUILD)/kernel-headers/l* prepare
+	$(MAKE) -C $(BUILD)/kernel-headers/l* headers_install INSTALL_HDR_PATH=$(BUILD)/kernel-headers/install
+	$(REALLY) cp -dR $(BUILD)/kernel-headers/install/include/* $(JTL_ROOT)$(PREFIX)/include/
+	touch $(MADE)/kernel-headers
+	rm -rf $(BUILD)/kernel-headers

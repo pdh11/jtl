@@ -1,0 +1,4 @@
+## Make.libkipi
+
+libkipi: kde-libs
+	$(MAKE) PROG=libkipi PREFIX=$(PREFIX)/kde _gnucmake

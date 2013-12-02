@@ -1,0 +1,17 @@
+## Make.doxygen
+
+doxygen: graphviz mscgen
+	@echo Making Doxygen
+	rm -rf $(BUILD)/doxygen
+	mkdir -p $(BUILD)/doxygen
+	tar xjf $(ARCHIVE)/doxygen-*bz2 -C $(BUILD)/doxygen
+	# patch -p0 -d $(BUILD)/doxygen < patches/doxygen-1.4.6-jtl1.diff
+	( cd $(BUILD)/doxygen/* \
+		&& rm -f config.cache \
+		&& chmod a+x configure \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix $(PREFIX) --shared --install /usr/bin/install \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) MAN1DIR=share/man/man1 install )
+	du -hs $(BUILD)/doxygen > $(MADE)/doxygen
+	rm -rf $(BUILD)/doxygen

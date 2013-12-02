@@ -1,0 +1,59 @@
+## Make.gcc
+#
+# Full bootstrap build of native gcc
+
+gcc:
+	@echo Making gcc
+	rm -rf $(BUILD)/gcc
+	mkdir -p $(BUILD)/gcc/build $(BUILD)/gcc/build_p
+	tar xf $(ARCHIVE)/gcc-4*.tar.* -C $(BUILD)/gcc
+	patch -d $(BUILD)/gcc/g* -p1 < patches/gcc-4.6.2-jtl1.diff
+	export _POSIX2_VERSION=199209 ; ( cd $(BUILD)/gcc/build \
+		&& CFLAGS="$(JTL_CFLAGS)" LIBCFLAGS="$(JTL_CFLAGS)" \
+			LIBCXXFLAGS="$(JTL_CXXFLAGS)" \
+			BOOT_CFLAGS="$(JTL_CFLAGS)" \
+			../g*/configure --prefix=$(PREFIX) --enable-shared \
+			--enable-languages=c,c++ --disable-werror \
+			--enable-threads --disable-checking --disable-multilib \
+			--enable-__cxa_atexit --with-system-zlib \
+			$(JTL_ARCH)-linux \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) CFLAGS="$(JTL_CFLAGS)" \
+			LIBCFLAGS="$(JTL_CFLAGS)" \
+			LIBCXXFLAGS="$(JTL_CXXFLAGS) -fno-implicit-templates" \
+			BOOT_CFLAGS="$(JTL_CFLAGS)" \
+                        MULTILIB_OPTIONS="" \
+                        MULTILIB_DIRNAMES="" \
+                        MULTILIB_OSDIRNAMES="" \
+			bootstrap \
+		&& $(REALLY) $(MAKE) -j1 \
+                        DESTDIR=$(JTL_ROOT) \
+                        MULTILIB_OPTIONS="" \
+                        MULTILIB_DIRNAMES="" \
+                        MULTILIB_OSDIRNAMES="" install )
+	if [ $(PREFIX) = /usr ] ; then \
+		$(REALLY) rm $(JTL_ROOT)/lib/cpp ; \
+		$(REALLY) ln -sf ../usr/bin/cpp $(JTL_ROOT)/lib/cpp ; \
+	fi
+	du -hs $(BUILD)/gcc > $(MADE)/gcc
+	rm -rf $(BUILD)/gcc
+
+gcc2:
+	export _POSIX2_VERSION=199209 ; ( cd $(BUILD)/gcc/build_p \
+		&& CFLAGS="$(JTL_CFLAGS)" LIBCFLAGS="$(JTL_CFLAGS)" \
+			LIBCXXFLAGS="$(JTL_CXXFLAGS) -fno-implicit-templates -pg" \
+			BOOT_CFLAGS="$(JTL_CFLAGS)" \
+			../g*/libstdc++-v3/configure --prefix=$(PREFIX) \
+			--enable-static --disable-shared --disable-werror \
+			--enable-cxx-flags=-pg --disable-libstdcxx-pch \
+			--disable-multilib --program-suffix=_p --enable-threads \
+			--enable-__cxa_atexit --with-system-zlib \
+			$(JTL_ARCH)-linux \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) CFLAGS="$(JTL_CFLAGS)" \
+			LIBCFLAGS="$(JTL_CFLAGS)" \
+			LIBCXXFLAGS="$(JTL_CXXFLAGS) -fno-implicit-templates -pg" \
+			BOOT_CFLAGS="$(JTL_CFLAGS)" \
+		&& $(REALLY) install -m644 src/.libs/libstdc++.a $(PREFIX)/lib/libstdc++_p.a )

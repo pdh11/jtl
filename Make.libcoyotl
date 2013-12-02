@@ -1,0 +1,4 @@
+## Make.libcoyotl
+
+libcoyotl:
+	$(MAKE) PROG=libcoyotl _gnu

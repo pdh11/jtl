@@ -1,0 +1,5 @@
+## Make.colord-gtk
+
+colord-gtk: glib gobject-introspection colord
+	$(MAKE) PROG=colord-gtk _gnu \
+                JTL_TESTS_BOGUS=predictably

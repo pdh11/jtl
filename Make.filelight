@@ -1,0 +1,4 @@
+## Make.filelight
+
+filelight: kde-libs kde-base graphviz doxygen
+	$(MAKE) PROG=filelight JTL_CONFIG="$(JTL_CONFIG) --prefix=$(PREFIX)/kde" _gnu

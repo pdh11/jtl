@@ -1,0 +1,20 @@
+## Make.udev
+#
+# Only the libraries etc used by hal
+
+udev: usbutils acl glib gobject-introspection kmod
+	$(MAKE) PROG=udev _gnu \
+		USBUTILS_CFLAGS="-I/usr/include" \
+                LIBS="-lrt" \
+		USBUTILS_LIBS="-L/usr/lib"
+
+# udev0 without introspection, to break the cycle
+# udev -> gobject-introspection -> cairo -> udev
+
+udev0: usbutils acl glib kmod
+	$(MAKE) PROG=udev _gnu \
+		USBUTILS_CFLAGS="-I/usr/include" \
+		USBUTILS_LIBS="-L/usr/lib" \
+                LIBS="-lrt" \
+                JTL_CONFIG="$(JTL_CONFIG) --disable-introspection" \
+                JTL_TOUCH=udev0

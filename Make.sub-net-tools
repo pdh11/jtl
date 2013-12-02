@@ -1,0 +1,14 @@
+## Make.sub-net-tools
+
+sub-net-tools:
+	@echo Compiling sub-net-tools
+	rm -rf $(BUILD)/sub-net-tools
+	mkdir -p $(BUILD)/sub-net-tools
+	mkdir -p $(SUB_ROOT)/usr/{bin,sbin}
+	tar xzf $(ARCHIVE)/net-tools*gz -C $(BUILD)/sub-net-tools
+	( cd $(BUILD)/sub-net-tools/* \
+		&& yes '' | $(MAKE) config \
+		&& $(MAKE) COPT="$(JTL_CFLAGS)" \
+		&& $(MAKE) BASEDIR=$(SUB_ROOT) update )
+	du -hs $(BUILD)/sub-net-tools > $(MADE)/sub-net-tools
+	rm -rf $(BUILD)/sub-net-tools

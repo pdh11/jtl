@@ -1,0 +1,8 @@
+## Make.gnash
+
+gnash: gtk+ mozilla giflib libjpeg libpng pango atk \
+		gst-libav cairo curl speex python perl boost zlib sdl
+	$(MAKE) PROG=gnash _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-gui=gtk --enable-renderer=cairo" \
+		JTL_INSTALL="install install-plugin" \
+		JTL_TESTS_BOGUS=bogus

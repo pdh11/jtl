@@ -1,0 +1,19 @@
+## Device mapper raid
+
+dmraid: lvm2
+	@echo Making dmraid
+	mv $(BUILD)/dmraid $(BUILD)/dmraid.old || true
+	( $(REALLY) rm -rf $(BUILD)/dmraid.old ) &
+	mkdir -p $(BUILD)/dmraid
+	tar xjf $(ARCHIVE)/dmraid-[0-9]*bz2 -C $(BUILD)/dmraid
+	if [ x$(JTL_PATCH) != x ] ; then patch -d $(BUILD)/dmraid/* -p1 -F5 -z.old < patches/$(JTL_PATCH) ; fi
+	( cd $(BUILD)/dmraid/*/*/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
+		&& $(MAKE) $(JTL_MAKE) \
+		&& if [ x$(JTL_TESTS_BOGUS) == x ] && grep -q '^check:' Makefile ; then $(MAKE) -j1 check ; fi \
+		&& if [ x$(JTL_TESTS_BOGUS) == x ] && grep -q '^tests[ :]' Makefile ; then $(MAKE) -j1 tests ; fi \
+		&& $(REALLY) $(MAKE) $(JTL_INSTALL) )
+	$(REALLY) /sbin/ldconfig || true
+	du -hs $(BUILD)/dmraid > $(MADE)/dmraid
+	( $(REALLY) rm -rf $(BUILD)/dmraid ; onesync ) &

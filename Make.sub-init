@@ -1,0 +1,17 @@
+## Make.sub-init
+#
+
+sub-init: sub-glibc
+	@echo Compiling init for image
+	rm -rf $(BUILD)/sub-init
+	mkdir -p $(BUILD)/sub-init
+	tar xzf $(ARCHIVE)/sysvinit-* -C $(BUILD)/sub-init
+	mkdir -p $(SUB_ROOT)/usr/man/man{1,2,3,4,5,6,7,8}
+	cd $(SUB_ROOT)/usr/share && rm -rf man
+	cd $(SUB_ROOT)/usr/share && ln -sf ../man man
+	mkdir -p $(SUB_ROOT)/etc
+	( cd $(BUILD)/sub-init/*/src \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) ROOT=$(SUB_ROOT) install )
+	du -hs $(BUILD)/sub-init > $(MADE)/sub-init
+	rm -rf $(BUILD)/sub-init

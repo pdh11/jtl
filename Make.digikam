@@ -1,0 +1,5 @@
+## Make.digikam
+
+digikam: kde-libs gphoto2 perl sqlite marble libkdcraw opencv libkexiv2
+	$(MAKE) PROG=digikam _gnucmake \
+                JTL_CMAKE=-DENABLE_LCMS2=on

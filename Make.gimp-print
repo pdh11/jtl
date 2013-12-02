@@ -1,0 +1,9 @@
+## Make.gimp-print
+#
+
+gimp-print: x bison
+	$(MAKE) PROG=gutenprint JTL_TOUCH=gimp-print \
+		JTL_CONFIG="$(JTL_CONFIG) --without-gimp" _gnu \
+		JTL_PATCH=gutenprint-5.2.7-jtl1.diff \
+		JTL_TESTS_BOGUS=bogus
+

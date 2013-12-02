@@ -1,0 +1,6 @@
+## Make.fontconfig
+#
+
+fontconfig: freetype expat
+	$(MAKE) PROG=fontconfig _gnu
+	touch $(MADE)/fontconfig

@@ -1,0 +1,4 @@
+## Make.python-cheetah
+
+python-cheetah: python python-markdown
+	$(MAKE) PROG=python-cheetah _pythonstyle

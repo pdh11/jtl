@@ -1,0 +1,19 @@
+## Make.libmpeg3
+#
+# The included configury/makefile is such rubbish, we spin our own
+
+libmpeg3: a52dec
+	@echo Making libmpeg3
+	rm -rf $(BUILD)/libmpeg3
+	mkdir -p $(BUILD)/libmpeg3
+	tar xjf $(ARCHIVE)/libmpeg3-*.bz2 -C $(BUILD)/libmpeg3
+	patch -d $(BUILD)/libmpeg3 -p0 < patches/libmpeg3-1.8-jtl1.diff
+	( cd $(BUILD)/libmpeg3/* \
+		&& $(MAKE) -f jtl.make \
+		&& $(REALLY) $(MAKE) -f jtl.make install )
+	echo "Name: libmpeg3" > $(BUILD)/libmpeg3/libmpeg3.pc
+	echo "Version: 1.8" >> $(BUILD)/libmpeg3/libmpeg3.pc
+	echo "Libs: -lmpeg3" >> $(BUILD)/libmpeg3/libmpeg3.pc
+	$(REALLY) install -m 644 $(BUILD)/libmpeg3/libmpeg3.pc /usr/lib/pkgconfig
+	du -hs $(BUILD)/libmpeg3 > $(MADE)/libmpeg3
+	rm -rf $(BUILD)/libmpeg3

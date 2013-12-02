@@ -1,0 +1,6 @@
+## Make.pth
+#
+# 2.0.7 doesn't like -j
+
+pth:
+	$(MAKE) PROG=pth -j1 _gnu

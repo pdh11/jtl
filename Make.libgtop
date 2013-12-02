@@ -1,0 +1,4 @@
+## Make.libgtop
+
+libgtop: glib gobject-introspection
+	$(MAKE) PROG=libgtop _gnu

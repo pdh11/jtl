@@ -1,0 +1,43 @@
+--- kdevelop-3.3.0/lib/catalog/catalog.cpp~	2005-11-19 09:57:10.000000000 +0000
++++ kdevelop-3.3.0/lib/catalog/catalog.cpp	2005-12-04 20:11:21.000000000 +0000
+@@ -32,9 +32,7 @@
+ 
+ #include <config.h>
+ 
+-#if DB_VERSION_MAJOR != 4
+-#error "BDB Version 4 required."
+-#endif
++#define HAVE_BDB(x,y) (DB_VERSION_MAJOR > (x) || (DB_VERSION_MAJOR == (x) && DB_VERSION_MINOR >= (y)))
+ 
+ struct _Catalog_Private
+ {
+@@ -201,10 +199,12 @@ void  Catalog::setEnabled( bool isEnable
+ 	}
+ 
+         if ((ret = 
+-#if DB_VERSION_MINOR >= 1
++#if HAVE_BDB(4,1)
+ 	     dbp->open(dbp, NULL, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)
+-#else
++#elif HAVE_BDB(4,0)
+ 	     dbp->open(dbp, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)
++#else
++	     dbp->open(dbp, NULL, QFile::encodeName( indexName ).data() BDB_OPEN_HACK, DB_BTREE, DB_CREATE, 0664)
+ #endif
+ 		== 0))
+ 	{
+@@ -269,10 +269,12 @@ void  Catalog::setEnabled( bool isEnable
+     }
+ 
+     if ((ret =
+-#if DB_VERSION_MINOR >= 1
++#if HAVE_BDB(4,1)
+ 	 d->dbp->open(d->dbp, NULL, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)
+-#else
++#elif HAVE_BDB(4,0)
+ 	 d->dbp->open(d->dbp, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)
++#else
++	 d->dbp->open(d->dbp, NULL, d->dbName.local8Bit() BDB_OPEN_HACK, DB_BTREE, DB_CREATE, 0664)
+ #endif
+ 	 != 0))
+     {

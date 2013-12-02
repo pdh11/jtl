@@ -1,0 +1,21 @@
+## Make.sub-gcc
+
+sub-gcc: sub-glibc
+	@echo Compiling gcc for image
+	rm -rf $(BUILD)/sub-gcc
+	mkdir -p $(BUILD)/sub-gcc
+	tar xzf $(ARCHIVE)/gcc-3*.tar.gz -C $(BUILD)/sub-gcc
+	patch -d $(BUILD)/sub-gcc/* -p1 < patches/gcc-3.3.5-jtl1.diff
+	mkdir -p $(BUILD)/sub-gcc/build
+	( cd $(BUILD)/sub-gcc/build \
+		&& CFLAGS="$(JTL_CFLAGS)" LIBCFLAGS="-g $(JTL_CFLAGS)" \
+			LIBCXXFLAGS="-g $(JTL_CXXFLAGS) -fno-implicit-templates" \
+			 ../g*/configure --prefix=$(PREFIX) --enable-shared \
+			--enable-languages=c \
+		&& $(MAKE) CFLAGS="$(JTL_CFLAGS)" LIBCFLAGS="-g $(JTL_CFLAGS)" LIBCXXFLAGS="-g $(JTL_CXXFLAGS) -fno-implicit-templates" -j1 bootstrap \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	cd $(SUB_ROOT)/usr/bin && ln -sf gcc cc
+	mkdir -p $(SUB_ROOT)/lib
+	cd $(SUB_ROOT)/lib && ln -sf /usr/bin/cpp cpp
+	du -hs $(BUILD)/sub-gcc > $(MADE)/sub-gcc
+	rm -rf $(BUILD)/sub-gcc

@@ -1,0 +1,6 @@
+## Make.dconf
+
+dconf: pkgconfig libxml2
+	$(MAKE) PROG=dconf _gnu \
+                JTL_TESTS_BOGUS=expect-dbus-running
+

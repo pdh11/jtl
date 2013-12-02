@@ -1,0 +1,4 @@
+## Make.libgssglue
+
+libgssglue: krb5
+	$(MAKE) PROG=libgssglue _gnu

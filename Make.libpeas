@@ -1,0 +1,5 @@
+## Make.libpeas
+
+libpeas: glib gobject-introspection
+	$(MAKE) PROG=libpeas _gnu \
+                JTL_TESTS_BOGUS=1.2.0

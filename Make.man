@@ -1,0 +1,15 @@
+## Make.man
+
+man: groff less
+	@echo Making man
+	rm -rf $(BUILD)/man
+	mkdir -p $(BUILD)/man
+	tar xjf $(ARCHIVE)/man-[0-9]*bz2 -C $(BUILD)/man
+	( cd $(BUILD)/man/* \
+		&& sed -e 's/DEFAULTLESSOPT="-is"/DEFAULTLESSOPT="-isR"/' < configure > configure2 \
+		&& chmod a+x configure2 \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ./configure2 -d \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) $(MAKE) -j1 install )
+	du -hs $(BUILD)/man > $(MADE)/man
+	rm -rf $(BUILD)/man

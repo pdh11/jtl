@@ -1,0 +1,4 @@
+## Make.json-glib
+
+json-glib: glib
+	$(MAKE) PROG=json-glib _gnu

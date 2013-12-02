@@ -1,0 +1,41 @@
+--- procmail-3.22/src/formisc.c~	2001-06-29 03:20:45.000000000 +0100
++++ procmail-3.22/src/formisc.c	2009-10-14 23:53:38.000000000 +0100
+@@ -115,7 +115,7 @@ void loadchar(c)const int c;		      /* a
+   buf[buffilled++]=c;
+ }
+ 
+-int getline P((void))			   /* read a newline-terminated line */
++int getline2 P((void))			   /* read a newline-terminated line */
+ { if(buflast==EOF)			 /* at the end of our Latin already? */
+    { loadchar('\n');					  /* fake empty line */
+      return EOF;					  /* spread the word */
+--- procmail-3.22/src/formisc.h~	1999-04-19 07:42:15.000000000 +0100
++++ procmail-3.22/src/formisc.h	2009-10-14 23:53:43.000000000 +0100
+@@ -17,4 +17,4 @@ void
+ char*
+  skipwords P((char*start));
+ int
+- getline P((void));
++ getline2 P((void));
+--- procmail-3.22/src/fields.c~	2001-09-11 05:57:08.000000000 +0100
++++ procmail-3.22/src/fields.c	2009-10-14 23:54:07.000000000 +0100
+@@ -110,16 +110,16 @@ void dispfield(p)register const struct f
+ 		    /* try and append one valid field to rdheader from stdin */
+ int readhead P((void))
+ { int idlen;
+-  getline();
++  getline2();
+   if((idlen=breakfield(buf,buffilled))<=0) /* not the start of a valid field */
+      return 0;
+   if(idlen==STRLEN(FROM)&&eqFrom_(buf))			/* it's a From_ line */
+    { if(rdheader)
+ 	return 0;			       /* the From_ line was a fake! */
+-     for(;buflast=='>';getline());	    /* gather continued >From_ lines */
++     for(;buflast=='>';getline2());	    /* gather continued >From_ lines */
+    }
+   else
+-     for(;;getline())		      /* get the rest of the continued field */
++     for(;;getline2())		      /* get the rest of the continued field */
+       { switch(buflast)			     /* will this line be continued? */
+ 	 { case ' ':case '\t':				  /* yep, it sure is */
+ 	      continue;

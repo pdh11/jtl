@@ -1,0 +1,15 @@
+## Make.xv
+
+xv: x libjpeg libpng jasper
+	@echo Making xv
+	rm -rf $(BUILD)/xv
+	mkdir -p $(BUILD)/xv
+	tar xjf $(ARCHIVE)/xv-3.10a.tar.bz2 -C $(BUILD)/xv
+	tar xjf $(ARCHIVE)/xv-3.10a-jumbo-patches-*.tar.bz2 -C $(BUILD)/xv
+	patch -d $(BUILD)/xv/xv-3.10a -p1 < $(BUILD)/xv/xv-3.10a-jumbo-fix-enh-patch-20070520.txt
+	patch -d $(BUILD)/xv/xv-3.10a -p0 < $(ARCHIVE)/xv-3.10a-libpng15.patch
+	( cd $(BUILD)/xv/xv-3.10a \
+		&& $(MAKE) -j1 BINDIR=/usr/bin MANDIR=/usr/man/man1 LIBDIR=/usr/lib CCOPTS="$(JTL_CFLAGS) -L/usr/X11R6/lib" RANLIB=ranlib JP2KLIB=-ljasper PREFIX=$(PREFIX) \
+		&& $(REALLY) $(MAKE) -j1 install  BINDIR=/usr/bin MANDIR=/usr/share/man/man1 LIBDIR=/usr/lib JP2KLIB=-ljasper PREFIX=$(PREFIX) )
+	du -hs $(BUILD)/xv > $(MADE)/xv
+	rm -rf $(BUILD)/xv

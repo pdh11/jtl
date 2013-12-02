@@ -1,0 +1,8 @@
+## Make.geoclue
+
+geoclue: glib gobject-introspection libgnome-keyring
+	$(MAKE) PROG=geoclue _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --disable-werror"
+# \
+#                JTL_PATCH=geoclue-0.12.0-jtl1.diff
+

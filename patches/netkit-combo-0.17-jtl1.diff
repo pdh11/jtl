@@ -1,0 +1,105 @@
+*** netkit-combo-0.17/netkit-telnet/telnet/main.cc~	Sun Aug  1 06:06:37 1999
+--- netkit-combo-0.17/netkit-telnet/telnet/main.cc	Sat Jan 24 18:49:12 2004
+***************
+*** 46,51 ****
+--- 46,52 ----
+  #include <sys/types.h>
+  #include <getopt.h>
+  #include <string.h>
++ #include <stdlib.h>
+  
+  #include "ring.h"
+  #include "externs.h"
+*** netkit-combo-0.17/netkit-telnet/telnet/network.cc~	Tue Aug 13 09:09:58 1996
+--- netkit-combo-0.17/netkit-telnet/telnet/network.cc	Sat Jan 24 18:51:47 2004
+***************
+*** 42,47 ****
+--- 42,48 ----
+  #include <sys/time.h>
+  #include <errno.h>
+  #include <arpa/telnet.h>
++ #include <stdlib.h>
+  
+  #include "ring.h"
+  #include "defines.h"
+*** netkit-combo-0.17/netkit-telnet/telnet/terminal.cc~	Sat Jan 24 18:54:57 2004
+--- netkit-combo-0.17/netkit-telnet/telnet/terminal.cc	Sat Jan 24 18:55:08 2004
+***************
+*** 45,50 ****
+--- 45,52 ----
+  #include <signal.h>
+  #include <errno.h>
+  #include <stdio.h>
++ #include <string.h>
++ #include <stdlib.h>
+  
+  #include "ring.h"
+  #include "defines.h"
+*** netkit-combo-0.17/netkit-telnet/telnet/utilities.cc~	Sun Dec 12 15:33:40 1999
+--- netkit-combo-0.17/netkit-telnet/telnet/utilities.cc	Sat Jan 24 18:57:02 2004
+***************
+*** 47,52 ****
+--- 47,54 ----
+  #include <sys/socket.h>
+  #include <unistd.h>
+  #include <ctype.h>
++ #include <string.h>
++ #include <stdlib.h>
+  
+  #include "ring.h"
+  #include "defines.h"
+*** netkit-combo-0.17/netkit-telnet/telnet/netlink.cc~	Sun Jul 23 05:16:25 2000
+--- netkit-combo-0.17/netkit-telnet/telnet/netlink.cc	Sat Jan 24 18:58:43 2004
+***************
+*** 8,13 ****
+--- 8,14 ----
+  #include <sys/ioctl.h>
+  #include <sys/time.h>
+  #include <netdb.h>
++ #include <string.h>
+  #include "netlink.h"
+  #include "proto.h"
+  #include "ring.h"
+--- netkit-combo-0.17/netkit-base/inetd/servtab.c~	2000-07-22 21:20:50.000000000 +0100
++++ netkit-combo-0.17/netkit-base/inetd/servtab.c	2006-09-23 13:04:10.000000000 +0100
+@@ -771,7 +771,7 @@ loadconfigent(struct servtab *cp)
+ 			return;
+ 		}
+ 		
+-#define SWAP(type, a, b) {type c=(type)a; (type)a=(type)b; (type)b=(type)c;}
++#define SWAP(type, a, b) {type c=(type)a; a=(type)b; b=(type)c;}
+ 
+ 		/*
+ 		 * sep->se_wait may be holding the pid of a daemon
+--- netkit-combo-0.17/linux-ftpd/ftpd/ftpcmd.y~	1999-10-09 03:32:12.000000000 +0100
++++ netkit-combo-0.17/linux-ftpd/ftpd/ftpcmd.y	2006-09-23 13:06:41.000000000 +0100
+@@ -105,6 +105,14 @@ static int	 yylex __P((void));
+ static void	 sizecmd __P((char *));
+ static void	 help __P((struct tab *, char *));
+ 
++struct tab {
++	const char	*name;
++	short	token;
++	short	state;
++	short	implemented;	/* 1 if command is implemented */
++	const char	*help;
++};
++
+ extern struct tab cmdtab[];
+ extern struct tab sitetab[];
+ 
+@@ -832,14 +840,6 @@ extern jmp_buf errcatch;
+ #define	SITECMD	7	/* SITE command */
+ #define	NSTR	8	/* Number followed by a string */
+ 
+-struct tab {
+-	const char	*name;
+-	short	token;
+-	short	state;
+-	short	implemented;	/* 1 if command is implemented */
+-	const char	*help;
+-};
+-
+ struct tab cmdtab[] = {		/* In order defined in RFC 765 */
+ 	{ "USER", USER, STR1, 1,	"<sp> username" },
+ 	{ "PASS", PASS, ZSTR1, 1,	"<sp> password" },

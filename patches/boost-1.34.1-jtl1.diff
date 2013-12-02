@@ -1,0 +1,70 @@
+--- Jamroot~	2007-05-11 04:40:34.000000000 +0100
++++ Jamroot	2007-07-17 22:11:30.000000000 +0100
+@@ -277,7 +277,7 @@ rule tag ( name : type ? : property-set 
+         if $(layout) = versioned
+         {
+             local result = [ common.format-name
+-                <base> <toolset> <threading> <runtime> -$(BOOST_VERSION_TAG)
++                <base>
+                 -$(BUILD_ID)
+                 : $(name) : $(type) : $(property-set) ] ;
+             
+@@ -299,7 +299,7 @@ rule tag ( name : type ? : property-set 
+         else
+         {
+             return [ common.format-name
+-                <base> <threading> <runtime> -$(BUILD_ID)
++                <base> <runtime> -$(BUILD_ID)
+                 : $(name) : $(type) : $(property-set) ] ;
+         }
+     }
+--- boost/dynamic_bitset/dynamic_bitset.hpp~	2009-03-28 16:50:22.000000000 +0000
++++ boost/dynamic_bitset/dynamic_bitset.hpp	2009-03-28 18:23:50.000000000 +0000
+@@ -332,6 +332,8 @@ private:
+     BOOST_STATIC_CONSTANT(block_width_type, ulong_width = std::numeric_limits<unsigned long>::digits);
+     typedef std::vector<block_type, allocator_type> buffer_type;
+ 
++    BOOST_STATIC_CONSTANT(int, no_padding = (bits_per_block == CHAR_BIT * sizeof(Block)) );
++
+     void m_zero_unused_bits();
+     bool m_check_invariants() const;
+ 
+@@ -999,12 +1001,6 @@ dynamic_bitset<Block, Allocator>::count(
+     using detail::dynamic_bitset_impl::access_by_blocks;
+     using detail::dynamic_bitset_impl::value_to_type;
+ 
+-    // NOTE: Explicitly qualifying "bits_per_block" to workaround
+-    //       regressions of gcc 3.4.x
+-    const bool no_padding =
+-        dynamic_bitset<Block, Allocator>::bits_per_block
+-        == CHAR_BIT * sizeof(Block);
+-
+     const bool enough_table_width = table_width >= CHAR_BIT;
+ 
+     const bool mode = (no_padding && enough_table_width)
+--- configure~	2008-11-09 11:44:08.000000000 +0000
++++ configure	2009-03-28 18:34:10.000000000 +0000
+@@ -347,8 +347,7 @@ LIBS=$LIBS
+ 
+ all: .dummy
+ 	@echo "\$(BJAM) \$(BJAM_CONFIG) --user-config=user-config.jam \$(LIBS)"
+-	@\$(BJAM) \$(BJAM_CONFIG) --user-config=user-config.jam \$(LIBS) || \\
+-	echo "Not all Boost libraries built properly."
++	@\$(BJAM) \$(BJAM_CONFIG) --user-config=user-config.jam \$(LIBS)
+ 
+ clean: .dummy
+ 	rm -rf bin.v2
+@@ -357,11 +356,11 @@ distclean: clean
+ 	rm -rf Makefile config.log
+ 
+ check: .dummy
+-	@cd status && ../\$(BJAM) \$(BJAM_CONFIG) --user-config=../user-config.jam || echo "Some Boost regression tests failed. This is normal for many compilers."
++	@cd status && ../\$(BJAM) \$(BJAM_CONFIG) --user-config=../user-config.jam
+ 
+ install: .dummy
+ 	@echo "\$(BJAM) \$(BJAM_CONFIG) --user-config=user-config.jam --prefix=\$(prefix) --exec-prefix=\$(exec_prefix) --libdir=\$(libdir) --includedir=\$(includedir) \$(LIBS) install"
+-	@\$(BJAM) \$(BJAM_CONFIG) --user-config=user-config.jam --prefix=\$(prefix) --exec-prefix=\$(exec_prefix) --libdir=\$(libdir) --includedir=\$(includedir) \$(LIBS) install || echo "Not all Boost libraries built properly."
++	@\$(BJAM) \$(BJAM_CONFIG) --user-config=user-config.jam --prefix=\$(prefix) --exec-prefix=\$(exec_prefix) --libdir=\$(libdir) --includedir=\$(includedir) \$(LIBS) install
+ 
+ .dummy:
+ 

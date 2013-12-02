@@ -1,0 +1,6 @@
+## Make.kde-multimedia
+
+kde-multimedia: kde-libs kde-runtime qt taglib flac vorbis-tools \
+		libmad jack gstreamer pkgconfig lame alsa-lib xine-lib \
+		libtheora
+	$(MAKE) PROG=kdemultimedia JTL_TOUCH=kde-multimedia PREFIX=$(PREFIX)/kde _gnucmake

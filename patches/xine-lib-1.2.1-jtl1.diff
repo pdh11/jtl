@@ -1,0 +1,48 @@
+--- xine-lib-1.2.1/src/combined/ffmpeg/ff_video_decoder.c~	2012-02-04 00:41:43.000000000 +0000
++++ xine-lib-1.2.1/src/combined/ffmpeg/ff_video_decoder.c	2012-06-01 16:57:43.000000000 +0100
+@@ -127,7 +127,7 @@ struct ff_video_decoder_s {
+ 
+   yuv_planes_t      yuv;
+ 
+-  AVPaletteControl  palette_control;
++//  AVPaletteControl  palette_control;
+ 
+ #ifdef LOG
+   enum PixelFormat  debug_fmt;
+@@ -214,8 +214,9 @@ static int get_buffer(AVCodecContext *co
+ 
+   /* We should really keep track of the ages of xine frames (see
+    * avcodec_default_get_buffer in libavcodec/utils.c)
+-   * For the moment tell ffmpeg that every frame is new (age = bignumber) */
++   * For the moment tell ffmpeg that every frame is new (age = bignumber)
+   av_frame->age = 256*256*256*64;
++   */
+ 
+   av_frame->type= FF_BUFFER_TYPE_USER;
+ 
+@@ -1024,6 +1025,7 @@ static void ff_handle_special_buffer (ff
+       buf->decoder_info[2]);
+ 
+   } else if (buf->decoder_info[1] == BUF_SPECIAL_PALETTE) {
++#if 0
+     unsigned int i;
+ 
+     palette_entry_t *demuxer_palette;
+@@ -1041,7 +1043,7 @@ static void ff_handle_special_buffer (ff
+         (demuxer_palette[i].b <<  0);
+     }
+     decoder_palette->palette_changed = 1;
+-
++#endif
+   } else if (buf->decoder_info[1] == BUF_SPECIAL_RV_CHUNK_TABLE) {
+     int i;
+ 
+@@ -1758,7 +1760,7 @@ static video_decoder_t *ff_video_open_pl
+   this->av_frame          = avcodec_alloc_frame();
+   this->context           = avcodec_alloc_context();
+   this->context->opaque   = this;
+-  this->context->palctrl  = NULL;
++//  this->context->palctrl  = NULL;
+ 
+   this->decoder_ok        = 0;
+   this->decoder_init_mode = 1;

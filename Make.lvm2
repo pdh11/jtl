@@ -1,0 +1,4 @@
+### Make.lvm2
+
+lvm2:
+	$(MAKE) PROG=lvm2 _gnu

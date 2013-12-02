@@ -1,0 +1,4 @@
+## Make.libgnomecanvasmm
+
+libgnomecanvasmm: glib pkgconfig libgnomecanvas glibmm gtkmm
+	$(MAKE) PROG=libgnomecanvasmm _gnu

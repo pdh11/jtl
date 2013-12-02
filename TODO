@@ -1,0 +1,15 @@
+ffmpeg -- used by transcode or mplayer? if not kill
+audacity
+does {distcc,mplayer,ogle} really need gtk+1 not 2?
+vlc (& transcode)
+pciutils vs /usr/local
+
+ghostscript (some sort of struct tm screwup)
+guile (patch for bogus inet_aton decl)
+NVrec
+procmeter3
+
+ -- /usr/etc vs /etc
+ -- /usr/man vs /usr/share/man
+ -- /bin/* vs /usr/lib/*.so
+ -- rsync vs /usr/local

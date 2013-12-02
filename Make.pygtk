@@ -1,0 +1,5 @@
+## Make.pygtk
+
+pygtk: gtk+ python libglade pango cairo atk pygobject pycairo
+	$(MAKE) PROG=pygtk _gnu \
+		JTL_TESTS_BOGUS=bogus

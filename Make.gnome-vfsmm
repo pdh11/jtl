@@ -1,0 +1,4 @@
+## Make.gnome-vfsmm
+
+gnome-vfsmm: glib pkgconfig gnome-vfs glibmm
+	$(MAKE) PROG=gnome-vfsmm _gnu

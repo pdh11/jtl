@@ -1,0 +1,10 @@
+## Make.grepmail
+
+grepmail: perl
+	$(MAKE) PROG=grepmail _perlstyle
+
+grepmail: perl_mail_mbox_messageparser perl_date_manip
+
+perl_mail_mbox_messageparser: perl_filehandle_unget perl_benchmark_timer perl
+
+perl_date_manip: perl

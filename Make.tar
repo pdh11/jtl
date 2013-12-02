@@ -1,0 +1,9 @@
+## Make.tar
+#
+# -fgnu89-inline needed for 1.19 with GCC 4.3.0
+
+tar:
+	$(MAKE) PROG=tar _gnu-strip JTL_CFLAGS="$(JTL_CFLAGS) -fgnu89-inline"
+	if [ $(PREFIX) = /usr ] ; then \
+	  $(REALLY) mv $(JTL_ROOT)/usr/bin/tar $(JTL_ROOT)/bin ; \
+	fi

@@ -1,0 +1,5 @@
+## Make.mpc
+
+mpc: gmp mpfr
+	$(MAKE) PROG=mpc _gnu \
+                JTL_CFLAGS=""

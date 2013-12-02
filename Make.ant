@@ -1,0 +1,13 @@
+## Make.ant
+#
+# Apache ANT nasty java buildsystem thing
+
+ant: gcj
+        
+
+#
+#
+#
+# BOOTJAVAC_OPTS="-C" JAVACMD=/usr/bin/gij JAVAC=/usr/bin/gcj ./bootstrap.sh
+# gcj -classpath build/classes:src/main:/usr/share/java/libgcj-tools-4.6.0.jar:/usr/share/java/libgcj-4.6.0.jar -Dant.home=. --main=org.apache.tools.ant.Main -lgcj-tools -o ./ant `find build/classes -name '*.class'`
+# CLASSPATH=src/main:/home/peter/downloads/ecj-4.5.jar ANT_HOME=. ./ant 

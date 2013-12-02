@@ -1,0 +1,15 @@
+## Make.sub-bzip2
+#
+# Stupid "make install" doesn't deal with it already being installed
+
+sub-bzip2: sub-glibc
+	@echo Compiling sub-bzip2
+	rm -rf $(BUILD)/sub-bzip2
+	mkdir -p $(BUILD)/sub-bzip2
+	tar xzf $(ARCHIVE)/bzip2-* -C $(BUILD)/sub-bzip2
+	rm -f $(SUB_ROOT)/usr/bin/{bzegrep,bzfgrep,bzless,bzcmp}
+	( cd $(BUILD)/sub-bzip2/* \
+		&& make PREFIX=/usr bzip2 bzip2recover \
+		&& make PREFIX=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-bzip2 > $(MADE)/sub-bzip2
+	rm -rf $(BUILD)/sub-bzip2

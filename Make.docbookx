@@ -1,0 +1,17 @@
+## Make.docbookx
+
+docbookx: libxml2
+	$(REALLY) mkdir -p $(PREFIX)/share/xml/docbook/4.2
+	$(REALLY) tar xf $(ARCHIVE)/docbookx-*bz2 -C $(PREFIX)/share/xml/docbook/4.2
+	touch $(MADE)/docbookx
+
+#	@echo Making docbookx
+#	rm -rf $(BUILD)/docbookx
+#	mkdir -p $(BUILD)/docbookx
+#	tar xj -C $(BUILD)/docbookx -f $(ARCHIVE)/docbookx-*bz2
+#	( cd $(BUILD)/docbookx/* \
+#		&& $(MAKE) \
+#		&& $(REALLY) $(MAKE) install \
+#		&& $(REALLY) chmod -R a+rw . )
+#	du -hs $(BUILD)/docbookx > $(MADE)/docbookx
+#	$(REALLY) rm -rf $(BUILD)/docbookx

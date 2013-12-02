@@ -1,0 +1,4 @@
+## Make.gssdp
+
+gssdp: glib libsoup gtk+
+	$(MAKE) PROG=gssdp _gnu

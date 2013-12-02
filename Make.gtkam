@@ -1,0 +1,4 @@
+## Make.gtkam
+
+gtkam: gphoto2 gtk+ libexif_gtk libgnome-keyring
+	$(MAKE) PROG=gtkam _gnu

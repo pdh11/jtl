@@ -1,0 +1,7 @@
+## Make.onesync
+
+onesync:
+	$(CC) $(JTL_CFLAGS) -Wall -Wextra patches/onesync.c -o build/onesync -lpthread -lrt
+	$(REALLY) install -s -m 0755 -o root build/onesync $(PREFIX)/bin/onesync
+	rm build/onesync
+	touch $(MADE)/onesync

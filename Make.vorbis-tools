@@ -1,0 +1,6 @@
+## Make.vorbis-tools
+#
+# vorbis-tools 1.1.1 doesn't compile against curl 7.16.2
+
+vorbis-tools: libvorbis libogg libao flac curl
+	$(MAKE) PROG=vorbis-tools JTL_CONFIG=--without-curl _gnu

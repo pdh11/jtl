@@ -1,0 +1,4 @@
+## Make.rpcbind
+
+rpcbind: openssl
+	LIBS=-lcrypto $(MAKE) PROG=rpcbind _gnu

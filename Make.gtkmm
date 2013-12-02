@@ -1,0 +1,4 @@
+## Make.gtkmm
+
+gtkmm: gtk+ libsigc++ glibmm cairomm pangomm atkmm
+	$(MAKE) PROG=gtkmm _gnu JTL_CXXFLAGS="$(JTL_CXXFLAGS) -include /usr/include/string.h"

@@ -1,0 +1,22 @@
+## Make.galeon
+#
+
+galeon: mozilla gconf gtk+ glib orbit scrollkeeper \
+		gnome-vfs libglade control-center
+	@echo Making galeon
+	rm -rf $(BUILD)/galeon
+	mkdir -p $(BUILD)/galeon
+	tar xjf $(ARCHIVE)/galeon-*bz2 -C $(BUILD)/galeon
+	patch -d $(BUILD)/galeon -p0 < patches/galeon-2.0.7-jtl1.diff
+	( cd $(BUILD)/galeon/* \
+		&& ./configure --prefix=/usr --enable-shared \
+			--disable-static --sysconfdir=$(JTL_SYSCONFDIR) \
+			--disable-werror \
+			--with-mozilla=libxul-embedding-unstable \
+			CFLAGS="$(JTL_CFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+			CXXFLAGS="$(JTL_CXXFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
+		&& $(MAKE) \
+		&& $(MAKE) check \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/galeon > $(MADE)/galeon
+	rm -rf $(BUILD)/galeon

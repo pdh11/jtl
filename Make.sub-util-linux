@@ -1,0 +1,16 @@
+## Make.sub-util-linux
+#
+# Kill comes from procps
+
+sub-util-linux: sub-glibc sub-ncurses
+	@echo Compiling util-linux for image
+	rm -rf $(BUILD)/sub-util-linux
+	mkdir -p $(BUILD)/sub-util-linux
+	tar xzf $(ARCHIVE)/util-linux* -C $(BUILD)/sub-util-linux
+	( cd $(BUILD)/sub-util-linux/* \
+		&& $(MAKE) HAVE_SHADOW=no HAVE_PAM=no OPT="$(JTL_CFLAGS) $(JTL_SUBLIBS)" HAVE_NCURSES=yes HAVE_SLANG=no USE_TTY_GROUP=no HAVE_SLN=yes HAVE_SYSVINIT=yes \
+		&& $(REALLY) $(MAKE) HAVE_SHADOW=no HAVE_PAM=no OPT="$(JTL_CFLAGS) $(JTL_SUBLIBS)" HAVE_NCURSES=yes HAVE_SLANG=no USE_TTY_GROUP=no HAVE_SLN=yes HAVE_SYSVINIT=yes DESTDIR=$(SUB_ROOT) install )
+	du -hs $(BUILD)/sub-util-linux > $(MADE)/sub-util-linux
+	rm -rf $(BUILD)/sub-util-linux
+
+

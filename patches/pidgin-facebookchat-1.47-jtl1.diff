@@ -1,0 +1,26 @@
+--- pidgin-facebookchat/Makefile~	2008-12-04 20:29:48.000000000 +0000
++++ pidgin-facebookchat/Makefile	2009-02-26 09:51:24.000000000 +0000
+@@ -37,13 +37,10 @@ FACEBOOK_SOURCES = \
+ #Standard stuff here
+ .PHONY:	all clean install sourcepackage
+ 
+-all:	libfacebook.so libfacebook.dll libfacebook64.so libfacebookarm.so libfacebookppc.so installers sourcepackage
++all:	libfacebook.so
+ 
+ install:
+ 	cp libfacebook.so /usr/lib/purple-2/
+-	cp libfacebook64.so /usr/lib64/purple-2/
+-	cp libfacebookarm.so /usr/lib/pidgin/
+-	cp libfacebookppc.so /usr/lib/purple-2/
+ 	cp facebook16.png /usr/share/pixmaps/pidgin/protocols/16/facebook.png
+ 	cp facebook22.png /usr/share/pixmaps/pidgin/protocols/22/facebook.png
+ 	cp facebook48.png /usr/share/pixmaps/pidgin/protocols/48/facebook.png
+@@ -80,7 +77,7 @@ libfacebookbsd60.so:	${FACEBOOK_SOURCES}
+ pidgin-facebookchat.exe:	libfacebook.dll
+ 	echo "Dont forget to update version number"
+ 	makensis facebook.nsi > /dev/null
+-	
++
+ pidgin-facebookchat.deb:	libfacebook.so libfacebookarm.so libfacebook64.so libfacebookppc.so
+ 	echo "Dont forget to update version number"
+ 	cp libfacebook.so ${DEB_PACKAGE_DIR}/usr/lib/purple-2/

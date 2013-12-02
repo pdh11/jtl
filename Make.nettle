@@ -1,0 +1,5 @@
+## Make.nettle
+
+nettle:
+	$(MAKE) PROG=nettle _gnu \
+                JTL_PATCH=nettle-2.7.1-jtl.diff

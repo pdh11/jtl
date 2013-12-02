@@ -1,0 +1,7 @@
+## Make.gnome-python
+
+gnome-python: gtk+ python libglade pango cairo atk pygobject pycairo \
+		gnome-vfs pygtk \
+		libgnomecanvas
+	$(MAKE) PROG=gnome-python _gnu \
+		JTL_TESTS_BOGUS=bogus

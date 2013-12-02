@@ -1,0 +1,31 @@
+--- valgrind-3.2.3/configure~	2007-01-29 19:45:30.000000000 +0000
++++ valgrind-3.2.3/configure	2007-06-09 16:45:56.000000000 +0100
+@@ -4438,6 +4438,17 @@ _ACEOF
+ 	DEFAULT_SUPP="glibc-2.5.supp ${DEFAULT_SUPP}"
+ 	;;
+ 
++     2.6)
++	echo "$as_me:$LINENO: result: 2.5 family" >&5
++echo "${ECHO_T}2.5 family" >&6
++
++cat >>confdefs.h <<\_ACEOF
++#define GLIBC_2_5 1
++_ACEOF
++
++	DEFAULT_SUPP="glibc-2.5.supp ${DEFAULT_SUPP}"
++	;;
++
+      *)
+ 	echo "$as_me:$LINENO: result: unsupported version" >&5
+ echo "${ECHO_T}unsupported version" >&6
+--- valgrind-3.2.3/configure~	2007-06-09 16:48:48.000000000 +0100
++++ valgrind-3.2.3/configure	2007-06-09 16:49:08.000000000 +0100
+@@ -4377,7 +4377,7 @@ cat >>conftest.$ac_ext <<_ACEOF
+ 
+ #include <features.h>
+ #ifdef __GNU_LIBRARY__
+- #if (__GLIBC__ == 2 && __GLIBC_MINOR__ == 5)
++ #if (__GLIBC__ == 2 && (__GLIBC_MINOR__ == 5 || __GLIBC_MINOR__ == 6))
+   GLIBC_25
+  #endif
+ #endif

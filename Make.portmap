@@ -1,0 +1,15 @@
+## Make.portmap
+#
+# Portmap-6 was released in May 2007 following a 10-year wait for a working one
+
+portmap:
+	@echo Compiling portmap
+	rm -rf $(BUILD)/portmap
+	mkdir -p $(BUILD)/portmap
+	tar xjf $(ARCHIVE)/portmap-*bz2 -C $(BUILD)/portmap
+	( cd $(BUILD)/portmap/* \
+		&& gcc $(JTL_CFLAGS) portmap.c pmap_check.c from_local.c \
+			-o portmap -DFACILITY=LOG_MAIL \
+		&& $(REALLY) mv -f portmap /sbin/portmap )
+	du -hs $(BUILD)/portmap > $(MADE)/portmap
+	rm -rf $(BUILD)/portmap

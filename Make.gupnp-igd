@@ -1,0 +1,4 @@
+## Make.gupnp-igd
+
+gupnp-igd: gupnp
+	$(MAKE) PROG=gupnp-igd _gnu

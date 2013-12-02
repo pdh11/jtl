@@ -1,0 +1,4 @@
+## Make.screen
+
+screen:
+	$(MAKE) PROG=screen _gnu

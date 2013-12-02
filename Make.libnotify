@@ -1,0 +1,4 @@
+## Make.libnotify
+
+libnotify: glib gtk+ dbus-glib
+	$(MAKE) PROG=libnotify _gnu

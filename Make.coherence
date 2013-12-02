@@ -1,0 +1,9 @@
+## Make.coherence
+
+coherence: python louie python-twisted
+
+coherence: configobj
+	$(MAKE) PROG=coherence _pythonstyle
+
+configobj: python
+	$(MAKE) PROG=configobj _pythonstyle

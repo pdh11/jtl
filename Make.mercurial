@@ -1,0 +1,4 @@
+## Make.mercurial
+
+mercurial: python
+	$(MAKE) PROG=mercurial _pythonstyle

@@ -1,0 +1,53 @@
+## Make.vnc
+#
+# RealVNC (not tightvnc) as we want to build against x.org
+
+vnc: x
+
+vncproto: util-macros
+	$(MAKE) PROG=$@ _xgnu
+
+xcliplistproto: util-macros
+	$(MAKE) PROG=$@ _xgnu
+
+xvnc-server: vncproto xcliplistproto x
+	
+
+ex_vnc: x
+	@echo Making VNC
+	rm -rf $(BUILD)/vnc
+	mkdir -p $(BUILD)/vnc
+	tar xjf $(ARCHIVE)/vnc*bz2 -C $(BUILD)/vnc
+	( cd $(BUILD)/vnc/*/unix \
+		&& ./configure --with-installed-zlib $(JTL_CONFIG) \
+		&& make \
+		&& tar xjf $(ARCHIVE)/X-*bz2 \
+		&& ( patch -Np0 < xc.patch || true ) \
+		&& echo '#define OptimizedCDebugFlags $(JTL_CFLAGS)' >> xc/config/cf/host.def \
+		&& echo '#define HasZlib       YES' >> xc/config/cf/host.def \
+		&& echo '#define HasFreetype2  YES' >> xc/config/cf/host.def \
+		&& echo '#define HasPam        NO' >> xc/config/cf/host.def \
+		&& echo '#define Freetype2Dir $(PREFIX)' >> xc/config/cf/host.def \
+		&& echo '#define HasExpat      YES' >> xc/config/cf/host.def \
+		&& echo '#define HasLibpng     YES' >> xc/config/cf/host.def \
+		&& echo '#define HasFontconfig YES' >> xc/config/cf/host.def \
+		&& echo '#define BuildXft1Library NO' >> xc/config/cf/host.def \
+		&& echo '#define SharedOldX    NO' >> xc/config/cf/host.def \
+		&& echo '#define NormalOldX    NO' >> xc/config/cf/host.def \
+		&& echo '#define BuildXaw6     NO' >> xc/config/cf/host.def \
+		&& echo '#define BuildXaw7     NO' >> xc/config/cf/host.def \
+		&& echo '#define BuildXF86VidModeExt NO' >> xc/config/cf/host.def \
+		&& echo '#define BuildXF86MiscExt NO' >> xc/config/cf/host.def \
+		&& echo '#define BuildXF86DRI  NO' >> xc/config/cf/host.def \
+		&& echo '#define BuildXF86DGA  NO' >> xc/config/cf/host.def \
+		&& echo '#if defined(__sparc__) && defined(__arch64__)' >> xc/config/cf/host.def \
+		&& echo '#define Sparc64Architecture' >> xc/config/cf/host.def \
+		&& echo '#endif' >> xc/config/cf/host.def \
+		&& cd xc \
+		&& $(MAKE) WORLDOPTS= World \
+		&& cd .. \
+		&& $(REALLY) ./vncinstall $(PREFIX)/bin $(PREFIX)/share/man \
+			.no.such.dir. )
+	du -hs $(BUILD)/vnc > $(MADE)/vnc
+	rm -rf $(BUILD)/vnc
+

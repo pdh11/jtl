@@ -1,0 +1,5 @@
+## Make.upower
+
+upower: glib gobject-introspection dbus-glib polkit udev intltool
+	$(MAKE) PROG=upower _gnu \
+                JTL_TESTS_BOGUS=0.9.14

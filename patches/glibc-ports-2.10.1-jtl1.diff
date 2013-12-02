@@ -1,0 +1,42 @@
+--- glibc-ports-2.10.1/sysdeps/arm/eabi/machine-gmon.h~	2009-05-16 09:36:20.000000000 +0100
++++ glibc-ports-2.10.1/sysdeps/arm/eabi/machine-gmon.h	2010-01-18 18:30:44.000000000 +0000
+@@ -50,7 +50,7 @@ void __attribute__((__naked__)) __gnu_mc
+ 	 "ldr r0, [sp, #20]\n\t"					\
+ 	 "bl mcount_internal\n\t"					\
+ 	 "pop {r0, r1, r2, r3, ip, lr}\n\t"				\
+-	 "bx ip");							\
++	 "mov pc, ip");							\
+ }									\
+ OLD_MCOUNT
+ 
+@@ -93,7 +93,7 @@ void __attribute__((__naked__)) _mcount 
+ 	  "movnes	r1, lr;"					\
+ 	  "blne		mcount_internal;"				\
+ 	  "ldmia	sp!, {r0, r1, r2, r3, fp, lr};"			\
+-	  "bx		lr");						\
++	  "mov pc,	lr");						\
+ }
+ 
+ #endif
+--- glibc-ports-2.10.1/sysdeps/unix/sysv/linux/arm/eabi/nptl/unwind-resume.c~	2009-05-16 09:36:20.000000000 +0100
++++ glibc-ports-2.10.1/sysdeps/unix/sysv/linux/arm/eabi/nptl/unwind-resume.c	2010-01-18 18:18:30.000000000 +0000
+@@ -62,7 +62,7 @@ asm (
+ "	beq	4f\n"
+ "5:	mov	r0, r6\n"
+ "	ldmfd	sp!, {r4, r5, r6, lr}\n"
+-"	bx	r3\n"
++"	mov pc,	r3\n"
+ "4:	bl	init\n"
+ "	ldr	r3, [r4, r5]\n"
+ "	b	5b\n"
+--- glibc-ports-2.10.1/sysdeps/unix/sysv/linux/arm/eabi/nptl/unwind-forcedunwind.c~	2009-05-16 09:36:20.000000000 +0100
++++ glibc-ports-2.10.1/sysdeps/unix/sysv/linux/arm/eabi/nptl/unwind-forcedunwind.c	2010-01-18 18:33:51.000000000 +0000
+@@ -99,7 +99,7 @@ asm (
+ "	beq	4f\n"
+ "5:	mov	r0, r6\n"
+ "	ldmfd	sp!, {r4, r5, r6, lr}\n"
+-"	bx	r3\n"
++"	mov pc,	r3\n"
+ "4:	bl	pthread_cancel_init\n"
+ "	ldr	r3, [r4, r5]\n"
+ "	b	5b\n"

@@ -1,0 +1,7 @@
+## Make.kde-l10n-en_GB
+
+kde-l10n-en_GB: kde-games kde-libs \
+		kde-pim \
+		kde-plasma-addons kate kde-webdev kde-workspace kde-runtime \
+                kde-baseapps okular
+	make PROG=kde-l10n-en_GB PREFIX=/usr/kde _gnucmake

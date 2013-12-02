@@ -1,0 +1,35 @@
+## Make.coreutils
+
+# FHS says these go in /bin:
+#   cat chgrp chmod chown cp date dd df dmesg echo false hostname kill ln login
+#   ls mkdir mknod more mount mv ps pwd rm rmdir sed sh stty su sync true 
+#   umount uname
+# also: tar gzip gunzip zcat netstat ping
+#
+# these go in /sbin:
+#   shutdown fdisk fsck* getty halt ifconfig init mkfs* mkswap reboot route
+#   swapon swapoff update
+
+coreutils:
+	$(MAKE) PROG=coreutils _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-install-program=su,arch --disable-acl --disable-xattr" \
+                JTL_INSTALL="-j1 install" \
+		JTL_TESTS_BOGUS=8.20
+	if [ $(PREFIX) = /usr ] ; then \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/chgrp $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/chmod $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/chown $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/cp    $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/dd    $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/df    $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/ln    $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/ls    $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/mkdir $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/mknod $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/mv    $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/rm    $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/rmdir $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/sync  $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv $(JTL_ROOT)/usr/bin/{date,echo,false,pwd,sleep,stty,su,true,uname} $(JTL_ROOT)/bin ; \
+	   $(REALLY) mv -f $(JTL_ROOT)/usr/bin/cat $(JTL_ROOT)/bin ; \
+	fi

@@ -1,0 +1,9 @@
+## Make.pulseaudio
+#
+# 0.9.15test5 gets libwrap support wrong, and fails tests
+
+pulseaudio: speex libsamplerate jack liboil avahi alsa-lib gconf \
+		glib libtool intltool x libsndfile hal dbus json-c
+	$(MAKE) PROG=pulseaudio _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --disable-tcpwrap" \
+		JTL_TESTS_BOGUS=bogus -j1

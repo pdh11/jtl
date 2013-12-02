@@ -1,0 +1,5 @@
+## Make.pygobject
+
+pygobject: glib python libxslt pkgconfig gobject-introspection gdk-pixbuf
+	$(MAKE) PROG=pygobject _gnu \
+		JTL_TESTS_BOGUS=2.26.0

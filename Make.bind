@@ -1,0 +1,4 @@
+## Make.bind
+
+bind: openssl
+	$(MAKE) PROG=bind JTL_CONFIG="--with-openssl=/usr/ssl --sysconfdir=/etc --localstatedir=/var --enable-ipv6=no" _gnu

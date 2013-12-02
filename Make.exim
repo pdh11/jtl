@@ -1,0 +1,22 @@
+## Make.exim
+
+exim: openssl
+	@echo Making exim
+	rm -rf $(BUILD)/exim
+	mkdir -p $(BUILD)/exim
+	tar xjf $(ARCHIVE)/exim-*bz2 -C $(BUILD)/exim
+	export _POSIX2_VERSION=199209 ; ( cd $(BUILD)/exim/* \
+		&& mkdir -p Local \
+		&& cp src/EDITME Local/Makefile \
+		&& echo "BIN_DIRECTORY=/usr/bin" >> Local/Makefile \
+		&& echo "COMPRESS_COMMAND=/usr/bin/gzip" >> Local/Makefile \
+		&& echo "CONFIGURE_FILE=/etc/exim" >> Local/Makefile \
+		&& echo "SPOOL_DIRECTORY=/var/spool/exim" >> Local/Makefile \
+		&& echo "SUPPORT_TLS=yes" >> Local/Makefile \
+		&& echo "TLS_LIBS=-lssl -lcrypto" >> Local/Makefile \
+		&& echo "EXIM_MONITOR=" >> Local/Makefile \
+		&& echo "EXIM_USER=mail" >> Local/Makefile \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" make -j1 \
+		&& $(REALLY) $(MAKE) -j1 install )
+	du -hs $(BUILD)/exim > $(MADE)/exim
+	rm -rf $(BUILD)/exim

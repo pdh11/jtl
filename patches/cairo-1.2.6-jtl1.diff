@@ -1,0 +1,11 @@
+--- cairo-1.2.6/src/cairoint.h~	2006-11-20 21:36:24.000000000 +0000
++++ cairo-1.2.6/src/cairoint.h	2006-11-20 21:37:40.000000000 +0000
+@@ -1978,7 +1978,7 @@ _cairo_surface_has_device_transform (cai
+  * to support it (at least cairo_surface_write_to_png and a few spots
+  * in cairo-xlib-surface.c--again see -Wswitch-enum).
+  */
+-#define CAIRO_FORMAT_VALID(format) ((format) <= CAIRO_FORMAT_A1)
++#define CAIRO_FORMAT_VALID(format) ((format) <= CAIRO_FORMAT_RGB16_565)
+ 
+ #define CAIRO_CONTENT_VALID(content) ((content) && 			         \
+ 				      (((content) & ~(CAIRO_CONTENT_COLOR |      \

@@ -1,0 +1,4 @@
+## Make.gnome-online-accounts
+
+gnome-online-accounts: glib gtk+ webkit-gtk rest libsecret telepathy-glib
+	$(MAKE) PROG=gnome-online-accounts _gnu

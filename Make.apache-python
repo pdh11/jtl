@@ -1,0 +1,8 @@
+## Make.apache-python
+
+apache-python: apache-base python
+	$(MAKE) PROG=mod_python JTL_CONFIG="--with-apxs=$(PREFIX)/sbin/apxs" \
+		JTL_PATCH=mod_python-3.3.1-jtl1.diff _gnu
+	grep -q python $(JTL_SYSCONFDIR)/httpd.conf \
+		|| $(REALLY) /bin/sh -c 'echo "LoadModule python_module $(PREFIX)/libexec/mod_python.so" >> $(JTL_SYSCONFDIR)/httpd.conf'
+	touch $(MADE)/apache-python

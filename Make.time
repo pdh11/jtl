@@ -1,0 +1,5 @@
+## Make.time
+
+time:
+	$(MAKE) PROG=time _gnu
+

@@ -1,0 +1,38 @@
+## Make.gcj
+#
+# Full bootstrap build of native gcc with gcj
+#
+# Go mysteriously FTBFS in 4.7.0
+
+gcj: gcc gtk+2 mpc autogen
+	@echo Making gcj
+	rm -rf $(BUILD)/gcj
+	mkdir -p $(BUILD)/gcj/build
+	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/gcj
+	patch -d $(BUILD)/gcj/g* -p1 < patches/gcc-4.6.2-jtl1.diff
+	cd $(BUILD)/gcj/g* && autogen Makefile.def
+	export _POSIX2_VERSION=199209 ; ( cd $(BUILD)/gcj/build \
+		&& CFLAGS="$(JTL_CFLAGS)" LIBCFLAGS="$(JTL_CFLAGS)" \
+			LIBCXXFLAGS="$(JTL_CXXFLAGS) -fno-implicit-templates" \
+			BOOT_CFLAGS="$(JTL_CFLAGS)" \
+			../g*/configure --prefix=$(PREFIX) --enable-shared \
+			--enable-languages=c,c++,java,fortran,objc,obj-c++,go \
+                        --enable-threads \
+			--enable-__cxa_atexit --with-system-zlib \
+			--disable-checking --disable-werror \
+			--disable-multilib --enable-java-awt=gtk \
+			$(JTL_ARCH)-linux \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) CFLAGS="$(JTL_CFLAGS)" \
+			LIBCFLAGS="$(JTL_CFLAGS)" \
+			LIBCXXFLAGS="$(JTL_CXXFLAGS) -fno-implicit-templates" \
+			BOOT_CFLAGS="$(JTL_CFLAGS)" \
+			bootstrap \
+		&& $(REALLY) $(MAKE) -j1 install )
+	if [ $(PREFIX) = /usr ] ; then \
+		$(REALLY) rm /lib/cpp ; \
+		$(REALLY) ln -sf ../usr/bin/cpp /lib/cpp ; \
+	fi
+	du -hs $(BUILD)/gcj > $(MADE)/gcj
+	rm -rf $(BUILD)/gcj

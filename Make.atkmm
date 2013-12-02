@@ -1,0 +1,4 @@
+## Make.atkmm
+
+atkmm: atk glibmm libsigc++
+	$(MAKE) PROG=atkmm _gnu

@@ -1,0 +1,20 @@
+--- qtscriptgenerator-src-0.1.0/qtbindings/qtbindings.pro~	2009-02-20 11:42:24.000000000 +0000
++++ qtscriptgenerator-src-0.1.0/qtbindings/qtbindings.pro	2009-10-14 19:06:09.000000000 +0100
+@@ -8,6 +8,4 @@ SUBDIRS = qtscript_core \
+ 	  qtscript_xml \
+-	  qtscript_phonon \
+ 	  qtscript_webkit \
+-	  qtscript_xmlpatterns \
+ 	  qtscript_uitools \
+ 	  qs_eval
+--- qtscriptgenerator-src-0.1.0/generator/parser/rpp/pp.h~	2009-02-20 11:42:24.000000000 +0000
++++ qtscriptgenerator-src-0.1.0/generator/parser/rpp/pp.h	2010-01-08 18:21:44.000000000 +0000
+@@ -29,6 +29,8 @@
+ #include <cassert>
+ #include <cctype>
+ 
++#include <stdio.h>
++
+ #include <fcntl.h>
+ 
+ #ifdef HAVE_MMAP

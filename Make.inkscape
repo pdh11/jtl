@@ -1,0 +1,14 @@
+## Make.inkscape
+#
+# Still needs GTK+2/gtkmm2 as of 0.48.2
+
+inkscape: glib intltool perl perl_xml_parser libpng gc libxslt zlib pango \
+		fontconfig freetype gtk+2 libxml2 libsigc++ gtkmm2 popt \
+		gnome-vfs perl_xml_parser python lcms swig \
+		openssl pyxml gsl libtool lzma poppler
+	$(MAKE) PROG=inkscape _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-lcms --enable-inkboard" \
+		LDFLAGS="-L/usr/X11/lib" \
+		CXXFLAGS="-DPOPPLER_NEW_COLOR_SPACE_API" \
+                JTL_PATCH=inkscape-0.48.4-jtl1.diff
+

@@ -1,0 +1,19 @@
+## Make.netkit-combo
+#
+# Only essential ones are actually built. Note that ping and inetd come from
+# here, but tftpd comes from tftp-hpa and netstat comes from net-tools.
+
+NETKIT_COMBO := netkit-base netkit-rpc linux-ftpd netkit-ftp netkit-rsh netkit-telnet bsd-finger
+
+netkit-combo:
+	@echo Compiling netkit-combo
+	rm -rf $(BUILD)/netkit
+	mkdir -p $(BUILD)/netkit
+	tar xzf $(ARCHIVE)/netkit-* -C $(BUILD)/netkit
+	patch -d $(BUILD)/netkit -p0 < patches/netkit-combo-0.17-jtl1.diff
+	( cd $(BUILD)/netkit/* \
+		&& ./configure --prefix=$(PREFIX) --without-pam --without-shadow \
+		&& for i in $(NETKIT_COMBO) ; do $(MAKE) -C $$i CXX=g++ ; done \
+		&& for i in $(NETKIT_COMBO) ; do $(REALLY) $(MAKE) -C $$i CXX=g++ MANDIR=$(PREFIX)/share/man INSTALLROOT=$(JTL_ROOT) install ; done )
+	du -hs $(BUILD)/netkit > $(MADE)/netkit-combo
+	rm -rf $(BUILD)/netkit

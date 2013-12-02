@@ -1,0 +1,26 @@
+--- glibc-2.10.1/sysdeps/unix/sysv/linux/prof-freq.c~	2006-01-08 08:21:15.000000000 +0000
++++ glibc-2.10.1/sysdeps/unix/sysv/linux/prof-freq.c	2009-06-08 16:40:47.000000000 +0100
+@@ -26,6 +26,7 @@
+ int
+ __profile_frequency (void)
+ {
++    return 100;
+ #ifdef __ASSUME_AT_CLKTCK
+   return GLRO(dl_clktck);
+ #else
+--- glibc-2.10.1/gmon/mcount.c~	2006-10-11 09:59:28.000000000 +0100
++++ glibc-2.10.1/gmon/mcount.c	2009-06-08 17:22:59.000000000 +0100
+@@ -69,7 +69,7 @@ _MCOUNT_DECL(frompc, selfpc)	/* _mcount;
+ 	 * check that we are profiling
+ 	 * and that we aren't recursively invoked.
+ 	 */
+-	if (catomic_compare_and_exchange_bool_acq (&p->state, GMON_PROF_BUSY,
++	if (atomic_compare_and_exchange_bool_acq (&p->state, GMON_PROF_BUSY,
+ 						   GMON_PROF_ON))
+ 	  return;
+ 
+2009-09-04  H.J. Lu  &lt;hongjiu.lu@intel.com&gt;
+
+	* configure.in: Support binutils 2.20.
+	* configure: Regenerated.
+

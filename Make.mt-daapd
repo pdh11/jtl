@@ -1,0 +1,4 @@
+## Make.mt-daapd
+
+mt-daapd: libid3tag gdbm
+	$(MAKE) PROG=mt-daapd JTL_CONFIG="--enable-oggvorbis" _gnu

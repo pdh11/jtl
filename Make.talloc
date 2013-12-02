@@ -1,0 +1,5 @@
+## Make.talloc
+
+talloc:
+	$(MAKE) PROG=talloc _gnu \
+                JTL_CONFIG="--prefix=/usr"

@@ -1,0 +1,4 @@
+## Make.gmp
+
+gmp:
+	$(MAKE) PROG=gmp _gnu

@@ -1,0 +1,6 @@
+## Make.file
+#
+# Tries to re-configure itself for some reason, and fails
+
+file:
+	$(MAKE) PROG=file JTL_MAKE="-o Makefile -o config.h" _gnu

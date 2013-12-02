@@ -1,0 +1,14 @@
+## Make.rarpd
+
+rarpd:
+	@echo Making rarpd
+	rm -rf $(BUILD)/rarpd
+	mkdir -p $(BUILD)/rarpd
+	bunzip2 -c $(ARCHIVE)/rarpd-*.bz2 | tar xf - -C $(BUILD)/rarpd
+	patch -d $(BUILD)/rarpd/* -p1 < patches/rarpd-981107-jtl1.diff
+	( cd $(BUILD)/rarpd/* \
+		&& gcc $(JTL_CFLAGS) rarpd.c -o rarpd \
+		&& strip rarpd \
+		&& $(REALLY) cp -f rarpd $(PREFIX)/sbin/rarpd )
+	du -hs $(BUILD)/rarpd > $(MADE)/rarpd
+	rm -rf $(BUILD)/rarpd

@@ -1,0 +1,5 @@
+## Make.tftp-hpa
+
+tftp-hpa:
+	$(MAKE) PROG=tftp-hpa _gnu
+

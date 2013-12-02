@@ -1,0 +1,33 @@
+Submitted by: Matt Burgess (matthew at linuxfromscratch dot org)
+Date: 2009-02-25
+Initial Package Version: 1.10.2 
+Upstream Status: From upstream
+Origin: From upstream git repository
+
+diff -Naur automake-1.10.2.orig/ChangeLog automake-1.10.2/ChangeLog
+--- automake-1.10.2.orig/ChangeLog	2008-11-23 08:36:41.000000000 +0000
++++ automake-1.10.2/ChangeLog	2009-02-25 18:47:39.000000000 +0000
+@@ -44,6 +44,12 @@
+ 	* lib/gnupload: Accept --delete to remove files from
+ 	alpha.gnu.org or ftp.gnu.org.
+ 
++2008-11-12 Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
++
++	Testsuite fixes for ksh.
++	* test/check10.test: Add ':' as last command in subshell, for
++	zero exit status of the subshell.
++
+ 2008-11-11 Charles Wilson  <libtool@cwilson.fastmail.fm>  (tiny change)
+ 	   Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+ 
+diff -Naur automake-1.10.2.orig/tests/check10.test automake-1.10.2/tests/check10.test
+--- automake-1.10.2.orig/tests/check10.test	2008-11-23 08:29:00.000000000 +0000
++++ automake-1.10.2/tests/check10.test	2009-02-25 18:45:55.000000000 +0000
+@@ -72,6 +72,7 @@
+   env TESTS="xpass xpass2" $MAKE -e check
+   env TESTS='pass skip xfail' $MAKE -e check
+   $MAKE check
++  :
+ ) >stdout
+ cat stdout
+ 

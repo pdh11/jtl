@@ -1,0 +1,4 @@
+## Make.clearsilver
+
+clearsilver: glib apache perl python apache-python
+	$(MAKE) PROG=clearsilver _gnu

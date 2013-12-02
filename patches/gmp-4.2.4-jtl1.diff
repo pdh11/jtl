@@ -1,0 +1,11 @@
+--- gmp-4.2.4/longlong.h~	2007-12-01 17:47:47.000000000 +0000
++++ gmp-4.2.4/longlong.h	2009-04-10 19:54:50.000000000 +0100
+@@ -452,7 +452,7 @@ long __MPN(count_leading_zeros) _PROTO (
+ 	       : "=r" (sh), "=&r" (sl)					\
+ 	       : "r" (ah), "rI" (bh), "r" (al), "rI" (bl) __CLOBBER_CC);\
+     } while (0)
+-#if 1 || defined (__arm_m__)	/* `M' series has widening multiply support */
++#if 0 || defined (__arm_m__)	/* `M' series has widening multiply support */
+ #define umul_ppmm(xh, xl, a, b) \
+   __asm__ ("umull %0,%1,%2,%3" : "=&r" (xl), "=&r" (xh) : "r" (a), "r" (b))
+ #define UMUL_TIME 5

@@ -1,0 +1,5 @@
+## Make.texi2html
+
+texi2html: perl
+	$(MAKE) PROG=texi2html _gnu \
+		JTL_TESTS_BOGUS=5.0

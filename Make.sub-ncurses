@@ -1,0 +1,28 @@
+## Make.sub-ncurses
+#
+
+sub-ncurses: sub-glibc
+	@echo Compiling ncurses for image
+	rm -rf $(BUILD)/sub-ncurses
+	mkdir -p $(BUILD)/sub-ncurses/{build,install0}
+	tar xzf $(ARCHIVE)/ncurses-* -C $(BUILD)/sub-ncurses
+	( cd $(BUILD)/sub-ncurses/build \
+		&& CFLAGS="$(JTL_CFLAGS)" ../n*/configure --without-shared \
+			--with-normal --without-debug --without-termcap \
+			--prefix=$(BUILD)/sub-ncurses/install0 \
+		&& $(MAKE) -j1 \
+		&& $(MAKE) -j1 install \
+		&& $(MAKE) -j1 distclean \
+		&& CFLAGS="$(JTL_CFLAGS)" LDFLAGS="$(JTL_SUBLIBS)" \
+			PATH=$(BUILD)/sub-ncurses/install0/bin:$(PATH) \
+			../n*/configure --with-shared --without-normal \
+			--without-debug --without-termcap \
+			--with-fallbacks=linux,vt100,xterm --without-database \
+			--without-cxx-binding --prefix=/usr \
+			--with-install-prefix=$(SUB_ROOT) \
+		&& PATH=$(BUILD)/sub-ncurses/install0/bin:$(PATH) \
+			LD_PRELOAD="" \
+			LD_LIBRARY_PATH=$(BUILD)/sub-ncurses/install0/lib $(MAKE) -j1 \
+		&& $(MAKE) -j1 install.libs install.includes )
+	du -hs $(BUILD)/sub-ncurses > $(MADE)/sub-ncurses
+	rm -rf $(BUILD)/sub-ncurses

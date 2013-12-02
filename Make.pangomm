@@ -1,0 +1,4 @@
+## Make.pangomm
+
+pangomm: pango pkgconfig perl cairomm x glib libsigc++ glibmm
+	$(MAKE) PROG=pangomm _gnu

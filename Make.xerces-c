@@ -1,0 +1,17 @@
+## Make.xerces-c
+#
+# Apache Foundation XML parser library with an appalling build system
+
+xerces-c:
+	rm -rf $(BUILD)/xerces-c
+	mkdir -p $(BUILD)/xerces-c
+	tar xjf $(ARCHIVE)/xerces-c*bz2 -C $(BUILD)/xerces-c
+	( cd $(BUILD)/xerces-c/x*/src/xercesc \
+		&& export XERCESCROOT=`cd $(BUILD)/xerces-c/x* && pwd` \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./runConfigure -plinux -cgcc -xg++ -minmem -nsocket \
+			-tnative -rpthread -P/usr \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/xerces-c > $(MADE)/xerces-c
+	rm -rf $(BUILD)/xerces-c

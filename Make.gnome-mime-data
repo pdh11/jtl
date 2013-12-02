@@ -1,0 +1,5 @@
+## Make.gnome-mime-data
+
+gnome-mime-data: glib perl_xml_parser
+	$(MAKE) PROG=gnome-mime-data _gnu
+

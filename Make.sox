@@ -1,0 +1,4 @@
+## Make.sox
+
+sox:
+	$(MAKE) PROG=sox JTL_INSTALL="MANDIR=$(PREFIX)/share/man install" _gnu

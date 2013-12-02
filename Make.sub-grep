@@ -1,0 +1,15 @@
+## Make.sub-grep
+#
+# Some faff to ensure it picks up SUB_ROOT's pcre and not the build machine one
+
+sub-grep: sub-glibc sub-pcre
+	@echo Compiling grep for image
+	rm -rf $(BUILD)/sub-grep
+	mkdir -p $(BUILD)/sub-grep
+	tar xzf $(ARCHIVE)/grep*gz -C $(BUILD)/sub-grep
+	( cd $(BUILD)/sub-grep/* \
+		&& CFLAGS="$(JTL_CFLAGS) -I$(SUB_ROOT)/usr/include" CXXFLAGS="$(JTL_CXXFLAGS)" LDFLAGS="$(JTL_SUBLIBS)" ./configure --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-grep > $(MADE)/sub-grep
+	rm -rf $(BUILD)/sub-grep

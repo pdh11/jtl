@@ -1,0 +1,6 @@
+## Make.at-spi2-atk
+
+at-spi2-atk: atk at-spi2-core
+	$(MAKE) PROG=at-spi2-atk _gnu \
+                JTL_TESTS_BOGUS=needs-dbus
+

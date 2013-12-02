@@ -1,0 +1,12 @@
+## Make.unzip
+
+unzip: zlib
+	@echo Making unzip
+	rm -rf $(BUILD)/unzip
+	mkdir -p $(BUILD)/unzip
+	tar xjf $(ARCHIVE)/unzip-*bz2 -C $(BUILD)/unzip
+	( cd $(BUILD)/unzip/* \
+		&& $(MAKE) prefix=$(PREFIX) LOCAL_UNZIP="$(JTL_CFLAGS)" -f unix/Makefile linux_noasm \
+		&& $(REALLY) $(MAKE) prefix=$(PREFIX) MANDIR=$(PREFIX)/share/man/man1 -f unix/Makefile install )
+	du -hs $(BUILD)/unzip > $(MADE)/unzip
+	rm -rf $(BUILD)/unzip

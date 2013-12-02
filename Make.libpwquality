@@ -1,0 +1,4 @@
+## Make.libpwquality
+
+libpwquality: python cracklib
+	$(MAKE) PROG=libpwquality _gnu

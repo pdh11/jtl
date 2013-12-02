@@ -1,0 +1,6 @@
+## Make.beecrypt
+
+beecrypt: python
+	$(MAKE) PROG=beecrypt _gnu \
+		JTL_TESTS_BOGUS=bogus
+

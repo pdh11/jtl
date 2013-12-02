@@ -1,0 +1,12 @@
+## Make.pine
+
+pine:
+	@echo Compiling pine
+	rm -rf $(BUILD)/pine
+	mkdir -p $(BUILD)/pine
+	tar xjf $(ARCHIVE)/pine-*bz2 -C $(BUILD)/pine
+	( cd $(BUILD)/pine/* \
+		&& makeargs="OPTIMISE='$(JTL_CFLAGS)' DEBUG= EXTRACFLAGS='$(JTL_CFLAGS)'" ./build slx SSLDIR=$(PREFIX)/ssl SSLINCLUDE=/usr/include/openssl \
+		&& $(REALLY) cp bin/{pine,pico} $(PREFIX)/bin )
+	du -hs $(BUILD)/pine > $(MADE)/pine
+	rm -rf $(BUILD)/pine

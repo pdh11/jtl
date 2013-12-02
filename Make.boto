@@ -1,0 +1,4 @@
+## Make.boto
+
+boto: python
+	$(MAKE) PROG=boto _pythonstyle

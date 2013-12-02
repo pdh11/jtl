@@ -1,0 +1,20 @@
+## Make.faad2
+
+faad2:
+	@echo Compiling faad2
+	rm -rf $(BUILD)/faad2
+	mkdir -p $(BUILD)/faad2
+	tar xjf $(ARCHIVE)/faad2-*bz2 -C $(BUILD)/faad2
+	patch -d $(BUILD)/faad2/* -p1 -F5 < patches/faad2-2.6-jtl1.diff
+	( cd $(BUILD)/faad2/* \
+		&& autoreconf -vif \
+		&& CFLAGS="$(JTL_CFLAGS)" ./configure --prefix=$(PREFIX) \
+			--sysconfdir=/etc \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+			--localstatedir=/var --with-mpeg4ip \
+			--enable-shared=yes --enable-static=no \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/faad2 > $(MADE)/faad2
+	rm -rf $(BUILD)/faad2

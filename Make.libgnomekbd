@@ -1,0 +1,5 @@
+## Make.libgnomekbd
+
+libgnomekbd: glib libxklavier libglade pkgconfig \
+		gconf intltool perl_xml_parser
+	$(MAKE) PROG=libgnomekbd _gnu

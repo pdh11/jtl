@@ -1,0 +1,4 @@
+## Make.cadaver
+
+cadaver: neon libproxy
+	$(MAKE) PROG=cadaver _gnu

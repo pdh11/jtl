@@ -1,0 +1,14 @@
+## Make.sub-dhcpcd
+#
+
+sub-dhcpcd: sub-glibc
+	@echo Compiling dhcpcd for image
+	rm -rf $(BUILD)/sub-dhcpcd
+	mkdir -p $(BUILD)/sub-dhcpcd
+	tar xzf $(ARCHIVE)/dhcpcd-* -C $(BUILD)/sub-dhcpcd
+	( cd $(BUILD)/sub-dhcpcd/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ./configure i386-linux --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr sbindir=$(SUB_ROOT)/sbin sysconfdir=$(SUB_ROOT)/etc oldincludedir=$(SUB_ROOT)/usr/include mandir=$(SUB_ROOT)/usr/man install )
+	du -hs $(BUILD)/sub-dhcpcd > $(MADE)/sub-dhcpcd
+	rm -rf $(BUILD)/sub-dhcpcd

@@ -1,0 +1,5 @@
+## Make.pango
+
+pango: glib x cairo gobject-introspection harfbuzz
+	$(MAKE) PROG=pango JTL_CONFIG="--enable-shared --disable-static --sysconfdir=/etc" _gnu \
+		JTL_TESTS_BOGUS=bogus

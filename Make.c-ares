@@ -1,0 +1,7 @@
+## Make.c-ares
+
+c-ares:
+	$(MAKE) PROG=c-ares _gnu -j1 \
+                JTL_CFLAGS="-ggdb" \
+                JTL_CXXFLAGS="-ggdb" \
+                JTL_CONFIG="$(JTL_CONFIG) --enable-debug --enable-nonblocking"

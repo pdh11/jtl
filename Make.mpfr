@@ -1,0 +1,4 @@
+## Make.mpfr
+
+mpfr: gmp
+	$(MAKE) PROG=mpfr _gnu

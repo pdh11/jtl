@@ -1,0 +1,4 @@
+## Make.libsigc++
+
+libsigc++: perl
+	$(MAKE) PROG=libsigc++ _gnu

@@ -1,0 +1,6 @@
+## Make.libgnome-keyring
+
+libgnome-keyring: glib libgcrypt gobject-introspection perl_xml_parser \
+                gtk-doc dbus dbus-python
+	$(MAKE) PROG=libgnome-keyring _gnu \
+                JTL_TESTS_BOGUS=3.4.1

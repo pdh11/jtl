@@ -1,0 +1,5 @@
+## Make.indent
+
+indent: texi2html
+	$(MAKE) PROG=indent _gnu \
+                JTL_PATCH=indent-2.2.11-jtl1.diff

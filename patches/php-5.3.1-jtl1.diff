@@ -1,0 +1,11 @@
+--- php-5.3.1/ext/gd/libgd/gd_png.c~	2009-04-01 17:06:56.000000000 +0100
++++ php-5.3.1/ext/gd/libgd/gd_png.c	2010-01-26 17:24:01.000000000 +0000
+@@ -145,7 +145,7 @@ gdImagePtr gdImageCreateFromPngCtx (gdIO
+ 		return NULL;
+ 	}
+ 
+-	if (!png_check_sig (sig, 8)) { /* bad signature */
++	if (png_sig_cmp(sig, 0, 8)) { /* bad signature */
+ 		return NULL;
+ 	}
+ 

@@ -1,0 +1,7 @@
+## Make.wv2
+#
+# Word viewer
+
+wv2: libgsf zlib imagemagick cmake
+	$(MAKE) PROG=wv2 _gnucmake \
+                JTL_PATCH=wv2-0.4.2-jtl1.diff

@@ -1,0 +1,13 @@
+## Make.sub-gawk
+
+sub-gawk: sub-glibc
+	@echo Compiling gawk for image
+	rm -rf $(BUILD)/sub-gawk
+	mkdir -p $(BUILD)/sub-gawk
+	tar xzf $(ARCHIVE)/gawk* -C $(BUILD)/sub-gawk
+	( cd $(BUILD)/sub-gawk/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" ./configure $(JTL_ARCH)-linux --prefix=/usr --disable-nls \
+		&& $(MAKE) \
+		&& $(MAKE) prefix=$(SUB_ROOT)/usr install )
+	du -hs $(BUILD)/sub-gawk > $(MADE)/sub-gawk
+	rm -rf $(BUILD)/sub-gawk

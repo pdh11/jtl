@@ -1,0 +1,13 @@
+## Make.divx
+#
+# WARNING this is a BINARY distribution of DivX and works on x86 ONLY
+
+divx:
+	@echo WARNING, installing BINARY release of divx4linux
+	rm -rf $(BUILD)/divx
+	mkdir -p $(BUILD)/divx
+	tar xzf $(ARCHIVE)/x86-binary/divx4linux-*gz -C $(BUILD)/divx
+	$(REALLY) cp $(BUILD)/divx/*/*.so $(PREFIX)/lib
+	$(REALLY) cp $(BUILD)/divx/*/*core*.h $(PREFIX)/include
+	du -hs $(BUILD)/divx > $(MADE)/divx
+	rm -rf $(BUILD)/divx

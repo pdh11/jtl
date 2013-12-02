@@ -1,0 +1,10 @@
+## Make.ffmpeg
+
+FFMPEG_FLAGS_x86_64=--cpu=core2
+FFMPEG_FLAGS:=$(FFMPEG_FLAGS_$(JTL_ARCH))
+
+ffmpeg: lame libvorbis a52dec x264 faac speex libtheora texi2html jack
+	$(MAKE) PROG=ffmpeg JTL_CONFIG="--enable-shared --disable-static --prefix=$(PREFIX) $(FFMPEG_FLAGS) --enable-libx264 --enable-libfaac --enable-libmp3lame --enable-libspeex --enable-libtheora --enable-postproc --enable-swscale --enable-pthreads --enable-avfilter --enable-gpl --enable-nonfree --extra-libs=-lm --disable-vdpau" _gnu \
+		JTL_TESTS_BOGUS=bogus
+
+# JTL_PATCH=ffmpeg-20080426-jtl1.diff _gnu

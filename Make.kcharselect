@@ -1,0 +1,4 @@
+## Make.kcharselect
+
+kcharselect: kde-libs
+	$(MAKE) PROG=kcharselect PREFIX=$(PREFIX)/kde _gnucmake

@@ -1,0 +1,11 @@
+--- libexif-0.6.12/libexif/exif-utils.c~	2005-03-13 02:27:13.000000000 +0000
++++ libexif-0.6.12/libexif/exif-utils.c	2005-12-04 16:25:33.000000000 +0000
+@@ -83,7 +83,7 @@ exif_array_set_byte_order (ExifFormat f,
+ 	}
+ }
+ 
+-static ExifSShort
++ExifSShort
+ exif_get_sshort (const unsigned char *buf, ExifByteOrder order)
+ {
+ 	if (!buf) return 0;

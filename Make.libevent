@@ -1,0 +1,5 @@
+## Make.libevent
+
+libevent:
+	$(MAKE) PROG=libevent _gnu \
+                JTL_TESTS_BOGUS=needs-dns

@@ -1,0 +1,6 @@
+## Make.sqlite
+
+sqlite: tcl readline
+	$(MAKE) PROG=sqlite _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --enable-threadsafe --enable-releasemode --enable-tempstore --enable-cross-thread-connections --enable-tee" \
+		JTL_CFLAGS="$(JTL_CFLAGS) -DSQLITE_SECURE_DELETE -DSQLITE_ENABLE_UNLOCK_NOTIFY"

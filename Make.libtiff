@@ -1,0 +1,16 @@
+## Make.libtiff
+
+libtiff: libjpeg
+	@echo Making libtiff
+	rm -rf $(BUILD)/libtiff
+	mkdir -p $(BUILD)/libtiff
+	tar xjf $(ARCHIVE)/tiff-*bz2 -C $(BUILD)/libtiff
+	( cd $(BUILD)/libtiff/* \
+		&& CFLAGS="$(JTL_CFLAGS)" ./configure --prefix=$(PREFIX) \
+			--disable-static --enable-shared \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/libtiff > $(MADE)/libtiff
+	rm -rf $(BUILD)/libtiff

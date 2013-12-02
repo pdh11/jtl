@@ -1,0 +1,20 @@
+## Make.id3lib
+#
+# We don't (since GCC 4.3.0) really have iomanip.h. But id3lib doesn't use
+# it anyway.
+
+id3lib:
+	@echo Making id3lib
+	rm -rf $(BUILD)/id3lib
+	mkdir -p $(BUILD)/id3lib
+	tar xjf $(ARCHIVE)/id3lib* -C $(BUILD)/id3lib
+	patch -d $(BUILD)/id3lib/* -p1 -F5 < patches/id3lib-3.8.3-jtl1.diff
+	( cd $(BUILD)/id3lib/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			ac_cv_header_iomanip_h=yes \
+			./configure --enable-shared --disable-static \
+			--disable-debug --prefix=$(PREFIX) \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/id3lib > $(MADE)/id3lib
+	rm -rf $(BUILD)/id3lib

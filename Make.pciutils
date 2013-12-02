@@ -1,0 +1,16 @@
+## Make.pciutils
+
+pciutils:
+	@echo Making pciutils
+	rm -rf $(BUILD)/pciutils
+	mkdir -p $(BUILD)/pciutils
+	tar xjf $(ARCHIVE)/pciutils-*bz2 -C $(BUILD)/pciutils
+	( cd $(BUILD)/pciutils/* \
+		&& make PREFIX=$(PREFIX) \
+		&& $(REALLY) make PREFIX=$(PREFIX) install )
+	bunzip2 -c $(ARCHIVE)/pci.ids-*.bz2 > $(BUILD)/pciutils/pci.ids
+	$(REALLY) cp $(BUILD)/pciutils/pci.ids $(PREFIX)/share/pci.ids
+	$(REALLY) chown root.root $(PREFIX)/share/pci.ids
+	$(REALLY) chmod 0644 $(PREFIX)/share/pci.ids
+	du -hs $(BUILD)/pciutils > $(MADE)/pciutils
+	rm -rf $(BUILD)/pciutils

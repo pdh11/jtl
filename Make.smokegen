@@ -1,0 +1,4 @@
+## Make.smokegen
+
+smokegen: qt cmake
+	$(MAKE) PROG=smokegen PREFIX=$(PREFIX)/kde _gnucmake

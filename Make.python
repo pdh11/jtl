@@ -1,0 +1,17 @@
+## Make.python
+#
+# Doesn't cope with -j; KDE installs a pydcop.py which doesn't compile (bad whitespace)
+
+python: openssl readline expat zlib gdbm ncurses
+	@echo Making Python
+	rm -rf $(BUILD)/python
+	mkdir -p $(BUILD)/python
+	tar xjf $(ARCHIVE)/python-[0-9]*bz2 -C $(BUILD)/python
+	( cd $(BUILD)/python/* \
+	    	&& OPT="$(JTL_CFLAGS)" ./configure --prefix=$(PREFIX) \
+			--enable-shared --enable-unicode=ucs4 \
+		&& $(MAKE) -j1 \
+		&& $(REALLY) rm -f $(PREFIX)/lib/python*/pydcop.py \
+		&& $(REALLY) $(MAKE) -j1 install )
+	du -hs $(BUILD)/python > $(MADE)/python
+	$(REALLY) rm -rf $(BUILD)/python

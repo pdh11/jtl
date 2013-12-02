@@ -1,0 +1,6 @@
+## Make.check
+
+check:
+
+check-project:
+	$(MAKE) PROG=check JTL_TOUCH=check-project _gnu

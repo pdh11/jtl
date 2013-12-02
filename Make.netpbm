@@ -1,0 +1,29 @@
+## Make.netpbm
+
+netpbm: libpng libjpeg zlib libtiff
+	@echo Making netpbm
+	rm -rf $(BUILD)/netpbm
+	mkdir -p $(BUILD)/netpbm
+	tar xjf $(ARCHIVE)/netpbm-*bz2 -C $(BUILD)/netpbm
+	# patch -d $(BUILD)/netpbm/n* -p1 < patches/netpbm-10.27-jtl1.diff
+	( cd $(BUILD)/netpbm/* \
+		&& cp Makefile.config.in Makefile.config \
+		&& echo "STATICLIB_TOO:=n" >> Makefile.config \
+		&& echo "INSTALL_PREFIX:=$(PREFIX)" >> Makefile.config \
+		&& echo "INSTALL:=install" >> Makefile.config \
+		&& echo "TIFFLIB:=libtiff.so" >> Makefile.config \
+		&& echo "JPEGLIB:=libjpeg.so" >> Makefile.config \
+		&& echo "PNGLIB:=libpng.so" >> Makefile.config \
+		&& echo "ZLIB:=libz.so" >> Makefile.config \
+		&& echo "CFLAGS+=$(JTL_CFLAGS) -flax-vector-conversions" >> Makefile.config \
+		&& echo "CFLAGS_SHLIB+=-fPIC" >> Makefile.config \
+		&& echo "LDFLAGS+=-lm" >> Makefile.config \
+		&& $(MAKE) -j1 \
+		&& $(MAKE) -j1 package pkgdir=`pwd`/../staging \
+		&& $(REALLY) cp $(BUILD)/netpbm/staging/bin/* $(PREFIX)/bin \
+		&& $(REALLY) cp $(BUILD)/netpbm/staging/lib/* $(PREFIX)/lib \
+		&& $(REALLY) mkdir -p $(PREFIX)/{share/man,include} \
+		&& $(REALLY) cp -dpR $(BUILD)/netpbm/staging/man/* $(PREFIX)/share/man \
+		&& $(REALLY) cp -dpR $(BUILD)/netpbm/staging/include $(PREFIX) )
+	du -hs $(BUILD)/netpbm > $(MADE)/netpbm
+	rm -rf $(BUILD)/netpbm

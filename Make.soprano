@@ -1,0 +1,4 @@
+## Make.soprano
+
+soprano: qt clucene-core redland cmake libiodbc
+	$(MAKE) PROG=soprano _gnucmake

@@ -1,0 +1,5 @@
+## Make.libxklavier
+
+libxklavier: pkgconfig libxml2 x
+	$(MAKE) PROG=libxklavier \
+		JTL_CFLAGS="$(JTL_CFLAGS) -Wno-error" _gnu

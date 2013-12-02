@@ -1,0 +1,5 @@
+## Make.raptor
+
+raptor: curl libxml2 pkgconfig libxslt expat
+	$(MAKE) PROG=raptor _gnu \
+		-j1

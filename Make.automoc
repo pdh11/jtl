@@ -1,0 +1,4 @@
+## Make.automoc
+
+automoc: cmake qt
+	$(MAKE) PROG=automoc _gnucmake

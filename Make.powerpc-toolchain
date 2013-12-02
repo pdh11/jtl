@@ -1,0 +1,12 @@
+## Make.powerpc-toolchain
+#
+# Linux 2.6.16 has a half-merge of ppc32 and ppc64 so is a bit weird
+
+powerpc-toolchain:
+	libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
+		$(MAKE) JTL_CROSS=powerpc JTL_CROSS2=powerpc \
+		JTL_CROSSCFLAGS="-O2" \
+		JTL_CROSSGCCFLAGS=--disable-multilib \
+		JTL_CONFIGPATH=configs/pmac32_ \
+		JTL_CROSSCONFIGMAKE="biarch = 32" \
+		powerpc-do-toolchain

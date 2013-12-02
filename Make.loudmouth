@@ -1,0 +1,8 @@
+## Make.loudmouth
+#
+# Doesn't like gnutls 2.8.x
+
+loudmouth: glib openssl check-project
+	$(MAKE) PROG=loudmouth _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --with-ssl=openssl" \
+                JTL_PATCH=loudmouth-1.4.3-jtl1.diff

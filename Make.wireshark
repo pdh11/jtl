@@ -1,0 +1,7 @@
+## Make.wireshark
+#
+# Needs a shared liblua, which lua's build system can't do
+
+wireshark: libpcap gtk+ glib portaudio
+	$(MAKE) PROG=wireshark _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --without-lua"

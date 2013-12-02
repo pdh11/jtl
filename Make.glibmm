@@ -1,0 +1,7 @@
+## Make.glibmm
+#
+# The -include is huge cheatery until it's gcc-4.3.0 clean (2.14.2 isn't)
+
+glibmm: glib libsigc++ doxygen
+	$(MAKE) PROG=glibmm JTL_CXXFLAGS="$(JTL_CXXFLAGS) -include /usr/include/string.h" _gnu \
+                JTL_TESTS_BOGUS=2.38.1

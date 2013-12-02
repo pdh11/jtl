@@ -1,0 +1,11 @@
+--- configure~	2005-07-04 21:41:20.000000000 +0100
++++ configure	2005-08-30 21:24:17.000000000 +0100
+@@ -24800,7 +24800,7 @@ CPPFLAGS=$savecppflags
+ 
+ 
+ 
+-COMMON_MODULES="gtk+-2.0 >= 2.3.0  gconf-2.0  libgnomeui-2.0 >= 2.2.0  libglade-2.0 >= 2.0.0  libbonobo-2.0  libbonoboui-2.0  gnome-desktop-2.0 >= 2.2.0"
++COMMON_MODULES="gtk+-2.0 >= 2.3.0  gconf-2.0  libgnomeui-2.0 >= 2.2.0  libglade-2.0 >= 2.0.0  libbonobo-2.0  libbonoboui-2.0  gnome-desktop-2.0 >= 2.2.0 pangox pangoxft "
+ 
+   succeeded=no
+ 

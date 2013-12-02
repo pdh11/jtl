@@ -1,0 +1,4 @@
+## Make.libidl
+
+libidl: glib
+	$(MAKE) PROG=libidl _gnu

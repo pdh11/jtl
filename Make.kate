@@ -1,0 +1,4 @@
+## Make.kate
+
+kate: kde-libs kde-runtime cmake
+	$(MAKE) PROG=kate PREFIX=$(PREFIX)/kde _gnucmake

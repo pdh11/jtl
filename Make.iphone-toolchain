@@ -1,0 +1,67 @@
+# Make.iphone-toolchain
+#
+# http://oreilly.com/catalog/9780596518561
+# http://www.saurik.com/id/4
+
+iphone-toolchain: iphone-dev-csu odcctools darwin-include iphone-llvm
+	$(MAKE) JTL_CROSS=arm-apple-darwin9 \
+		JTL_SHARED_BOOST= \
+		iphone-toolchain2
+
+iphone-toolchain2: \
+		cross-arm-apple-darwin9-boost \
+		cross-arm-apple-darwin9-flac \
+		cross-arm-apple-darwin9-pkgconfig
+	touch $(MADE)/iphone-toolchain
+
+iphone-dev-csu:
+	$(MAKE) PROG=iphone-dev-csu _gnu \
+		PREFIX=$(PREFIX)/arm-apple-darwin9
+
+odcctools:
+	@echo Warning, skipping cctools build, must be done inside ia32 root
+
+odcctools.not:
+	$(MAKE) PROG=odcctools _gnu \
+		JTL_CONFIG="$(JTL_CONFIG) --target=arm-apple-darwin9 --enable-as-targets=\"arm\"" \
+		JTL_PATCH=odcctools-9.2-jtl1.diff
+
+darwin-include:
+	@echo Making darwin-include
+	rm -rf $(BUILD)/darwin-include
+	mkdir -p $(BUILD)/darwin-include
+	tar xjf $(ARCHIVE)/darwin-include-[0-9]*bz2 -C $(BUILD)/darwin-include
+	if [ x$(JTL_PATCH) != x ] ; then patch -d $(BUILD)/darwin-include/* -p1 -F5 -z.old < patches/$(JTL_PATCH) ; fi
+	( cd $(BUILD)/darwin-include/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure \
+			--prefix=$(PREFIX)/arm-apple-darwin9/arm-root/usr \
+			--with-macosx-sdk=/mnt/cd/Developer/SDKs/MacOSX10.4u.sdk \
+		&& $(REALLY) bash install-headers.sh )
+	du -hs $(BUILD)/darwin-include > $(MADE)/darwin-include
+	( rm -rf $(BUILD)/darwin-include ; sync ) &
+
+iphone-llvm: darwin-include odcctools iphone-dev-csu
+	@echo Making iphone-llvm
+	rm -rf $(BUILD)/iphone-llvm
+	mkdir -p $(BUILD)/iphone-llvm/build
+	tar xf $(ARCHIVE)/iphone-llvm-*.tar.* -C $(BUILD)/iphone-llvm
+	( cd $(BUILD)/iphone-llvm/build \
+		&& ../l*/configure --prefix=$(PREFIX) \
+			--target=arm-apple-darwin9 \
+			--enable-languages=c,c++,objc,obj-c++ \
+			--with-sysroot=$(PREFIX)/arm-apple-darwin9/arm-root \
+			--with-as=`which arm-apple-darwin9-as` \
+			--with-ld=`which arm-apple-darwin9-ld` \
+			--enable-wchar-t=no \
+			--mandir=$(PREFIX)/share/man \
+			--infodir=$(PREFIX)/share/info \
+			 --with-gxx-include-dir=/usr/include/c++/4.0.0 \
+		&& $(MAKE) \
+		&& $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/iphone-llvm > $(MADE)/iphone-llvm
+	touch $(MADE)/cross-arm-apple-darwin9-binutils
+	touch $(MADE)/cross-arm-apple-darwin9-headers
+	touch $(MADE)/cross-arm-apple-darwin9-glibc
+	touch $(MADE)/cross-arm-apple-darwin9-gcc
+	rm -rf $(BUILD)/iphone-llvm

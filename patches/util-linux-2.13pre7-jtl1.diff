@@ -1,0 +1,11 @@
+--- util-linux-2.13-pre7/mount/umount.c~	2005-09-23 20:55:55.000000000 +0100
++++ util-linux-2.13-pre7/mount/umount.c	2007-06-10 17:21:07.000000000 +0100
+@@ -29,7 +29,7 @@
+ #include "nfsmount.h"
+ #include <arpa/inet.h>
+ 
+-#if defined(MNT_FORCE) && !defined(__sparc__) && !defined(__arm__)
++#if defined(MNT_FORCE)
+ /* Interesting ... it seems libc knows about MNT_FORCE and presumably
+    about umount2 as well -- need not do anything */
+ #else /* MNT_FORCE */

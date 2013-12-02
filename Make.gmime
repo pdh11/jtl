@@ -1,0 +1,4 @@
+## Make.gmime
+
+gmime: glib pkgconfig
+	$(MAKE) PROG=gmime _gnu

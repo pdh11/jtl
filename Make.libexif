@@ -1,0 +1,4 @@
+## Make.libexif
+
+libexif:
+	$(MAKE) PROG=libexif _gnu

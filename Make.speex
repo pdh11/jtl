@@ -1,0 +1,4 @@
+## Make.speex
+
+speex: libogg pkgconfig
+	$(MAKE) PROG=speex _gnu

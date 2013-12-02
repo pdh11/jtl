@@ -1,0 +1,11 @@
+--- rpm-4.4.2.3/tools/debugedit.c~	2008-04-01 08:28:22.000000000 +0100
++++ rpm-4.4.2.3/tools/debugedit.c	2009-03-15 20:03:28.000000000 +0000
+@@ -1346,7 +1346,7 @@ handle_build_id (DSO *dso, Elf_Data *bui
+      or Elf64 object, only that we are consistent in what bits feed the
+      hash so it comes out the same for the same file contents.  */
+   {
+-    inline void process (const void *data, size_t size);
++//    inline void process (const void *data, size_t size);
+     inline void process (const void *data, size_t size)
+     {
+       memchunk chunk = { .data = (void *) data, .size = size };
