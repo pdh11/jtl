@@ -2,4 +2,4 @@
 #
 
 python_imaging: python tk
-	$(MAKE) PROG=python_imaging _pythonstyle
+	$(MAKE) PROG=python_imaging _pythonstyle JTL_PATCH=python_imaging-1.1.5.diff

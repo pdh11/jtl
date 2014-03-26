@@ -5,7 +5,7 @@
  	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
  	;;
 -     2.14)
-+     2.14 | 2.15 | 2.16 | 2.17 | 2.18)
++     2.14 | 2.15 | 2.16 | 2.17 | 2.18 | 2.19)
  	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: 2.14 family" >&5
  $as_echo "2.14 family" >&6; }
  

@@ -1,5 +1,5 @@
 ## Make.libkdcraw
 
-libkdcraw: kde-libs lcms
+libkdcraw: kde-libs lcms libraw
 	$(MAKE) PROG=libkdcraw PREFIX=$(PREFIX)/kde _gnucmake
 

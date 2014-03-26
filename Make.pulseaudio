@@ -6,4 +6,5 @@ pulseaudio: speex libsamplerate jack liboil avahi alsa-lib gconf \
 		glib libtool intltool x libsndfile hal dbus json-c
 	$(MAKE) PROG=pulseaudio _gnu \
 		JTL_CONFIG="$(JTL_CONFIG) --disable-tcpwrap" \
+                CFLAGS="$(JTL_CFLAGS) -I/usr/X11/include" \
 		JTL_TESTS_BOGUS=bogus -j1

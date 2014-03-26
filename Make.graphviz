@@ -20,7 +20,7 @@ graphviz: bison libpng zlib libjpeg tk python x fontconfig freetype python \
 			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
 				--with-freetype2 --with-fontconfig \
 				--with-pangocairo --with-rsvg \
-				--with-gtk --with-glade \
+				--with-gtk --with-glade --without-lua --disable-lua \
 		&& $(MAKE) \
 		&& $(REALLY) $(MAKE) install )
 	du -hs $(BUILD)/graphviz > $(MADE)/graphviz

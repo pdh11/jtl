@@ -7,11 +7,11 @@ gdbm:
 	tar xjf $(ARCHIVE)/gdbm-*bz2 -C $(BUILD)/gdbm
 	( cd $(BUILD)/gdbm/* \
 		&& ./configure --prefix=$(PREFIX) --enable-shared \
-			--disable-static \
+			--disable-static --enable-libgdbm-compat \
 			--mandir=$(PREFIX)/share/man \
 			--infodir=$(PREFIX)/share/info \
 		&& $(MAKE) prefix=$(PREFIX) CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
-		&& $(REALLY) $(MAKE) prefix=$(PREFIX) install install-compat )
+		&& $(REALLY) $(MAKE) prefix=$(PREFIX) install )
 	$(REALLY) rm -f $(PREFIX)/lib/libndbm.a
 	$(REALLY) mkdir -p $(PREFIX)/include/gdbm
 	$(REALLY) cp $(PREFIX)/include/ndbm.h $(PREFIX)/include/gdbm/ndbm.h

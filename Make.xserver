@@ -27,7 +27,8 @@ xorg-server: util-macros xf86driproto libdrm glproto randrproto \
 		recordproto resourceproto xineramaproto evieext libxkbfile \
 		libXfont libXau libfontenc makedepend \
 		libxkbui libXxf86misc libXxf86vm libXaw libXmu libXt libXpm \
-		libXext libX11 libdrm hal libpciaccess dri2proto mesa
+		libXext libX11 libdrm hal libpciaccess dri2proto mesa \
+                dri3proto presentproto
 	@echo Making xorg-server
 	rm -rf $(BUILD)/xorg-server
 	mkdir -p $(BUILD)/xorg-server
@@ -49,7 +50,7 @@ libpciaccess:
 	$(MAKE) PROG=$@ _xgnu
 
 mesa: libdrm dri2proto glproto libXxf86vm libX11 libXext talloc \
-		libXfixes libXdamage libxcb
+		libXfixes libXdamage libxcb libxshmfence
 	$(MAKE) PROG=MesaLib _xgnu \
 		JTL_CONFIG="--with-x --enable-xcb --with-gallium-drivers=nouveau,svga,swrast --enable-dri --with-dri-drivers=swrast" \
 		JTL_TOUCH=mesa \

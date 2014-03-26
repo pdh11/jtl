@@ -1,0 +1,12 @@
+--- Imaging-1.1.5/_imagingft.c~	2004-09-14 09:28:58.000000000 +0100
++++ Imaging-1.1.5/_imagingft.c	2014-03-08 22:42:44.000000000 +0000
+@@ -62,8 +62,7 @@ struct {
+     int code;
+     const char* message;
+ } ft_errors[] =
+-
+-#include <freetype/fterrors.h>
++#include FT_ERRORS_H
+ 
+ /* -------------------------------------------------------------------- */
+ /* font objects */

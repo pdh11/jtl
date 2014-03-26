@@ -496,6 +496,7 @@ _pythonstyle:
 	tar xzf $(ARCHIVE)/$(PROG)-*gz -C $(BUILD)/$(PROG) \
 		|| tar xf $(ARCHIVE)/$(PROG)-*bz2 -C $(BUILD)/$(PROG) --use-compress-program bzip2 \
 		|| ( echo No archive found for $(PROG) ; exit 1 )
+	if [ x$(JTL_PATCH) != x ] ; then patch -d $(BUILD)/$(PROG)/* -p1 < patches/$(JTL_PATCH) ; fi
 	( cd $(BUILD)/$(PROG)/* \
 		&& python setup.py build \
 		&& $(REALLY) python setup.py install --prefix=$(PREFIX) )

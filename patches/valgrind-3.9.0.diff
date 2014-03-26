@@ -1,0 +1,19 @@
+--- valgrind-3.9.0/configure~	2013-10-31 23:33:32.000000000 +0000
++++ valgrind-3.9.0/configure	2014-02-23 18:12:38.000000000 +0000
+@@ -6689,6 +6689,16 @@ $as_echo "#define GLIBC_2_18 1" >>confde
+ 	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
+ 	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
+ 	;;
++     2.19)
++	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: 2.18 family" >&5
++$as_echo "2.18 family" >&6; }
++
++$as_echo "#define GLIBC_2_18 1" >>confdefs.h
++
++	DEFAULT_SUPP="glibc-2.X.supp ${DEFAULT_SUPP}"
++	DEFAULT_SUPP="glibc-2.34567-NPTL-helgrind.supp ${DEFAULT_SUPP}"
++	DEFAULT_SUPP="glibc-2.X-drd.supp ${DEFAULT_SUPP}"
++	;;
+      darwin)
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Darwin" >&5
+ $as_echo "Darwin" >&6; }

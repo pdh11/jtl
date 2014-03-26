@@ -1,4 +1,5 @@
 ### Make.lvm2
 
 lvm2:
-	$(MAKE) PROG=lvm2 _gnu
+	$(MAKE) PROG=lvm2 _gnu \
+                JTL_PATCH=lvm2-2.2.02.96.diff

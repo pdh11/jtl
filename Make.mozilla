@@ -18,7 +18,7 @@ mozilla: libpng libmng libjpeg zlib gtk+2 x openldap libidl atk \
 	mkdir -p $(BUILD)/mozilla/build
 	tar xjf $(ARCHIVE)/firefox-*bz2 -C $(BUILD)/mozilla
 	tar xjf $(ARCHIVE)/iceweasel-*bz2 -C $(BUILD)/mozilla/m*
-	#patch -d $(BUILD)/mozilla/m* -p1 -F5 -z.old < patches/firefox-4.0-jtl1.diff
+	patch -d $(BUILD)/mozilla/m* -p1 -F5 -z.old < patches/mozilla-22.0.diff
 	#( cd $(BUILD)/mozilla/m*/debian/patches && cat `cat $(BUILD)/mozilla/m*/debian/patches/series` ) | patch -d $(BUILD)/mozilla/m* -p1 -F5
 	(cd $(BUILD)/mozilla/m*/debian/patches && cat `grep -vE \(756390\|yandex\) series` ) | patch -d $(BUILD)/mozilla/m* -p1 -F5 || true
 	#( cd $(BUILD)/mozilla/m*/security/coreconf \
@@ -65,7 +65,7 @@ mozilla-xulrunner: libpng libmng libjpeg zlib gtk+2 x openldap libidl \
 	mkdir -p $(BUILD)/mozillax/build
 	tar xjf $(ARCHIVE)/firefox-*bz2 -C $(BUILD)/mozillax
 	tar xjf $(ARCHIVE)/iceweasel-*bz2 -C $(BUILD)/mozillax/m*
-	#patch -d $(BUILD)/mozillax/m* -p1 -F5 -z.old < patches/firefox-4.0-jtl1.diff
+	patch -d $(BUILD)/mozillax/m* -p1 -F5 -z.old < patches/mozilla-22.0.diff
 	(cd $(BUILD)/mozillax/m*/debian/patches && cat `grep -vE \(756390\|yandex\) series` ) | patch -d $(BUILD)/mozillax/m* -p1 -F5 || true
 	#( cd $(BUILD)/mozillax/m*/security/coreconf \
 	# #  && cp -n Linux2.6.mk Linux3.0.mk )

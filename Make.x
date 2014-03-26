@@ -260,7 +260,8 @@ libXfontcache: libXfont libX11
 	$(MAKE) PROG=$@ _xgnu
 
 libXft: util-macros freetype fontconfig libxcb libX11 libXrender
-	$(MAKE) PROG=$@ _xgnu
+	$(MAKE) PROG=$@ _xgnu \
+                JTL_PATCH=libXft-2.3.1.diff
 
 libXi: util-macros xproto libX11 xextproto libXext inputproto
 	$(MAKE) PROG=$@ _xgnu
@@ -287,6 +288,9 @@ libXrandr: util-macros randrproto libX11 libXext
 	$(MAKE) PROG=$@ _xgnu
 
 libXrender: util-macros renderproto libX11
+	$(MAKE) PROG=$@ _xgnu
+
+libxshmfence: util-macros libX11
 	$(MAKE) PROG=$@ _xgnu
 
 libXScrnSaver: util-macros libxcb libXext libX11 scrnsaverproto
@@ -344,6 +348,12 @@ bigreqsproto: util-macros
 	$(MAKE) PROG=$@ _xgnu
 
 dri2proto: util-macros
+	$(MAKE) PROG=$@ _xgnu
+
+dri3proto: util-macros
+	$(MAKE) PROG=$@ _xgnu
+
+presentproto: util-macros
 	$(MAKE) PROG=$@ _xgnu
 
 glproto: util-macros

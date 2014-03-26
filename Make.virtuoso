@@ -1,0 +1,6 @@
+## Make.virtuoso
+
+virtuoso:
+	$(MAKE) PROG=virtuoso _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --disable-all-vads" \
+		JTL_TESTS_BOGUS=bogus

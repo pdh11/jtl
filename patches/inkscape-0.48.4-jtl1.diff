@@ -9,3 +9,15 @@
      GtkWidget *snap_toolbox;
  
      static void init(SPDesktopWidget *widget);
+--- inkscape-0.48.4/src/libnrtype/FontFactory.h~	2011-07-08 19:25:09.000000000 +0100
++++ inkscape-0.48.4/src/libnrtype/FontFactory.h	2014-03-09 21:49:15.000000000 +0000
+@@ -31,7 +31,8 @@
+ #include <pango/pangowin32.h>
+ #else
+ #include <pango/pangoft2.h>
+-#include <freetype/freetype.h>
++#include <ft2build.h>
++#include FT_FREETYPE_H
+ #endif
+ 
+ namespace Glib

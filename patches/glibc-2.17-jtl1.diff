@@ -9,14 +9,3 @@
      || (defined __cplusplus && __cplusplus <= 201103L)
  /* Get a newline-terminated string from stdin, removing the newline.
     DO NOT USE THIS FUNCTION!!  There is no limit on how much it will read.
---- glibc-2.18/configure~	2013-08-10 23:52:55.000000000 +0100
-+++ glibc-2.18/configure	2013-11-23 16:10:17.000000000 +0000
-@@ -4772,7 +4772,7 @@ $as_echo_n "checking version of $MAKE...
-   ac_prog_version=`$MAKE --version 2>&1 | sed -n 's/^.*GNU Make[^0-9]*\([0-9][0-9.]*\).*$/\1/p'`
-   case $ac_prog_version in
-     '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
--    3.79* | 3.[89]*)
-+    3.79* | 3.[89]* | 4.*)
-        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-     *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
- 

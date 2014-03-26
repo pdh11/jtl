@@ -1,0 +1,4 @@
+## Make.libraw
+
+libraw: libjpeg jasper pkgconfig
+	$(MAKE) PROG=libraw _gnu

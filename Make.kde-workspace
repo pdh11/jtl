@@ -3,5 +3,5 @@
 kde-workspace: kde-pimlibs kde-runtime qimageblitz libusb \
 		glib fontconfig python pyqt pykde kactivities
 	$(MAKE) PROG=kde-workspace _gnucmake \
-		JTL_PATCH=kde-workspace-4.11.0.diff \
+                JTL_PATCH=kde-workspace-4.11.7.diff \
 		PREFIX=$(PREFIX)/kde

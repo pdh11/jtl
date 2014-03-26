@@ -7,7 +7,7 @@
 -  if (warn_ecpp && init == NULL_TREE && TREE_CODE (type) != ARRAY_TYPE)
 -    warning_at (DECL_SOURCE_LOCATION (current_function_decl), OPT_Weffc__,
 +  if (init == NULL_TREE && TREE_CODE (type) != ARRAY_TYPE
-+      && ! RECORD_OR_UNION_TYPE_P(type) )
++      && ! RECORD_OR_UNION_TYPE_P(type) && function_depth < 2 )
 +      warning_at (DECL_SOURCE_LOCATION (current_function_decl), OPT_Wuninitialized,
  		"%qD should be initialized in the member initialization list",
  		member);
@@ -98,3 +98,35 @@
  
    while ((tag = gcov_read_unsigned ()))
      {
+--- gcc-4.8.2/libjava/classpath/native/jni/gtk-peer/gnu_java_awt_peer_gtk_GdkFontPeer.c~	2012-12-19 17:03:15.000000000 +0000
++++ gcc-4.8.2/libjava/classpath/native/jni/gtk-peer/gnu_java_awt_peer_gtk_GdkFontPeer.c	2014-03-09 21:57:46.000000000 +0000
+@@ -39,10 +39,11 @@
+ #include <pango/pango.h>
+ #include <pango/pangoft2.h>
+ #include <pango/pangofc-font.h>
+-#include <freetype/ftglyph.h>
+-#include <freetype/ftoutln.h>
+-#include <freetype/fttypes.h>
+-#include <freetype/tttables.h>
++#include <ft2build.h>
++#include FT_GLYPH_H
++#include FT_OUTLINE_H
++#include FT_TYPES_H
++#include FT_TRUETYPE_TABLES_H 
+ #include "gdkfont.h"
+ #include "gtkpeer.h"
+ #include "gnu_java_awt_peer_gtk_GdkFontPeer.h"
+--- gcc-4.8.2/libjava/classpath/native/jni/gtk-peer/gnu_java_awt_peer_gtk_FreetypeGlyphVector.c~	2009-01-06 22:44:05.000000000 +0000
++++ gcc-4.8.2/libjava/classpath/native/jni/gtk-peer/gnu_java_awt_peer_gtk_FreetypeGlyphVector.c	2014-03-09 21:56:19.000000000 +0000
+@@ -42,8 +42,9 @@ exception statement from your version. *
+ #include <pango/pango.h>
+ #include <pango/pangoft2.h>
+ #include <pango/pangofc-font.h>
+-#include <freetype/ftglyph.h>
+-#include <freetype/ftoutln.h>
++#include <ft2build.h>
++#include FT_GLYPH_H
++#include FT_OUTLINE_H
+ #include "jcl.h"
+ #include "gdkfont.h"
+ #include "gnu_java_awt_peer_gtk_FreetypeGlyphVector.h"
