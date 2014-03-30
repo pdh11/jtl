@@ -1,0 +1,4 @@
+## Make.gnome-icon-theme-extras
+
+gnome-icon-theme-extras: gnome-icon-theme
+	$(MAKE) PROG=gnome-icon-theme-extras _gnu

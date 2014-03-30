@@ -1,4 +1,5 @@
 ## Make.gssdp
 
 gssdp: glib libsoup gtk+
-	$(MAKE) PROG=gssdp _gnu
+	$(MAKE) PROG=gssdp _gnu \
+                JTL_TESTS_BOGUS=0.14.7

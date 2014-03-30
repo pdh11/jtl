@@ -1,0 +1,6 @@
+## Make.uhttpmock
+
+uhttpmock: glib libsoup gnome-common
+	$(MAKE) PROG=uhttpmock _gnu \
+                JTL_TESTS_BOGUS=ofcourse
+

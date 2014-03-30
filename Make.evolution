@@ -15,7 +15,7 @@ evolution: glib gtk+ libsoup evolution-data-server gtkhtml gnome-desktop \
 		&& LDFLAGS=-Wl,-rpath,/usr/lib/mozilla \
 			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
 			--with-openldap --enable-nss=yes --with-libiconv=no \
-			--disable-nm --disable-image-inline \
+			--disable-nm --disable-image-inline --disable-gtkspell \
 			--disable-bogofilter --disable-text-highlight \
 		&& LDFLAGS=-Wl,-rpath,/usr/lib/mozilla \
 			$(MAKE) \

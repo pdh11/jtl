@@ -1,0 +1,10 @@
+--- evolution-data-server-3.12.0/examples/cursor/Makefile.in~	2014-03-23 00:08:42.000000000 +0000
++++ evolution-data-server-3.12.0/examples/cursor/Makefile.in	2014-03-29 19:56:25.000000000 +0000
+@@ -496,6 +496,7 @@ cursor_example_CPPFLAGS = \
+ cursor_example_CFLAGS = 
+ cursor_example_LDFLAGS = \
+ 	$(top_builddir)/addressbook/libebook/libebook-1.2.la \
++	$(top_builddir)/addressbook/libedata-book/libedata-book-1.2.la \
+ 	$(top_builddir)/addressbook/libebook-contacts/libebook-contacts-1.2.la \
+ 	$(top_builddir)/libedataserver/libedataserver-1.2.la \
+ 	$(top_builddir)/private/libedbus-private.la \

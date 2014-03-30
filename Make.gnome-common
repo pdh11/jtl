@@ -1,0 +1,4 @@
+## Make.gnome-common
+
+gnome-common: glib gtk+
+	$(MAKE) PROG=gnome-common _gnu

@@ -2,4 +2,6 @@
 
 gdk-pixbuf: glib gobject-introspection x libpng libjpeg jasper libtiff
 	$(MAKE) PROG=gdk-pixbuf _gnu \
-                JTL_CONFIG="$(JTL_CONFIG) --with-x11 --with-libjasper"
+                JTL_CONFIG="$(JTL_CONFIG) --with-x11 --with-libjasper" \
+                JTL_TESTS_BOGUS=2.30.7
+

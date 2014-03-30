@@ -5,7 +5,8 @@ gnome-settings-daemon: glib intltool perl_xml_parser gconf esound \
 		libglade alsa-lib libnotify libxklavier \
 		fontconfig pulseaudio gnome-media gnome-desktop colord upower \
                 libwacom xf86-input-wacom ibus gsettings-desktop-schemas \
-                geocode-glib geoclue libgweather
+                geocode-glib geoclue libgweather gnome-icon-theme-extras \
+                gnome-icon-theme-symbolic
 	$(MAKE) PROG=gnome-settings-daemon _gnu \
 		JTL_CONFIG="$(JTL_CONFIG) --disable-pulse --with-pnpids=/usr/share/libgnome-desktop-3.0/pnp.ids" \
 		LDFLAGS="-L/usr/X11/lib" \

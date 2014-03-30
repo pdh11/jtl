@@ -7,5 +7,6 @@ evolution-data-server: openldap pkgconfig gnome-vfs sqlite \
 		libglade gnome-keyring libgweather libical krb5 zlib db3 \
 		libgdata gnome-online-accounts
 	$(MAKE) PROG=evolution-data-server _gnu \
-		JTL_CONFIG="$(JTL_CONFIG) --with-openldap --enable-smime --enable-nss=yes --with-krb5=/usr --disable-uoa" \
+                JTL_PATCH=evolution-data-server-3.12.0-jtl1.diff \
+		JTL_CONFIG="$(JTL_CONFIG) --with-openldap --enable-smime --enable-nss=yes --with-krb5=/usr --disable-uoa --disable-goa" \
 		JTL_TESTS_BOGUS=3.0.2.1
