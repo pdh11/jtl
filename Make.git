@@ -5,4 +5,5 @@
 git: expat curl perl
 	$(MAKE) PROG=git _gnu \
 		JTL_TESTS_BOGUS=1.6.5.2-needs-sparse
-	$(REALLY) tar xf $(ARCHIVE)/git-manpages-*bz2 -C $(PREFIX)/share/man
+	$(REALLY) tar xf $(ARCHIVE)/git-manpages-*bz2 --no-same-owner -C $(PREFIX)/share/man
+	$(REALLY) chmod -R a+rX $(PREFIX)/share/man
