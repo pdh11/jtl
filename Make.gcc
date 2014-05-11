@@ -1,20 +1,31 @@
 ## Make.gcc
 #
 # Full bootstrap build of native gcc
+#
+# 4.9.0+p -O2 -O9 -mtune= -march= j12 FAIL (16m)
+# 4.9.0+p -O2     -mtune= -march= j12 FAIL (13m)
+# 4.9.0   -O2     -mtune= -march= j12 FAIL (13m)
+# 4.9.0   -O2                     j12 FAIL (13m)
+# 4.9.0   -O2                     j1  FAIL (57m)
+# 4.9.0   -O2                     j12 no-dis-ch OK
+# 4.9.0+p -O2 -O9 -mtune= -march= j12 no-dis-ch
+
+xcc:
+	echo $(JTL_CXXFLAGS)
 
 gcc:
 	@echo Making gcc
 	rm -rf $(BUILD)/gcc
 	mkdir -p $(BUILD)/gcc/build $(BUILD)/gcc/build_p
 	tar xf $(ARCHIVE)/gcc-4*.tar.* -C $(BUILD)/gcc
-	patch -d $(BUILD)/gcc/g* -p1 < patches/gcc-4.6.2-jtl1.diff
+	patch -d $(BUILD)/gcc/g* -p1 < patches/gcc-4.9.0.diff
 	export _POSIX2_VERSION=199209 ; ( cd $(BUILD)/gcc/build \
 		&& CFLAGS="$(JTL_CFLAGS)" LIBCFLAGS="$(JTL_CFLAGS)" \
 			LIBCXXFLAGS="$(JTL_CXXFLAGS)" \
 			BOOT_CFLAGS="$(JTL_CFLAGS)" \
 			../g*/configure --prefix=$(PREFIX) --enable-shared \
 			--enable-languages=c,c++ --disable-werror \
-			--enable-threads --disable-checking --disable-multilib \
+			--enable-threads --disable-multilib \
 			--enable-__cxa_atexit --with-system-zlib \
 			$(JTL_ARCH)-linux \
 			--mandir=$(PREFIX)/share/man \

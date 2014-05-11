@@ -9,7 +9,7 @@ gcj: gcc gtk+2 mpc autogen
 	rm -rf $(BUILD)/gcj
 	mkdir -p $(BUILD)/gcj/build
 	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/gcj
-	patch -d $(BUILD)/gcj/g* -p1 < patches/gcc-4.6.2-jtl1.diff
+	patch -d $(BUILD)/gcj/g* -p1 < patches/gcc-4.9.0.diff
 	cd $(BUILD)/gcj/g* && autogen Makefile.def
 	export _POSIX2_VERSION=199209 ; ( cd $(BUILD)/gcj/build \
 		&& CFLAGS="$(JTL_CFLAGS)" LIBCFLAGS="$(JTL_CFLAGS)" \
@@ -19,7 +19,7 @@ gcj: gcc gtk+2 mpc autogen
 			--enable-languages=c,c++,java,fortran,objc,obj-c++,go \
                         --enable-threads \
 			--enable-__cxa_atexit --with-system-zlib \
-			--disable-checking --disable-werror \
+			--disable-werror \
 			--disable-multilib --enable-java-awt=gtk \
 			$(JTL_ARCH)-linux \
 			--mandir=$(PREFIX)/share/man \

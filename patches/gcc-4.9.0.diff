@@ -1,0 +1,143 @@
+--- gcc-4.6.2/gcc/cp/init.c~	2011-10-13 19:02:10.000000000 +0100
++++ gcc-4.6.2/gcc/cp/init.c	2012-02-09 14:33:32.000000000 +0000
+@@ -473,8 +473,9 @@ perform_member_init (tree member, tree i
+ 
+   /* Effective C++ rule 12 requires that all data members be
+      initialized.  */
+-  if (warn_ecpp && init == NULL_TREE && TREE_CODE (type) != ARRAY_TYPE)
+-    warning_at (DECL_SOURCE_LOCATION (current_function_decl), OPT_Weffc__,
++  if (init == NULL_TREE && TREE_CODE (type) != ARRAY_TYPE
++      && ! RECORD_OR_UNION_TYPE_P(type) && function_depth < 2 )
++      warning_at (DECL_SOURCE_LOCATION (current_function_decl), OPT_Wuninitialized,
+ 		"%qD should be initialized in the member initialization list",
+ 		member);
+ 
+--- gcc-4.6.2/gcc/cp/decl.c~	2012-02-23 22:59:22.000000000 +0000
++++ gcc-4.6.2/gcc/cp/decl.c	2012-02-23 23:27:31.000000000 +0000
+@@ -7957,6 +7957,9 @@ check_var_type (tree identifier, tree ty
+    declarator, in cases like "struct S;"), or the ERROR_MARK_NODE if an
+    error occurs. */
+ 
++#define DECL_HEADER_P(decl) (expand_location(DECL_SOURCE_LOCATION(decl)).included)
++
++
+ tree
+ grokdeclarator (const cp_declarator *declarator,
+ 		const cp_decl_specifier_seq *declspecs,
+@@ -10043,6 +10046,14 @@ grokdeclarator (const cp_declarator *dec
+ 	  }
+       }
+ 
++    if (!DECL_HEADER_P(decl)
++        && (storage_class == sc_extern || 
++            (TREE_CODE (type) == FUNCTION_TYPE && storage_class != sc_static && !funcdef_flag)))
++      {
++          warning (OPT_Wmissing_declarations,
++                   "extern declaration of %q+D not in header", decl);
++      }
++
+     /* Record `register' declaration for warnings on &
+        and in case doing stupid register allocation.  */
+ 
+--- gcc-4.6.2/gcc/cp/decl.c~	2012-02-23 23:27:31.000000000 +0000
++++ gcc-4.6.2/gcc/cp/decl.c	2012-02-25 22:42:35.000000000 +0000
+@@ -10047,6 +10047,7 @@ grokdeclarator (const cp_declarator *dec
+       }
+ 
+     if (!DECL_HEADER_P(decl)
++        && !processing_explicit_instantiation
+         && (storage_class == sc_extern || 
+             (TREE_CODE (type) == FUNCTION_TYPE && storage_class != sc_static && !funcdef_flag)))
+       {
+--- gcc-4.7.0/libcpp/include/line-map.h~	2011-11-22 16:13:00.000000000 +0000
++++ gcc-4.7.0/libcpp/include/line-map.h	2012-03-22 11:44:38.000000000 +0000
+@@ -596,6 +596,9 @@ typedef struct
+ 
+   /* In a system header?. */
+   bool sysp;
++
++  /* In an included file? */
++  bool included;
+ } expanded_location;
+ 
+ /* This is enum is used by the function linemap_resolve_location
+--- gcc-4.7.0/libcpp/line-map.c~	2012-03-22 11:46:26.000000000 +0000
++++ gcc-4.7.0/libcpp/line-map.c	2012-03-22 11:49:41.000000000 +0000
+@@ -1148,6 +1148,7 @@ linemap_expand_location (struct line_map
+       xloc.line = SOURCE_LINE (map, loc);
+       xloc.column = SOURCE_COLUMN (map, loc);
+       xloc.sysp = LINEMAP_SYSP (map) != 0;
++      xloc.included = ORDINARY_MAP_INCLUDER_FILE_INDEX(map) >= 0;
+     }
+ 
+   return xloc;
+--- gcc-4.7.0/libitm/configure~	2012-03-22 07:37:39.000000000 +0000
++++ gcc-4.7.0/libitm/configure	2012-03-22 13:45:49.000000000 +0000
+@@ -17447,7 +17447,7 @@ rm -f confcache
+ 
+ # Add -Wall -Werror if we are using GCC.
+ if test "x$GCC" = "xyes"; then
+-  XCFLAGS="$XCFLAGS -Wall -Werror"
++  XCFLAGS="$XCFLAGS -Wall"
+ fi
+ 
+ XCFLAGS="$XCFLAGS $XPCFLAGS"
+--- gcc-4.8.1/gcc/gcov.c~	2013-01-10 20:38:27.000000000 +0000
++++ gcc-4.8.1/gcc/gcov.c	2013-06-17 22:37:08.000000000 +0100
+@@ -1246,11 +1246,13 @@ read_count_file (function_t *fns)
+ 	       da_file_name, v, e);
+     }
+   tag = gcov_read_unsigned ();
++/*
+   if (tag != bbg_stamp)
+     {
+       fnotice (stderr, "%s:stamp mismatch with notes file\n", da_file_name);
+       goto cleanup;
+     }
++*/
+ 
+   while ((tag = gcov_read_unsigned ()))
+     {
+--- gcc-4.9.0/libsanitizer/sanitizer_common/sanitizer_common.h~	2013-12-05 10:28:59.000000000 +0000
++++ gcc-4.9.0/libsanitizer/sanitizer_common/sanitizer_common.h	2014-04-25 00:08:05.000000000 +0100
+@@ -66,10 +66,11 @@ void FlushUnneededShadowMemory(uptr addr
+ template<typename T>
+ class InternalScopedBuffer {
+  public:
+-  explicit InternalScopedBuffer(uptr cnt) {
+-    cnt_ = cnt;
+-    ptr_ = (T*)MmapOrDie(cnt * sizeof(T), "InternalScopedBuffer");
+-  }
++    explicit InternalScopedBuffer(uptr cnt)
++        : ptr_((T*)MmapOrDie(cnt * sizeof(T), "InternalScopedBuffer")),
++          cnt_(cnt)
++    {
++    }
+   ~InternalScopedBuffer() {
+     UnmapOrDie(ptr_, cnt_ * sizeof(T));
+   }
+--- x/gcc/tree-tailcall.c.jj	2014-04-17 14:48:59.000000000 +0200
++++ y/gcc/tree-tailcall.c	2014-04-29 12:13:12.649414120 +0200
+@@ -285,9 +285,19 @@ process_assignment (gimple stmt, gimple_
+     {
+       /* Reject a tailcall if the type conversion might need
+ 	 additional code.  */
+-      if (gimple_assign_cast_p (stmt)
+-	  && TYPE_MODE (TREE_TYPE (dest)) != TYPE_MODE (TREE_TYPE (src_var)))
+-	return false;
++      if (gimple_assign_cast_p (stmt))
++	{
++	  if (TYPE_MODE (TREE_TYPE (dest)) != TYPE_MODE (TREE_TYPE (src_var)))
++	    return false;
++
++	  /* Even if the type modes are the same, if the precision of the
++	     type is smaller than mode's precision,
++	     reduce_to_bit_field_precision would generate additional code.  */
++	  if (INTEGRAL_TYPE_P (TREE_TYPE (dest))
++	      && (GET_MODE_PRECISION (TYPE_MODE (TREE_TYPE (dest)))
++		  > TYPE_PRECISION (TREE_TYPE (dest))))
++	    return false;
++	}
+ 
+       if (src_var != *ass_var)
+ 	return false;
