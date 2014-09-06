@@ -5,4 +5,5 @@
 pcre:
 	$(REALLY) rm -f $(PREFIX)/share/man/man3/pcre16*
 	$(MAKE) PROG=pcre _gnu \
-		JTL_CONFIG="--enable-static --enable-unicode-properties --enable-utf8"
+		JTL_CONFIG="--enable-static --enable-unicode-properties --enable-utf8" \
+                JTL_TESTS_BOGUS=8.35

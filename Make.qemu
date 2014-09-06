@@ -1,0 +1,7 @@
+## Make.qemu
+#
+# Doesn't like --enable-shared or --disable-static
+
+qemu:
+	$(MAKE) PROG=qemu _gnu \
+                JTL_CONFIG="--sysconfdir=$(JTL_SYSCONFDIR) --localstatedir=$(JTL_VARDIR) --mandir=$(PREFIX)/share/man --infodir=$(PREFIX)/share/info"

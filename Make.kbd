@@ -1,6 +1,8 @@
 ## Make.kbd
 #
 # Can't use make _gnu as it reacts badly to $PROG
+#
+# 2.0.x requires PAM
 
 kbd: mktemp
 	@echo Making kbd

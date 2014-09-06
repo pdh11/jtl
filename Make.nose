@@ -1,0 +1,4 @@
+## Make.nose
+
+nose: python
+	$(MAKE) PROG=nose _pythonstyle

@@ -1,0 +1,4 @@
+## Make.pyhamcrest
+
+pyhamcrest: python
+	$(MAKE) PROG=pyhamcrest _pythonstyle

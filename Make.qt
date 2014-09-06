@@ -18,7 +18,7 @@ QT4VER:=$(shell echo $(QT4VER) | tr -dc '0-9.')
 QT4DIR:=$(PREFIX)/qt-$(QT4VER)
 
 qt: x zlib libpng libjpeg libmng sqlite glib xserver cups dbus gstreamer \
-		openssl libtiff libmng alsa-lib gst-plugins-base
+		openssl libtiff libmng alsa-lib gst-plugins-base mysql
 	@echo Making Qt $(QT4VER)
 	rm -rf $(BUILD)/qt
 	mkdir -p $(BUILD)/qt

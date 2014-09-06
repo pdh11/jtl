@@ -5,7 +5,7 @@ ruby: openssl gdbm
 	$(REALLY) rm -rf $(BUILD)/ruby
 	mkdir -p $(BUILD)/ruby
 	tar xjf $(ARCHIVE)/ruby-*bz2 -C $(BUILD)/ruby
-	patch -d $(BUILD)/ruby/* -p1 -F5 < patches/ruby-2.1.1.diff
+	#patch -d $(BUILD)/ruby/* -p1 -F5 < patches/ruby-2.1.1.diff
 	( cd $(BUILD)/ruby/* \
 		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
 			./configure $(JTL_CONFIG) --prefix=$(PREFIX) --without-openssl \

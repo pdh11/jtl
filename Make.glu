@@ -1,0 +1,4 @@
+## Make.glu
+
+glu: xserver
+	$(MAKE) PROG=glu _gnu

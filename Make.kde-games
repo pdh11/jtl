@@ -1,7 +1,10 @@
 ## Make.kde-games
+#
+# kubrick in 4.9.5 depends on libGLU which isn't in Mesa any more
 
 kde-games: kde-libs kde-runtime qt pulseaudio
 	$(MAKE) PROG=kdegames JTL_TOUCH=kde-games PREFIX=$(PREFIX)/kde \
                  _gnucmake \
-                JTL_PATCH=kde-games-4.8.0-jtl1.diff
+                JTL_PATCH=kde-games-4.8.0-jtl1.diff \
+                JTL_CMAKE="-DBUILD_kubrick=no"
 

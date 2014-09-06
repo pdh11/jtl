@@ -25,15 +25,3 @@
  #include "libgimp/gimp.h"
  #include "libgimp/gimpui.h"
  
---- gimp-2.8.8/app/text/gimpfont.c~	2012-05-08 07:05:46.000000000 +0100
-+++ gimp-2.8.8/app/text/gimpfont.c	2014-03-09 21:44:09.000000000 +0000
-@@ -27,7 +27,8 @@
- 
- #define PANGO_ENABLE_ENGINE  1   /* Argh */
- #include <pango/pango-ot.h>
--#include <freetype/tttables.h>
-+#include <ft2build.h>
-+#include FT_TRUETYPE_TABLES_H
- 
- #include "text-types.h"
- 

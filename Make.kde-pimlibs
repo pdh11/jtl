@@ -2,5 +2,5 @@
 
 kde-pimlibs: kde-libs openldap gpgme boost akonadi cyrus-sasl \
                 shared-mime-info shared-desktop-ontologies soprano \
-                libical libxslt
+                libical libxslt nepomuk-core
 	$(MAKE) PROG=kdepimlibs JTL_TOUCH=kde-pimlibs PREFIX=$(PREFIX)/kde _gnucmake

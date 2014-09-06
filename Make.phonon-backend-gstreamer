@@ -1,0 +1,6 @@
+## Make.phonon-backend-gstreamer
+
+phonon-backend-gstreamer: qt gstreamer gst-plugins-base glib libxml2  \
+                alsa-lib automoc xine-lib phonon \
+		cmake pulseaudio
+	$(MAKE) PROG=phonon-backend-gstreamer _gnucmake PREFIX=$(PREFIX)/kde

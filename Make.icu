@@ -11,8 +11,6 @@ icu: libpng libtiff libjpeg
 		&& CC=gcc CXX=g++ CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
 			./configure --prefix=$(PREFIX) $(JTL_CONFIG) \
 		&& $(MAKE) $(JTL_MAKE) \
-		&& if [ x$(JTL_TESTS_BOGUS) == x ] && grep -q '^check:' Makefile ; then $(MAKE) -j1 check ; fi \
-		&& if [ x$(JTL_TESTS_BOGUS) == x ] && grep -q '^tests[ :]' Makefile ; then $(MAKE) -j1 tests ; fi \
 		&& $(REALLY) $(MAKE) install )
 	$(REALLY) /sbin/ldconfig || true
 	du -hs $(BUILD)/icu > $(MADE)/icu

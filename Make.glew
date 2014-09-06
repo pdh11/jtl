@@ -1,0 +1,14 @@
+## Make.glew
+
+glew: xserver
+	@echo Making glew
+	mv $(BUILD)/glew $(BUILD)/glew.old || true
+	( $(REALLY) rm -rf $(BUILD)/glew.old ) &
+	mkdir -p $(BUILD)/glew
+	tar xjf $(ARCHIVE)/glew-[0-9]*bz2 -C $(BUILD)/glew
+	( cd $(BUILD)/glew/* \
+                && $(MAKE) \
+                && $(REALLY) $(MAKE) install )
+	du -hs $(BUILD)/glew > $(MADE)/glew
+	mv $(BUILD)/glew $(BUILD)/glew.old || true
+	( $(REALLY) rm -rf $(BUILD)/glew.old ) &

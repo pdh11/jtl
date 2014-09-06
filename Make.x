@@ -99,7 +99,7 @@ twm: util-macros libX11 libXext libXt libXmu
 	$(MAKE) PROG=$@ _xgnu
 
 xauth: util-macros libX11 libXau libXext libXmu
-	$(MAKE) PROG=$@ _xgnu
+	$(MAKE) PROG=$@ _xgnu JTL_TESTS_BOGUS=1.0.9
 
 xdpyinfo: util-macros libX11 libxkbfile libXext libXxf86vm libXxf86dga \
 		libXxf86misc libXrender libXp libXtst libXi libXinerama
@@ -260,8 +260,7 @@ libXfontcache: libXfont libX11
 	$(MAKE) PROG=$@ _xgnu
 
 libXft: util-macros freetype fontconfig libxcb libX11 libXrender
-	$(MAKE) PROG=$@ _xgnu \
-                JTL_PATCH=libXft-2.3.1.diff
+	$(MAKE) PROG=$@ _xgnu
 
 libXi: util-macros xproto libX11 xextproto libXext inputproto
 	$(MAKE) PROG=$@ _xgnu

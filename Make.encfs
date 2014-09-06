@@ -1,6 +1,5 @@
 ## Make.encfs
 #
-# also boost
 
-encfs: openssl fuse rlog
+encfs: openssl fuse rlog boost
 	$(MAKE) PROG=encfs _gnu

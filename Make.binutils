@@ -12,7 +12,8 @@ binutils:
 			--disable-werror $(JTL_ARCH)-linux \
 			--mandir=$(PREFIX)/share/man \
 			--infodir=$(PREFIX)/share/info \
-			--enable-gold=yes --enable-bfd=default \
+                        --enable-plugins --enable-threads \
+			--enable-gold=yes --enable-ld=default \
 		&& $(MAKE) -j1 \
 		&& $(REALLY) $(MAKE) -j1 DESTDIR=$(JTL_ROOT) install )
 	du -hs $(BUILD)/binutils > $(MADE)/binutils

@@ -1,7 +1,7 @@
 ## Make.amarok
 
 amarok: kde-libs kde-runtime taglib flac xine-lib gmock \
-		graphviz \
+		graphviz phonon phonon-backend-gstreamer gstreamer \
 		sdl libvisual libvisual-plugins libusb doxygen pkgconfig ruby \
 		taglib-extras loudmouth mysql qtscriptgenerator qca cmake
 	$(MAKE) PROG=amarok PREFIX=$(PREFIX)/kde _gnucmake \
