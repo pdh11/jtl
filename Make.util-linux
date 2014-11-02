@@ -10,6 +10,7 @@ util-linux:
 		&& gcc -O9 *-passwd.c -I../include -Dutil_linux_version="0" \
 			-o passwd -lcrypt islocal.c setpwnam.c ../lib/env.c \
                         ../lib/fileutils.c -DHAVE_USLEEP -DHAVE_MKSTEMP \
+                        -DHAVE_STRNDUP \
                         -D_PATH_TMP=\"/tmp\" -DOPEN_MAX=4096 -DHAVE_FSYNC \
 		&& $(REALLY) install -m4711 -s passwd $(JTL_ROOT)/usr/bin
 	rm -rf $(BUILD)/passwd &

@@ -1,7 +1,21 @@
 ## Make.gdk-pixbuf
+#
+# Shenanigans here because only the install target depends on the GIR
+# stuff, so the (user) cache gets updated as root unless we try (and
+# fail) to install as user first.
 
 gdk-pixbuf: glib gobject-introspection x libpng libjpeg jasper libtiff
-	$(MAKE) PROG=gdk-pixbuf _gnu \
-                JTL_CONFIG="$(JTL_CONFIG) --with-x11 --with-libjasper" \
-                JTL_TESTS_BOGUS=2.30.7
-
+	@echo Making GNU gdk-pixbuf
+	mv $(BUILD)/gdk-pixbuf $(BUILD)/gdk-pixbuf.old || true
+	( $(REALLY) rm -rf $(BUILD)/gdk-pixbuf.old ) &
+	mkdir -p $(BUILD)/gdk-pixbuf
+	tar xjf $(ARCHIVE)/gdk-pixbuf-*bz2 -C $(BUILD)/gdk-pixbuf
+	( cd $(BUILD)/gdk-pixbuf/* \
+		&& CFLAGS="$(JTL_CFLAGS)" CXXFLAGS="$(JTL_CXXFLAGS)" \
+			./configure --prefix=$(PREFIX) $(JTL_CONFIG) --with-x11 --with-libjasper \
+		&& $(MAKE) $(JTL_MAKE) \
+		&& ($(MAKE) DESTDIR=$(JTL_ROOT) -k install \
+                    || $(REALLY) $(MAKE) DESTDIR=$(JTL_ROOT) install ) )
+	$(REALLY) /sbin/ldconfig || true
+	du -hs $(BUILD)/gdk-pixbuf > $(MADE)/gdk-pixbuf
+	( $(REALLY) rm -rf $(BUILD)/gdk-pixbuf) &

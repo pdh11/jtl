@@ -1,5 +1,5 @@
 ## Make.gtkhtml
 
-gtkhtml: gnome-mime-data gal libsoup \
+gtkhtml: gnome-mime-data libsoup \
 		perl_xml_parser intltool enchant iso-codes gnome-icon-theme
 	$(MAKE) PROG=gtkhtml INTLTOOL_MERGE=`which intltool-merge` _gnu

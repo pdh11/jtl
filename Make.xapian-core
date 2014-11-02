@@ -1,0 +1,4 @@
+## Make.xapian-core
+
+xapian-core: valgrind perl zlib
+	$(MAKE) PROG=xapian-core _gnu

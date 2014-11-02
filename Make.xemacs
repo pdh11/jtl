@@ -2,7 +2,7 @@
 #
 # --without-png as 21.4.22 doesn't like libpng 1.5
 
-xemacs: ncurses texinfo x openssl libtiff libjpeg libpng
+xemacs: ncurses texinfo x openssl libtiff libjpeg libpng imake xorg-cf-files
 	@echo Compiling xemacs
 	rm -rf $(BUILD)/xemacs
 	mkdir -p $(BUILD)/xemacs

@@ -1,0 +1,4 @@
+## Make.kfilemetadata
+
+kfilemetadata: phonon kde-libs poppler taglib exiv2 ffmpeg
+	$(MAKE) PROG=kfilemetadata PREFIX=$(PREFIX)/kde _gnucmake

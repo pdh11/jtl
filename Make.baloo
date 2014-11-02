@@ -1,0 +1,4 @@
+## Make.baloo
+
+baloo: kde-libs kfilemetadata xapian-core
+	$(MAKE) PROG=baloo _gnucmake PREFIX=$(PREFIX)/kde

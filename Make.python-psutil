@@ -1,0 +1,4 @@
+## Make.python-psutil
+
+python-psutil: python
+	$(MAKE) PROG=python-psutil _pythonstyle

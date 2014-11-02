@@ -4,11 +4,7 @@
 # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=652795
 
 kde-pim: kde-libs kde-runtime qt libassuan boost strigi soprano gpgme \
-                grantlee
+                grantlee baloo
 	mv -f $(BUILD)/kdepim $(BUILD)/kdepim.old || true
 	$(REALLY) rm -rf $(BUILD)/kdepim.old &
 	$(MAKE) PROG=kdepim JTL_TOUCH=kde-pim PREFIX=$(PREFIX)/kde _gnucmake
-
-
-#		JTL_PATCH=kdepim-4.4.5-jtl1.diff
-#

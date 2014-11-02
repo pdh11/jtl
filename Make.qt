@@ -30,8 +30,8 @@ qt: x zlib libpng libjpeg libmng sqlite glib xserver cups dbus gstreamer \
 			QMAKE_CXXFLAGS_RELEASE="$(JTL_CXXFLAGS) -Wno-error" \
 			./configure -system-libtiff -system-zlib -largefile \
 			-system-libpng -system-libjpeg -xrender \
-			-no-separate-debug-info -no-phonon \
-			-reduce-relocations \
+			-no-separate-debug-info -no-phonon -silent \
+			-reduce-relocations -nomake demos -nomake examples \
 			-xmlpatterns -shared -system-libmng \
 			-cups -qt-sql-sqlite -system-sqlite -stl \
 			-no-nis -glib -sm -prefix $(QT4DIR) ) \
@@ -42,8 +42,8 @@ qt: x zlib libpng libjpeg libmng sqlite glib xserver cups dbus gstreamer \
 			QMAKE_CXXFLAGS_RELEASE="$(JTL_CXXFLAGS) -Wno-error" \
 			./configure -system-libtiff -system-zlib -largefile \
 			-system-libpng -system-libjpeg -xrender \
-			-no-separate-debug-info -no-phonon \
-			-reduce-relocations \
+			-no-separate-debug-info -no-phonon -silent \
+			-reduce-relocations -nomake demos -nomake examples  \
 			-no-exceptions -shared -system-libmng \
 			-cups -qt-sql-sqlite -system-sqlite -stl \
 			-no-nis -glib -sm -prefix $(QT4DIR) ) \

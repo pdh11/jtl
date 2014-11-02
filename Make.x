@@ -190,7 +190,7 @@ util-macros:
 	$(MAKE) PROG=$@ _xgnu
 
 xorg-cf-files: util-macros
-	$(MAKE) PROG=$@ _xgnu
+	$(MAKE) PROG=$@ _xgnu JTL_PATCH=xorg-cf-files-1.0.5.diff
 
 ##
 # Libs

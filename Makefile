@@ -380,6 +380,7 @@ _gnu:
 		&& tar xjf $(ARCHIVE)/$(PROG)-*bz2 -C $(BUILD)/$(JTL_BUILD) ) \
 	    || ( echo No archive found for $(PROG) ; exit 1 )
 	if [ x$(JTL_PATCH) != x ] ; then patch -d $(BUILD)/$(JTL_BUILD)/* -p1 -F5 -z.old < patches/$(JTL_PATCH) ; fi
+	if [ x$(JTL_PATCH0) != x ] ; then patch -d $(BUILD)/$(JTL_BUILD)/* -p0 -F5 -z.old < patches/$(JTL_PATCH0) ; fi
 	( cd $(BUILD)/$(JTL_BUILD)/* \
 		&& rm -f config.cache \
 		&& ( [ -f configure ] || chmod a+x ./autogen.sh ) \

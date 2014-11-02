@@ -1,4 +1,5 @@
 ## Make.gtkam
 
-gtkam: gphoto2 gtk+ libexif_gtk libgnome-keyring
-	$(MAKE) PROG=gtkam _gnu
+gtkam: gphoto2 gtk+ libexif_gtk libgnome-keyring gimp
+	$(MAKE) PROG=gtkam _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --without-bonobo --without-gnome"

@@ -1,5 +1,0 @@
-## Make.gal
-
-gal: x libglade libgnomecanvas gtk+ libart \
-		libxml2 perl_xml_parser openssl gnome-keyring expat
-	$(MAKE) PROG=gal -j1 _gnu JTL_PATCH=gal-2.4.3-jtl1.diff

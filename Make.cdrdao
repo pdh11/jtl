@@ -2,4 +2,5 @@
 
 cdrdao: lame gtkmm2 libvorbis libmad libsigc++ libao
 	$(MAKE) PROG=cdrdao _gnu \
-		JTL_PATCH=cdrdao-1.2.3-jtl1.diff
+		JTL_PATCH=cdrdao-1.2.3-jtl1.diff \
+                JTL_CONFIG="$(JTL_CONFIG) --without-xdao"
