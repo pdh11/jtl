@@ -4,7 +4,7 @@
 
 mplayer: gtk+ libdvdread libcaca libtheora lame xvidcore libdv \
 		ffmpeg a52dec libvorbis libmad fontconfig libcdio \
-		freetype mpeg2dec esound libfame jack alsa-lib \
+		freetype mpeg2dec esound jack alsa-lib \
 		alsa-utils x264 giflib x samba speex enca fribidi libpng \
 		libmng pulseaudio cdparanoia openal-soft lzo
 	rm -rf $(BUILD)/mplayer

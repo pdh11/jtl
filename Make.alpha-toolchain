@@ -8,3 +8,4 @@ alpha-toolchain:
 		JTL_CROSSGCCFLAGS="--disable-multilib" \
 		alpha-linux-do-toolchain \
 		JTL_CROSSCONFIGMAKE="biarch = 64"
+	touch $(MADE)/alpha-toolchain

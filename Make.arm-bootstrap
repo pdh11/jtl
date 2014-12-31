@@ -2,8 +2,11 @@
 #
 
 arm-bootstrap: arm-toolchain
-	$(MAKE) JTL_CROSS=arm JTL_CROSSCFLAGS="-mcpu=arm6 -msoft-float -O" \
-		JTL_CROSSCPPFLAGS="-msoft-float -mcpu=arm6" \
-		JTL_CROSSGCCFLAGS="--with-cpu=arm6 --enable-multilib" \
-		JTL_CROSSGLIBCFLAGS=--without-fp arm-do-bootstrap
+	ac_cv_search_strerror="none required" \
+		libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
+        	$(MAKE) JTL_CROSS=arm-linux-gnueabi \
+                JTL_CROSSCFLAGS="-msoft-float -O" \
+		JTL_CROSSCPPFLAGS="-msoft-float" \
+		JTL_CROSSGCCFLAGS="--enable-multilib" \
+		JTL_CROSSGLIBCFLAGS=--without-fp arm-linux-gnueabi-do-bootstrap
 	@touch $(MADE)/arm-bootstrap

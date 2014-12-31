@@ -8,7 +8,7 @@ sparc64-toolchain:
 		$(MAKE) JTL_CROSS=sparc64-linux JTL_CROSS2=sparc \
 		JTL_CROSSCFLAGS="-mcpu=ultrasparc -m64 -O2" \
 		JTL_CROSSCPPFLAGS="-Wa,-xarch=v9a" \
-		JTL_CROSSGCCFLAGS=--disable-multilib \
+		JTL_CROSSGCCFLAGS="--disable-multilib --disable-libsanitizer" \
 		sparc64-linux-do-toolchain \
 		JTL_CROSSCONFIGMAKE="biarch = 64" \
 		JTL_CONFIGPATH=configs/sparc64_

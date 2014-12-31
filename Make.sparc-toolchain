@@ -5,6 +5,8 @@ sparc-toolchain:
 	libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
 		$(MAKE) JTL_CROSS=sparc-linux JTL_CROSS2=sparc \
 		JTL_CROSSCFLAGS="-m32 -O" \
+		JTL_CROSSGCCFLAGS="--disable-libsanitizer" \
 		sparc-linux-do-toolchain \
 		JTL_CROSSCONFIGMAKE="biarch = 32" \
 		JTL_CONFIGPATH=configs/sparc32_
+	touch $(MADE)/sparc-toolchain

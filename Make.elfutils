@@ -1,0 +1,7 @@
+## Make.elfutils
+#
+# Installs its own "ld", "nm" etc!
+
+elfutils:
+	$(MAKE) PROG=elfutils _gnu \
+                JTL_CONFIG="$(JTL_CONFIG) --program-suffix=.elfutils"

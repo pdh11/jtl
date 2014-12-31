@@ -1,7 +1,9 @@
 ## Make.gzip
+#
+# gzip 1.6 tests don't like grep 2.21
 
 gzip:
-	$(MAKE) PROG=gzip _gnu
+	$(MAKE) PROG=gzip _gnu JTL_TESTS_BOGUS=1.6
 	if [ $(PREFIX) = /usr ] ; then \
 	  $(REALLY) mv -f $(JTL_ROOT)/usr/bin/{gunzip,zcat,gzip} $(JTL_ROOT)/bin ; \
 	fi

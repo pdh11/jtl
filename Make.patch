@@ -1,5 +1,8 @@
 ## Make.patch
+#
+# patch 2.7.1 tests don't like grep 2.21
 
 patch:
-	$(MAKE) PROG=patch JTL_CFLAGS=-D_XOPEN_SOURCE=500 _gnu
+	$(MAKE) PROG=patch JTL_CFLAGS=-D_XOPEN_SOURCE=500 _gnu \
+                JTL_TESTS_BOGUS=2.7.1
 

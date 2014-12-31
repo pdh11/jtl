@@ -7,7 +7,6 @@ libjpeg:
 	tar xjf $(ARCHIVE)/jpegsrc*bz2 -C $(BUILD)/libjpeg
 	patch -d $(BUILD)/libjpeg/* -p1 < patches/jpegsrc.v9-jtl1.diff
 	( cd $(BUILD)/libjpeg/* \
-		&& cp $(PREFIX)/share/libtool/config/config.sub . \
 		&& ./configure --enable-shared --disable-static \
 			--prefix=$(PREFIX) \
 			--mandir=$(PREFIX)/share/man \

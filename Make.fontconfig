@@ -2,5 +2,4 @@
 #
 
 fontconfig: freetype expat
-	$(MAKE) PROG=fontconfig _gnu
-	touch $(MADE)/fontconfig
+	$(MAKE) PROG=fontconfig _gnu JTL_TESTS_BOGUS=2.11.1

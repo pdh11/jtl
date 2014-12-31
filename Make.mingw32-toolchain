@@ -5,8 +5,10 @@ mingw32-toolchain: binutils
 
 mingw32-toolchain: cross-mingw32-binutils cross-mingw32-headers \
 		cross-mingw32-gcc cross-mingw32-boost cross-mingw32-pkgconfig \
-                cross-mingw32-flac \
-		cross-mingw32-lame cross-mingw32-libcddb
+                cross-mingw32-flac
+
+# \
+#		cross-mingw32-lame cross-mingw32-libcddb
 
 cross-mingw32-binutils:
 	@echo Making cross-mingw32-binutils
@@ -47,7 +49,7 @@ cross-mingw32-gcc-stage1: cross-mingw32-binutils cross-mingw32-headers
 	mkdir -p $(BUILD)/cross-mingw32-gcc-stage1/build
 	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/cross-mingw32-gcc-stage1
 	patch -d $(BUILD)/cross-mingw32-gcc-stage1/g* -p1 \
-		< patches/gcc-4.6.2-jtl1.diff
+		< patches/gcc-4.9.0.diff
 	( cd $(BUILD)/cross-mingw32-gcc-stage1/build \
 		&& CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
 			 ../gcc-*/configure --target=i586-mingw32 \
@@ -109,7 +111,7 @@ cross-mingw32-gcc: cross-mingw32-runtime cross-mingw32-api
 	mkdir -p $(BUILD)/cross-mingw32-gcc/build
 	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/cross-mingw32-gcc
 	patch -d $(BUILD)/cross-mingw32-gcc/g* -p1 \
-		< patches/gcc-4.6.2-jtl1.diff
+		< patches/gcc-4.9.0.diff
 	( cd $(BUILD)/cross-mingw32-gcc/build \
 		&& CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS) -mthreads" \
 		   	CXXFLAGS_FOR_TARGET="$(JTL_CROSSCXXFLAGS) -mthreads" \
@@ -160,8 +162,10 @@ cross-mingw32-boost: cross-mingw32-gcc
 			--libdir=$(PREFIX)/i586-mingw32/lib \
 			--includedir=$(PREFIX)/i586-mingw32/include \
 		&& echo "using gcc : : i586-mingw32-g++ : <compileflags>-mthreads <linkflags>-mthreads ;" > jtl-config.jam \
-		&& ./bjam -d+2 \
+		&& ./bjam -q \
 			--layout=system \
+                        --without-context \
+                        --without-coroutine \
 			--without-python \
 			--without-iostreams \
 			--without-mpi \
@@ -176,6 +180,8 @@ cross-mingw32-boost: cross-mingw32-gcc
 		&& $(REALLY) rm -rf $(PREFIX)/i586-mingw32/include/boost \
 		&& $(REALLY) ./bjam \
 			--layout=system \
+                        --without-context \
+                        --without-coroutine \
 			--without-python \
 			--without-iostreams \
 			--without-mpi \

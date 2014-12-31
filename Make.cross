@@ -87,7 +87,7 @@ cross-$(JTL_CROSS)-gcc-stage1:
 	tar xzf $(ARCHIVE)/gcc-4*.tar.gz \
 		 -C $(BUILD)/cross-$(JTL_CROSS)-glibc
 	patch -d $(BUILD)/cross-$(JTL_CROSS)-glibc/gcc* -p1 \
-		< patches/gcc-4.6.2-jtl1.diff
+		< patches/gcc-4.9.0.diff
 	mkdir -p $(TEMP_INSTALL)/$(JTL_CROSS)/bin
 	for i in as ld ar ranlib strip ; do \
 		ln -sf $(PREFIX)/bin/$(JTL_CROSS)-$$i \
@@ -101,7 +101,7 @@ cross-$(JTL_CROSS)-gcc-stage1:
 			--prefix=$(TEMP_INSTALL) \
 			--enable-languages="c" --disable-libgomp \
 			--disable-libmudflap --disable-libssp \
-			--disable-libquadmath \
+			--disable-libquadmath --disable-libatomic \
 			--enable-static --disable-shared --enable-tls \
 			--infodir=$(PREFIX)/share/info \
 			--mandir=$(PREFIX)/share/man \
@@ -129,8 +129,8 @@ cross-$(JTL_CROSS)-glibc: cross-$(JTL_CROSS)-binutils \
 	rm -rf $(BUILD)/cross-$(JTL_CROSS)-glibc/build
 	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-glibc/build
 	tar xf $(ARCHIVE)/glibc-2*.tar.* -C $(BUILD)/cross-$(JTL_CROSS)-glibc
-	tar xf $(ARCHIVE)/glibc-ports-2*.tar.* -C $(BUILD)/cross-$(JTL_CROSS)-glibc/glibc*
-	patch -d $(BUILD)/cross-$(JTL_CROSS)-glibc/glibc* -p1 < patches/glibc-2.16-jtl1.diff
+        #tar xf $(ARCHIVE)/glibc-ports-2*.tar.* -C $(BUILD)/cross-$(JTL_CROSS)-glibc/glibc*
+	patch -d $(BUILD)/cross-$(JTL_CROSS)-glibc/glibc* -p1 < patches/glibc-2.17-jtl1.diff
 	#patch -d $(BUILD)/cross-$(JTL_CROSS)-glibc/glibc*/glibc-ports* -p1 < patches/glibc-ports-2.14.1-jtl1.diff
 	mkdir -p $(TEMP_INSTALL)/$(JTL_CROSS)/include
 	cp -dpR $(PREFIX)/$(JTL_CROSS)/include/{linux,asm,asm-generic} \
@@ -169,7 +169,7 @@ cross-$(JTL_CROSS)-gcc: cross-$(JTL_CROSS)-binutils \
 	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-gcc/build
 	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/cross-$(JTL_CROSS)-gcc
 	patch -d $(BUILD)/cross-$(JTL_CROSS)-gcc/gcc* -p1 \
-		< patches/gcc-4.6.2-jtl1.diff
+		< patches/gcc-4.9.0.diff
 	( cd $(BUILD)/cross-$(JTL_CROSS)-gcc/build \
 		&& CFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
 			CXXFLAGS_FOR_TARGET="$(JTL_CROSSCFLAGS)" \
@@ -264,12 +264,14 @@ cross-$(JTL_CROSS)-boost: cross-$(JTL_CROSS)-gcc cross-$(JTL_CROSS)-glibc \
 		&& ./bjam -q --layout=system variant=release \
 			link=static $(JTL_SHARED_BOOST) threading=multi \
 			-sGXX=$(JTL_CROSS)-g++ --without-math \
+                        --without-context --without-coroutine \
 			--without-python --user-config=jtl-config.jam \
 			cxxflags="$(JTL_CROSSCFLAGS)" \
 		&& $(REALLY) rm -rf $(PREFIX)/$(JTL_CROSS)/include/boost \
 		&& $(REALLY) ./bjam -q --layout=system variant=release \
 			link=static $(JTL_SHARED_BOOST) threading=multi \
 			--user-config=jtl-config.jam --without-python \
+                        --without-context --without-coroutine \
 			-sGXX=$(JTL_CROSS)-g++ --without-math install
 	du -hs $(BUILD)/cross-$(JTL_CROSS)-boost > $(MADE)/cross-$(JTL_CROSS)-boost
 	rm -rf $(BUILD)/cross-$(JTL_CROSS)-boost
@@ -671,7 +673,7 @@ $(JTL_CROSS)-gcc: $(JTL_CROSS)-toolchain $(JTL_CROSS)-binutils \
 	mkdir -p $(BUILD)/$(JTL_CROSS)-gcc/build
 	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/$(JTL_CROSS)-gcc
 	patch -d $(BUILD)/$(JTL_CROSS)-gcc/g* -p1 \
-		< patches/gcc-4.6.2-jtl1.diff
+		< patches/gcc-4.9.0-jtl1.diff
 	( cd $(BUILD)/$(JTL_CROSS)-gcc/build \
 		&& CC_FOR_TARGET="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS) -DSSIZE_MAX=LONG_MAX" \
 			CC="$(JTL_CROSS)-gcc $(JTL_CROSSCFLAGS) -DSSIZE_MAX=LONG_MAX" \

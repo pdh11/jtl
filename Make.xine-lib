@@ -1,7 +1,7 @@
 ## Make.xine-lib
 
 xine-lib: esound jack faad2 libcdio alsa-lib gnome-vfs gtk+ libmng libvorbis \
-		libtheora libfame sdl x pkgconfig ffmpeg flac imagemagick \
+		libtheora sdl x pkgconfig ffmpeg flac imagemagick \
 		vcdimager
 	FFMPEG_POSTPROC_CFLAGS="-I$(PREFIX)/include/libpostproc" \
 		FFMPEG_CFLAGS="-I$(PREFIX)/include/libavcodec" \

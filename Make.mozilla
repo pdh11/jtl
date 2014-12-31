@@ -7,7 +7,7 @@
 #
 # Still needs GTK+2 as of 8.0
 
-JTL_MOZILLA=31.0
+JTL_MOZILLA=34.0
 
 mozilla: libpng libmng libjpeg zlib gtk+2 x openldap libidl atk \
 		pango zip unzip cairo libart gnome-vfs libgnomecanvas \
@@ -18,7 +18,7 @@ mozilla: libpng libmng libjpeg zlib gtk+2 x openldap libidl atk \
 	mkdir -p $(BUILD)/mozilla/build
 	tar xjf $(ARCHIVE)/firefox-*bz2 -C $(BUILD)/mozilla
 	tar xjf $(ARCHIVE)/iceweasel-*bz2 -C $(BUILD)/mozilla/m*
-	#patch -d $(BUILD)/mozilla/m* -p1 -F5 -z.old < patches/mozilla-22.0.diff
+	patch -d $(BUILD)/mozilla/m* -p1 -F5 -z.old < patches/mozilla-34.0.diff
 	#( cd $(BUILD)/mozilla/m*/debian/patches && cat `cat $(BUILD)/mozilla/m*/debian/patches/series` ) | patch -d $(BUILD)/mozilla/m* -p1 -F5
 	(cd $(BUILD)/mozilla/m*/debian/patches && cat `grep -vE \(756390\|Reset-Firefox\|yandex\) series` ) | patch -d $(BUILD)/mozilla/m* -p1 -F5 || true
 	#( cd $(BUILD)/mozilla/m*/security/coreconf \

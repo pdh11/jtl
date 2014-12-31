@@ -1,0 +1,4 @@
+## Make.psycopg
+
+psycopg: python
+	$(MAKE) PROG=psycopg2 JTL_TOUCH=psycopg _pythonstyle

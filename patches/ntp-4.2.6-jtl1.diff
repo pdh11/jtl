@@ -9,3 +9,15 @@
  #else /* STA_NANO */
  			ntv.modes = MOD_BITS;
  #endif /* STA_NANO */
+--- ntp-4.2.8/ntpd/ntpd.c~	2014-12-19 11:58:06.000000000 +0000
++++ ntp-4.2.8/ntpd/ntpd.c	2014-12-29 21:30:55.485539928 +0000
+@@ -105,8 +105,8 @@
+ # include <grp.h>
+ # include <pwd.h>
+ #ifdef HAVE_LINUX_CAPABILITIES
+-# include <sys/capability.h>
+ # include <sys/prctl.h>
++# include <sys/capability.h>
+ #endif /* HAVE_LINUX_CAPABILITIES */
+ #if defined(HAVE_PRIV_H) && defined(HAVE_SOLARIS_PRIVS)
+ # include <priv.h>

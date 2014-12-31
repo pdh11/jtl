@@ -1,0 +1,4 @@
+## Make.pika
+
+pika: python
+	$(MAKE) PROG=pika _pythonstyle

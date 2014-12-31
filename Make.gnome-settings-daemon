@@ -8,6 +8,6 @@ gnome-settings-daemon: glib intltool perl_xml_parser gconf esound \
                 geocode-glib geoclue libgweather gnome-icon-theme-extras \
                 gnome-icon-theme-symbolic
 	$(MAKE) PROG=gnome-settings-daemon _gnu \
-		JTL_CONFIG="$(JTL_CONFIG) --disable-pulse --with-pnpids=/usr/share/libgnome-desktop-3.0/pnp.ids" \
+		JTL_CONFIG="$(JTL_CONFIG) --disable-pulse --with-pnpids=/usr/share/libgnome-desktop-3.0/pnp.ids --disable-network-manager" \
 		LDFLAGS="-L/usr/X11/lib" \
                 JTL_TESTS_BOGUS=3.4.1

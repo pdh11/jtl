@@ -8,7 +8,6 @@ libfame:
 	tar xjf $(ARCHIVE)/libfame*bz2 -C $(BUILD)/libfame
 	patch -d $(BUILD)/libfame/l* -p1 < patches/libfame-0.9.1-jtl1.diff
 	( cd $(BUILD)/libfame/* \
-		&& cp $(PREFIX)/share/libtool/config/config.sub . \
 		&& ./configure --enable-shared --disable-static --prefix=$(PREFIX) \
 			--mandir=$(PREFIX)/share/man \
 			--infodir=$(PREFIX)/share/info \

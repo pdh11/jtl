@@ -9,5 +9,4 @@ gnome-panel: glib gtk+ libglade libwnck scrollkeeper pkgconfig \
 	$(MAKE) PROG=gnome-panel _gnu \
 		JTL_CFLAGS="$(JTL_CFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
 		JTL_CXXFLAGS="$(JTL_CXXFLAGS) -Wl,-rpath,/usr/lib/mozilla" \
-		JTL_TESTS_BOGUS=bogus \
-                JTL_PATCH=gnome-panel-3.8.0.diff
+		JTL_TESTS_BOGUS=bogus

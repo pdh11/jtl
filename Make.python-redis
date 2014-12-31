@@ -1,0 +1,4 @@
+## Make.python-redis
+
+python-redis: python
+	$(MAKE) PROG=python-redis _pythonstyle
