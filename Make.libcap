@@ -1,0 +1,12 @@
+## Make.libcap
+
+libcap:
+	@echo Making libcap
+	$(REALLY) rm -rf $(BUILD)/libcap
+	mkdir -p $(BUILD)/libcap
+	tar xjf $(ARCHIVE)/libcap-*bz2 -C $(BUILD)/libcap
+	( cd $(BUILD)/libcap/* \
+	        && $(MAKE) \
+	                && $(REALLY) $(MAKE) install )
+	$(REALLY) /sbin/ldconfig
+	du -hs $(BUILD)/libcap > $(MADE)/libcap

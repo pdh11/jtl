@@ -1,0 +1,5 @@
+## Make.kmahjongg
+
+kmahjongg: kde-libs kde-runtime qt pulseaudio
+	$(MAKE) PROG=kmahjongg PREFIX=$(PREFIX)/kde \
+                 _gnucmake

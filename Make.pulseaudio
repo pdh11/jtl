@@ -3,8 +3,7 @@
 # 0.9.15test5 gets libwrap support wrong, and fails tests
 
 pulseaudio: speex libsamplerate jack liboil avahi alsa-lib gconf \
-		glib libtool intltool x libsndfile hal dbus json-c
+		glib libtool intltool x libsndfile hal dbus json-c fftw
 	$(MAKE) PROG=pulseaudio _gnu \
-		JTL_CONFIG="$(JTL_CONFIG) --disable-tcpwrap" \
-                CFLAGS="$(JTL_CFLAGS) -I/usr/X11/include" \
-		JTL_TESTS_BOGUS=bogus -j1
+		JTL_CONFIG="$(JTL_CONFIG) --disable-dbus --disable-tcpwrap" \
+                CFLAGS="$(JTL_CFLAGS) -I/usr/X11/include"

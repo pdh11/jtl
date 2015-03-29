@@ -1,6 +1,10 @@
 ## Make.webkit-gtk
 
-webkit-gtk: glib gtk+ libsoup gst-plugins-base geoclue icu
-	$(MAKE) PROG=webkitgtk _gnu \
+webkit-gtk: glib gtk+ libsoup gst-plugins-base geoclue icu perl gperf \
+                harfbuzz freetype fontconfig sqlite gnutls libnotify \
+                mesa atk libxml2 libxslt cairo gstreamer libsecret enchant \
+                cmake
+	$(MAKE) PROG=webkitgtk _gnucmake \
 		JTL_TOUCH=webkit-gtk \
-                JTL_CONFIG="$(JTL_CONFIG) --with-gstreamer=1.4"
+                JTL_PATCH=webkit-2.8.0.diff \
+                JTL_CMAKE="-DPORT=GTK"

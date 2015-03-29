@@ -1,4 +1,4 @@
 ## Make.nepomuk-core
 
-nepomuk-core:
+nepomuk-core: cmake
 	$(MAKE) PROG=nepomuk-core PREFIX=$(PREFIX)/kde _gnucmake

@@ -382,6 +382,7 @@ _gnu:
 	if [ x$(JTL_PATCH) != x ] ; then patch -d $(BUILD)/$(JTL_BUILD)/* -p1 -F5 -z.old < patches/$(JTL_PATCH) ; fi
 	if [ x$(JTL_PATCH0) != x ] ; then patch -d $(BUILD)/$(JTL_BUILD)/* -p0 -F5 -z.old < patches/$(JTL_PATCH0) ; fi
 	( cd $(BUILD)/$(JTL_BUILD)/* \
+		&& $(or $(JTL_PRECONFSTEP), true) \
 		&& rm -f config.cache \
 		&& ( [ -f configure ] || chmod a+x ./autogen.sh ) \
 		&& ( [ -f configure ] || ./autogen.sh ) \

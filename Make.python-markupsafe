@@ -1,0 +1,4 @@
+## Make.python-markupsafe
+
+python-markupsafe: python
+	$(MAKE) PROG=python-markupsafe _pythonstyle

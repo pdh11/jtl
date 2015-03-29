@@ -2,4 +2,6 @@
 #
 
 encfs: openssl fuse rlog boost
-	$(MAKE) PROG=encfs _gnu
+	$(MAKE) PROG=encfs _gnu \
+                JTL_PRECONFSTEP="make -f Makefile.dist"
+

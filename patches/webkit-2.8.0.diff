@@ -1,0 +1,22 @@
+--- webkitgtk-2.8.0/Source/JavaScriptCore/runtime/FunctionExecutableDump.cpp~	2015-03-04 07:19:42.000000000 +0000
++++ webkitgtk-2.8.0/Source/JavaScriptCore/runtime/FunctionExecutableDump.cpp	2015-03-28 19:35:42.906023337 +0000
+@@ -25,6 +25,8 @@
+ 
+ #include "config.h"
+ #include "FunctionExecutableDump.h"
++#include "JSCellInlines.h"
++#include "JSDestructibleObject.h"
+ 
+ #include "CodeBlock.h"
+ 
+--- webkitgtk-2.8.0/Source/JavaScriptCore/llint/LLIntEntrypoint.cpp~	2015-03-04 07:19:42.000000000 +0000
++++ webkitgtk-2.8.0/Source/JavaScriptCore/llint/LLIntEntrypoint.cpp	2015-03-28 19:36:32.490479446 +0000
+@@ -34,6 +34,8 @@
+ #include "MaxFrameExtentForSlowPathCall.h"
+ #include "StackAlignment.h"
+ #include "VM.h"
++#include "JSCellInlines.h"
++#include "JSDestructibleObject.h"
+ 
+ namespace JSC { namespace LLInt {
+ 

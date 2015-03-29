@@ -2,6 +2,6 @@
 
 gtk+: glib x perl pkgconfig atk pango freetype libpng libjpeg libtiff \
 		fontconfig cairo cups jasper gdk-pixbuf gobject-introspection \
-                at-spi2-atk
+                at-spi2-atk libepoxy
 	$(MAKE) PROG=gtk+ _gnu \
 		JTL_TESTS_BOGUS=bogus

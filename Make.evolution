@@ -6,7 +6,7 @@ evolution: glib gtk+ libsoup evolution-data-server gtkhtml gnome-desktop \
                 gnome-icon-theme gsettings-desktop-schemas webkit-gtk \
                 libgdata libxml2 shared-mime-info libpst clutter-gtk geoclue \
                 gnome-online-accounts libgweather libcanberra libnotify cairo \
-                openldap mozilla spamassassin gstreamer
+                openldap mozilla spamassassin gstreamer libcryptui
 	@echo Compiling evolution
 	rm -rf $(BUILD)/evolution
 	mkdir -p $(BUILD)/evolution
@@ -17,6 +17,7 @@ evolution: glib gtk+ libsoup evolution-data-server gtkhtml gnome-desktop \
 			--with-openldap --enable-nss=yes --with-libiconv=no \
 			--disable-nm --disable-image-inline --disable-gtkspell \
 			--disable-bogofilter --disable-text-highlight \
+                        --disable-autoar \
 		&& LDFLAGS=-Wl,-rpath,/usr/lib/mozilla \
 			$(MAKE) \
 		&& LDFLAGS=-Wl,-rpath,/usr/lib/mozilla \

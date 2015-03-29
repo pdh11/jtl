@@ -9,13 +9,4 @@
      || (defined __cplusplus && __cplusplus <= 201103L)
  /* Get a newline-terminated string from stdin, removing the newline.
     DO NOT USE THIS FUNCTION!!  There is no limit on how much it will read.
---- glibc-2.20/sysdeps/sparc/sparc32/sem_trywait.c~	2014-09-07 09:09:09.000000000 +0100
-+++ glibc-2.20/sysdeps/sparc/sparc32/sem_trywait.c	2014-12-30 21:31:26.966691447 +0000
-@@ -22,6 +22,7 @@
- #include <lowlevellock.h>
- #include <internaltypes.h>
- #include <semaphore.h>
-+#include <sparc-nptl.h>
- 
- #include <shlib-compat.h>
  

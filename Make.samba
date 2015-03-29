@@ -2,12 +2,12 @@
 #
 # CTDBDIR because 3.2.4-3.3.2 does -I$(CTDBDIR)/include
 
-samba: readline openldap krb5 popt valgrind cups avahi libtirpc talloc
+samba: readline openldap krb5 popt valgrind cups avahi libtirpc talloc tdb
 	@echo Compiling samba
 	rm -rf $(BUILD)/samba
 	mkdir -p $(BUILD)/samba
 	tar xjf $(ARCHIVE)/samba-*bz2 -C $(BUILD)/samba
-	patch -d $(BUILD)/samba/* -p1 < patches/samba-4.1.2.diff
+	patch -d $(BUILD)/samba/* -p1 < patches/samba-4.2.0.diff
 	( cd $(BUILD)/samba/* \
 		&& CFLAGS="$(JTL_CFLAGS)" \
                         LIBS="-Wl,--as-needed -ltirpc -lc" \

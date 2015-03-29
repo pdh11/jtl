@@ -1,4 +1,6 @@
 ## Make.json-c
 
+# 0.11 has trouble with -j (0.12 has trouble with -Werror)
+#
 json-c: 
-	$(MAKE) PROG=json-c _gnu
+	$(MAKE) PROG=json-c -j1 _gnu

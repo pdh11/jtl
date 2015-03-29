@@ -1,5 +1,5 @@
 ## Make.gwenview
 
-gwenview: kde-libs libkipi kde-runtime kde-baseapps baloo
+gwenview: kde-libs libkipi kde-runtime kde-baseapps baloo cmake
 	$(MAKE) PROG=gwenview PREFIX=$(PREFIX)/kde _gnucmake \
                 JTL_PATCH=gwenview-4.9.0-jtl1.diff

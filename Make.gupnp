@@ -1,4 +1,5 @@
 ## Make.gupnp
 
 gupnp: glib gssdp libxml2 libsoup pkgconfig
-	$(MAKE) PROG=gupnp _gnu
+	$(MAKE) PROG=gupnp _gnu \
+                JTL_TESTS_BOGUS=yup

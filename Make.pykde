@@ -1,4 +1,4 @@
 ## Make.pykde
 
-pykde: qt sip python pkgconfig pyqt
+pykde: qt sip python pkgconfig pyqt cmake
 	$(MAKE) PROG=pykde _gnucmake PREFIX=$(PREFIX)/kde

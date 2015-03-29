@@ -1,0 +1,4 @@
+## Make.python-mako
+
+python-mako: python python-markupsafe
+	$(MAKE) PROG=python-mako _pythonstyle

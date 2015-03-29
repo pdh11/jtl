@@ -1,4 +1,4 @@
 ## Make.grantlee
 
-grantlee: qt
+grantlee: qt cmake
 	$(MAKE) PROG=grantlee _gnucmake

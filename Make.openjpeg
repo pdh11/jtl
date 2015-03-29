@@ -1,0 +1,4 @@
+## Make.openjpeg
+
+openjpeg: cmake
+	$(MAKE) PROG=openjpeg _gnucmake

@@ -1,0 +1,6 @@
+## Make.libepoxy
+
+libepoxy: util-macros mesa
+	$(MAKE) PROG=libepoxy _gnu \
+                JTL_TESTS_BOGUS=1.2 \
+                JTL_PRECONFSTEP="autoreconf -v --install -I/usr/X11/share/aclocal"

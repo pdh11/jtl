@@ -1,0 +1,5 @@
+## Make.libcryptui
+
+libcryptui: glib gobject-introspection gpgme dbus-glib libnotify \
+                gnome-keyring gtk+
+	$(MAKE) PROG=libcryptui _gnu

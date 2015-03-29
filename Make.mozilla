@@ -9,7 +9,7 @@
 
 JTL_MOZILLA=34.0
 
-mozilla: libpng libmng libjpeg zlib gtk+2 x openldap libidl atk \
+mozilla: libpng libmng libjpeg zlib gtk+ x openldap libidl atk \
 		pango zip unzip cairo libart gnome-vfs libgnomecanvas \
 		gconf sqlite gmime imagemagick librsvg \
                 gnome-settings-daemon nss
@@ -32,8 +32,8 @@ mozilla: libpng libmng libjpeg zlib gtk+2 x openldap libidl atk \
 			--with-system-mng --with-system-libevent --enable-xft \
 			--enable-system-lcms --disable-necko-wifi \
 			--enable-shared --disable-static \
-			--enable-crypto --enable-toolkit-cairo-gtk2 \
-			--enable-default-toolkit=cairo-gtk2 \
+			--enable-crypto --enable-toolkit-cairo-gtk3 \
+			--enable-default-toolkit=cairo-gtk3 \
 			--enable-debug-symbols --disable-javaxpcom \
 			--mandir=$(PREFIX)/share/man \
 			--infodir=$(PREFIX)/share/info \
@@ -45,7 +45,7 @@ mozilla: libpng libmng libjpeg zlib gtk+2 x openldap libidl atk \
 			--enable-application=browser --disable-werror \
 			--with-branding=debian/branding --disable-elf-hack \
 			--enable-reorder --enable-system-cairo \
-                        --disable-gstreamer \
+                        --enable-gstreamer=1.0 --enable-alsa \
 			--enable-system-sqlite --disable-crashreporter \
 			--enable-default-mozilla-five-home=$(PREFIX)/lib/mozilla \
 		&& $(MAKE) WARNINGS_AS_ERRORS="" LD_BIND_NOW=1 \
@@ -68,7 +68,7 @@ mozilla-xulrunner: libpng libmng libjpeg zlib gtk+2 x openldap libidl \
 	mkdir -p $(BUILD)/mozillax/build
 	tar xjf $(ARCHIVE)/firefox-*bz2 -C $(BUILD)/mozillax
 	tar xjf $(ARCHIVE)/iceweasel-*bz2 -C $(BUILD)/mozillax/m*
-	#patch -d $(BUILD)/mozillax/m* -p1 -F5 -z.old < patches/mozilla-22.0.diff
+	patch -d $(BUILD)/mozillax/m* -p1 -F5 -z.old < patches/mozilla-34.0.diff
 	(cd $(BUILD)/mozillax/m*/debian/patches && cat `grep -vE \(756390\|Reset-Firefox\|yandex\) series` ) | patch -d $(BUILD)/mozillax/m* -p1 -F5 || true
 	#( cd $(BUILD)/mozillax/m*/security/coreconf \
 	# #  && cp -n Linux2.6.mk Linux3.0.mk )
@@ -80,8 +80,8 @@ mozilla-xulrunner: libpng libmng libjpeg zlib gtk+2 x openldap libidl \
 			--with-system-zlib --with-system-bz2 \
 			--with-system-mng --with-system-libevent --enable-xft \
 			--enable-system-lcms --disable-necko-wifi \
-			--enable-crypto --enable-toolkit-cairo-gtk2 \
-			--enable-default-toolkit=cairo-gtk2 \
+			--enable-crypto --enable-toolkit-cairo-gtk3 \
+			--enable-default-toolkit=cairo-gtk3 \
 			--enable-debug-symbols --disable-javaxpcom \
 			--mandir=$(PREFIX)/share/man \
 			--infodir=$(PREFIX)/share/info \
@@ -93,7 +93,7 @@ mozilla-xulrunner: libpng libmng libjpeg zlib gtk+2 x openldap libidl \
 			--enable-application=xulrunner --disable-werror \
 			--with-branding=debian/branding \
 			--enable-reorder --enable-system-cairo \
-                        --disable-gstreamer \
+                        --enable-gstreamer=1.0 --enable-alsa \
 			--enable-system-sqlite --disable-crashreporter \
 			--enable-default-mozilla-five-home=$(PREFIX)/lib/mozilla \
 		&& $(MAKE) WARNINGS_AS_ERRORS="" \

@@ -1,4 +1,4 @@
 ## Make.opencv
 
-opencv: gstreamer
+opencv: gstreamer cmake
 	$(MAKE) PROG=opencv _gnucmake

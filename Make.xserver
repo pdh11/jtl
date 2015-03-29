@@ -34,12 +34,8 @@ xorg-server: util-macros xf86driproto libdrm glproto randrproto \
 	mkdir -p $(BUILD)/xorg-server
 	tar xjf $(ARCHIVE)/xorg-server-*bz2 -C $(BUILD)/xorg-server
 	# if [ x$(JTL_PATCH) != x ] ; then patch -d $(BUILD)/xorg-server/* -p1 -F5 < patches/$(JTL_PATCH) ; fi
-	tar xjf $(ARCHIVE)/MesaLib*bz2 -C $(BUILD)/xorg-server
 	( cd $(BUILD)/xorg-server/x* \
-		&& CFLAGS="$(JTL_CFLAGS) -I`readlink -f -n $(BUILD)/xorg-server/M*/include`" CXXFLAGS="$(JTL_CXXFLAGS)" \
-			./configure --prefix=$(PREFIX)/X11 \
-			--enable-install-setuid \
-			--with-mesa-source=$(BUILD)/xorg-server/M* \
+		&& ./configure --prefix=$(PREFIX)/X11 --enable-install-setuid \
 		&& $(MAKE) \
 		&& $(REALLY) $(MAKE) install )
 	$(REALLY) /sbin/ldconfig
@@ -50,9 +46,8 @@ libpciaccess:
 	$(MAKE) PROG=$@ _xgnu
 
 mesa: libdrm dri2proto glproto libXxf86vm libX11 libXext talloc \
-		libXfixes libXdamage libxcb libxshmfence
-	$(MAKE) PROG=MesaLib _xgnu \
+		libXfixes libXdamage libxcb libxshmfence python-mako
+	$(MAKE) PROG=mesa _xgnu \
 		JTL_CONFIG="--with-x --enable-xcb --with-gallium-drivers=nouveau,svga,swrast --enable-dri --with-dri-drivers=swrast" \
-		JTL_TOUCH=mesa \
                 JTL_TESTS_BOGUS=9.1.6 \
                 am__configure_deps=""

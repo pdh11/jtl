@@ -1,4 +1,4 @@
 ## Make.libssh
 
-libssh:
+libssh: cmake
 	$(MAKE) PROG=libssh _gnucmake
