@@ -5,4 +5,5 @@
 imagemagick: libpng libmng libjpeg libtiff giflib x zlib perl fftw lcms \
 		fontconfig freetype librsvg expat libtool lzma cairo
 	$(MAKE) PROG=ImageMagick JTL_CONFIG="$(JTL_CONFIG) --enable-lzw --enable-shared --with-perl --without-static --with-modules --without-dot --disable-ltdl-install" JTL_TOUCH=imagemagick _gnu \
+                JTL_CXXFLAGS="$(JTL_CXXFLAGS) -fgnu89-inline" \
 		JTL_TESTS_BOGUS=bogus

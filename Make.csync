@@ -2,4 +2,5 @@
 
 csync: libssh cmake
 	$(MAKE) PROG=csync _gnucmake \
-                JTL_CMAKE="-DSYSCONF_INSTALL_DIR=/etc"
+                JTL_CMAKE="-DSYSCONF_INSTALL_DIR=/etc" \
+                JTL_PATCH=csync-0.50.0.diff

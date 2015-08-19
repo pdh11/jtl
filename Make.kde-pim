@@ -7,4 +7,5 @@ kde-pim: kde-libs kde-runtime qt libassuan boost strigi soprano gpgme \
                 grantlee baloo
 	mv -f $(BUILD)/kdepim $(BUILD)/kdepim.old || true
 	$(REALLY) rm -rf $(BUILD)/kdepim.old &
-	$(MAKE) PROG=kdepim JTL_TOUCH=kde-pim PREFIX=$(PREFIX)/kde _gnucmake
+	$(MAKE) PROG=kdepim JTL_TOUCH=kde-pim PREFIX=$(PREFIX)/kde _gnucmake \
+                JTL_CMAKE="-DBUILD_kleopatra:BOOL=OFF"

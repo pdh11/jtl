@@ -32,7 +32,7 @@ qt: x zlib libpng libjpeg libmng sqlite glib xserver cups dbus gstreamer \
 			-system-libpng -system-libjpeg -xrender \
 			-no-separate-debug-info -no-phonon -silent \
 			-reduce-relocations -nomake demos -nomake examples \
-			-xmlpatterns -shared -system-libmng \
+			-xmlpatterns -shared -system-libmng -webkit \
 			-cups -qt-sql-sqlite -system-sqlite -stl \
 			-no-nis -glib -sm -prefix $(QT4DIR) ) \
 		&& QTDIR=$(QT4DIR) $(MAKE) \
@@ -44,7 +44,7 @@ qt: x zlib libpng libjpeg libmng sqlite glib xserver cups dbus gstreamer \
 			-system-libpng -system-libjpeg -xrender \
 			-no-separate-debug-info -no-phonon -silent \
 			-reduce-relocations -nomake demos -nomake examples  \
-			-no-exceptions -shared -system-libmng \
+			-no-exceptions -shared -system-libmng -webkit \
 			-cups -qt-sql-sqlite -system-sqlite -stl \
 			-no-nis -glib -sm -prefix $(QT4DIR) ) \
 		&& QTDIR=$(QT4DIR) $(MAKE) \

@@ -1,4 +1,5 @@
 ## Make.opencv
 
 opencv: gstreamer cmake
-	$(MAKE) PROG=opencv _gnucmake
+	$(MAKE) PROG=opencv _gnucmake \
+                JTL_CXXFLAGS="$(JTL_CXXFLAGS) -fgnu89-inline"

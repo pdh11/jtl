@@ -84,7 +84,7 @@ cross-$(JTL_CROSS)-gcc-stage1:
 	@echo
 	rm -rf $(BUILD)/cross-$(JTL_CROSS)-glibc
 	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-glibc/build
-	tar xzf $(ARCHIVE)/gcc-4*.tar.gz \
+	tar xzf $(ARCHIVE)/gcc-*.tar.gz \
 		 -C $(BUILD)/cross-$(JTL_CROSS)-glibc
 	patch -d $(BUILD)/cross-$(JTL_CROSS)-glibc/gcc* -p1 \
 		< patches/gcc-4.9.0.diff
@@ -167,7 +167,7 @@ cross-$(JTL_CROSS)-gcc: cross-$(JTL_CROSS)-binutils \
 	@echo Making cross-$(JTL_CROSS)-gcc
 	rm -rf $(BUILD)/cross-$(JTL_CROSS)-gcc
 	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-gcc/build
-	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/cross-$(JTL_CROSS)-gcc
+	tar xzf $(ARCHIVE)/gcc-*.tar.gz -C $(BUILD)/cross-$(JTL_CROSS)-gcc
 	patch -d $(BUILD)/cross-$(JTL_CROSS)-gcc/gcc* -p1 \
 		< patches/gcc-4.9.0.diff
 	( cd $(BUILD)/cross-$(JTL_CROSS)-gcc/build \
@@ -255,7 +255,7 @@ cross-$(JTL_CROSS)-boost: cross-$(JTL_CROSS)-gcc cross-$(JTL_CROSS)-glibc \
 	rm -rf $(BUILD)/cross-$(JTL_CROSS)-boost
 	mkdir -p $(BUILD)/cross-$(JTL_CROSS)-boost
 	tar xjf $(ARCHIVE)/boost*bz2 -C $(BUILD)/cross-$(JTL_CROSS)-boost
-	# patch -d $(BUILD)/cross-$(JTL_CROSS)-boost/* -p0 < patches/boost-1.34.1-jtl1.diff
+	# patch -d $(BUILD)/cross-$(JTL_CROSS)-boost/* -p1 < patches/boost-1.58.0.diff
 	cd $(BUILD)/cross-$(JTL_CROSS)-boost/* \
 		&& ./bootstrap.sh --prefix=$(PREFIX)/$(JTL_CROSS) \
 			--libdir=$(PREFIX)/$(JTL_CROSS)/lib \
@@ -264,14 +264,14 @@ cross-$(JTL_CROSS)-boost: cross-$(JTL_CROSS)-gcc cross-$(JTL_CROSS)-glibc \
 		&& ./bjam -q --layout=system variant=release \
 			link=static $(JTL_SHARED_BOOST) threading=multi \
 			-sGXX=$(JTL_CROSS)-g++ --without-math \
-                        --without-context --without-coroutine \
+                        --without-context --without-coroutine --without-coroutine2 \
 			--without-python --user-config=jtl-config.jam \
 			cxxflags="$(JTL_CROSSCFLAGS)" \
 		&& $(REALLY) rm -rf $(PREFIX)/$(JTL_CROSS)/include/boost \
 		&& $(REALLY) ./bjam -q --layout=system variant=release \
 			link=static $(JTL_SHARED_BOOST) threading=multi \
 			--user-config=jtl-config.jam --without-python \
-                        --without-context --without-coroutine \
+                        --without-context --without-coroutine --without-coroutine2 \
 			-sGXX=$(JTL_CROSS)-g++ --without-math install
 	du -hs $(BUILD)/cross-$(JTL_CROSS)-boost > $(MADE)/cross-$(JTL_CROSS)-boost
 	rm -rf $(BUILD)/cross-$(JTL_CROSS)-boost
@@ -281,8 +281,8 @@ cross-$(JTL_CROSS)-boost: cross-$(JTL_CROSS)-gcc cross-$(JTL_CROSS)-glibc \
 # pkg-config for packages available to cross-compiler
 #
 cross-$(JTL_CROSS)-pkgconfig:
-	$(MAKE) PROG=pkgconfig \
-		JTL_CONFIG="$(JTL_CONFIG) --with-pc-path=/usr/$(JTL_CROSS)/lib/pkgconfig --program-prefix=$(JTL_CROSS)-" \
+	$(MAKE) PROG=pkg-config \
+		JTL_CONFIG="$(JTL_CONFIG) --with-pc-path=/usr/$(JTL_CROSS)/lib/pkgconfig --program-prefix=$(JTL_CROSS)- --disable-host-tool" \
 		JTL_TOUCH=cross-$(JTL_CROSS)-pkgconfig \
 		JTL_BUILD=cross-$(JTL_CROSS)-pkgconfig \
 		_gnu
@@ -671,7 +671,7 @@ $(JTL_CROSS)-gcc: $(JTL_CROSS)-toolchain $(JTL_CROSS)-binutils \
 	@echo Cross-compiling native $(JTL_CROSS) gcc
 	rm -rf $(BUILD)/$(JTL_CROSS)-gcc
 	mkdir -p $(BUILD)/$(JTL_CROSS)-gcc/build
-	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/$(JTL_CROSS)-gcc
+	tar xzf $(ARCHIVE)/gcc-*.tar.gz -C $(BUILD)/$(JTL_CROSS)-gcc
 	patch -d $(BUILD)/$(JTL_CROSS)-gcc/g* -p1 \
 		< patches/gcc-4.9.0-jtl1.diff
 	( cd $(BUILD)/$(JTL_CROSS)-gcc/build \

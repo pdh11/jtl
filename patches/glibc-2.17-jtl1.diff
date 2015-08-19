@@ -10,3 +10,14 @@
  /* Get a newline-terminated string from stdin, removing the newline.
     DO NOT USE THIS FUNCTION!!  There is no limit on how much it will read.
  
+--- glibc-2.22/sysdeps/sparc/sparc32/sem_open.c~	2015-08-05 07:42:21.000000000 +0100
++++ glibc-2.22/sysdeps/sparc/sparc32/sem_open.c	2015-08-19 23:38:56.540410282 +0100
+@@ -30,7 +30,7 @@
+ #include <sys/stat.h>
+ #include "semaphoreP.h"
+ #include <shm-directory.h>
+-
++#include "futex-internal.h"
+ 
+ /* Comparison function for search of existing mapping.  */
+ int

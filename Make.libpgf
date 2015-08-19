@@ -1,0 +1,5 @@
+## Make.libpgf
+
+libpgf: tofrodos
+	$(MAKE) PROG=libpgf _gnu \
+                JTL_PRECONFSTEP="fromdos configure.ac"

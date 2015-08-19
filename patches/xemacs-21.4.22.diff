@@ -1,0 +1,11 @@
+--- xemacs-21.4.22/src/lisp.h~	2005-02-01 03:55:02.000000000 +0000
++++ xemacs-21.4.22/src/lisp.h	2015-07-24 21:11:39.996877169 +0100
+@@ -201,7 +201,7 @@ typedef union
+   struct { void *p; } p;
+   struct { void (*f)(void); } f;
+   struct { double d; } d;
+-} max_align_t;
++} xmax_align_t;
+ 
+ #ifndef ALIGNOF
+ # if defined (__GNUC__) && (__GNUC__ >= 2)

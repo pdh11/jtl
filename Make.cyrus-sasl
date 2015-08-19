@@ -1,5 +1,7 @@
 ## Make.cyrus-sasl
 
 cyrus-sasl: krb5 openssl db3
-	$(MAKE) PROG=cyrus-sasl _gnu \
-		JTL_PATCH=cyrus-sasl-2.1.23-jtl1.diff
+	$(MAKE) PROG=cyrus-sasl _gnu
+
+# \
+#	#	JTL_PATCH=cyrus-sasl-2.1.23-jtl1.diff

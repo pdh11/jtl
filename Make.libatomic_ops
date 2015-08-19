@@ -1,0 +1,4 @@
+## Make.libatomic_ops
+
+libatomic_ops:
+	$(MAKE) PROG=libatomic_ops _gnu

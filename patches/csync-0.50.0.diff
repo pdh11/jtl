@@ -1,0 +1,11 @@
+--- csync-0.50.0/cmake/Modules/DefineCompilerFlags.cmake~	2013-08-01 09:33:44.000000000 +0100
++++ csync-0.50.0/cmake/Modules/DefineCompilerFlags.cmake	2015-08-19 22:35:57.596982229 +0100
+@@ -10,7 +10,7 @@ if (UNIX AND NOT WIN32)
+     if (${CMAKE_C_COMPILER_ID} MATCHES "(GNU|Clang)")
+ 
+         # add -Wconversion ?
+-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic -pedantic-errors")
++        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99")
+         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement")
+         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
+         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")

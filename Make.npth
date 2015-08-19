@@ -1,0 +1,4 @@
+## Make.npth
+
+npth:
+	$(MAKE) PROG=npth _gnu

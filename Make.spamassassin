@@ -6,7 +6,7 @@ spamassassin: perl
 
 spamassassin: perl_mail_spamassassin
 
-perl_mail_spamassassin: perl_libwww perl_net_dns perl_digest_sha1 perl_html_parser
+perl_mail_spamassassin: perl_libwww perl_net_dns perl_digest_sha1 perl_html_parser perl_netaddr_ip
 
 perl_libwww:
 	$(MAKE) PROG=perl_libwww JTL_CONFIG="-n" _perlstyle

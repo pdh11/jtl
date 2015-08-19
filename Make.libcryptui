@@ -2,4 +2,5 @@
 
 libcryptui: glib gobject-introspection gpgme dbus-glib libnotify \
                 gnome-keyring gtk+
-	$(MAKE) PROG=libcryptui _gnu
+	$(MAKE) PROG=libcryptui _gnu \
+                JTL_PATCH=libcryptui-3.12.2.diff

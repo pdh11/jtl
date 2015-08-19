@@ -47,7 +47,7 @@ cross-mingw32-gcc-stage1: cross-mingw32-binutils cross-mingw32-headers
 	@echo Making cross-mingw32-gcc-stage1
 	rm -rf $(BUILD)/cross-mingw32-gcc-stage1
 	mkdir -p $(BUILD)/cross-mingw32-gcc-stage1/build
-	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/cross-mingw32-gcc-stage1
+	tar xzf $(ARCHIVE)/gcc-5*.tar.gz -C $(BUILD)/cross-mingw32-gcc-stage1
 	patch -d $(BUILD)/cross-mingw32-gcc-stage1/g* -p1 \
 		< patches/gcc-4.9.0.diff
 	( cd $(BUILD)/cross-mingw32-gcc-stage1/build \
@@ -109,7 +109,7 @@ cross-mingw32-gcc: cross-mingw32-runtime cross-mingw32-api
 	@echo Making cross-mingw32-gcc
 	rm -rf $(BUILD)/cross-mingw32-gcc
 	mkdir -p $(BUILD)/cross-mingw32-gcc/build
-	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/cross-mingw32-gcc
+	tar xzf $(ARCHIVE)/gcc-5*.tar.gz -C $(BUILD)/cross-mingw32-gcc
 	patch -d $(BUILD)/cross-mingw32-gcc/g* -p1 \
 		< patches/gcc-4.9.0.diff
 	( cd $(BUILD)/cross-mingw32-gcc/build \
@@ -166,6 +166,7 @@ cross-mingw32-boost: cross-mingw32-gcc
 			--layout=system \
                         --without-context \
                         --without-coroutine \
+                        --without-coroutine2 \
 			--without-python \
 			--without-iostreams \
 			--without-mpi \
@@ -182,6 +183,7 @@ cross-mingw32-boost: cross-mingw32-gcc
 			--layout=system \
                         --without-context \
                         --without-coroutine \
+                        --without-coroutine2 \
 			--without-python \
 			--without-iostreams \
 			--without-mpi \
@@ -203,7 +205,7 @@ cross-mingw32-boost: cross-mingw32-gcc
 # pkg-config for packages available to cross-compiler
 #
 cross-mingw32-pkgconfig:
-	$(MAKE) PROG=pkgconfig JTL_CONFIG="$(JTL_CONFIG) --with-pc-path=/usr/i586-mingw32/lib/pkgconfig --program-prefix=i586-mingw32-" JTL_TOUCH=cross-mingw32-pkgconfig _gnu
+	$(MAKE) PROG=pkg-config JTL_CONFIG="$(JTL_CONFIG) --with-pc-path=/usr/i586-mingw32/lib/pkgconfig --program-prefix=i586-mingw32- --disable-host-tool" JTL_TOUCH=cross-mingw32-pkgconfig JTL_BUILD=cross-mingw32-pkgconfig _gnu
 
 ##
 #

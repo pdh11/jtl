@@ -2,5 +2,8 @@
 
 libgphoto2: libusb libtool
 	$(MAKE) PROG=libgphoto2 _gnu \
-                LIBUSB_CFLAGS=`pkg-config --cflags libusb-1.0` \
-                LIBUSB_LIBS=`pkg-config --libs libusb-1.0`
+                JTL_CFLAGS="$(JTL_CFLAGS) -DLIBUSB_CALL= "
+
+# \
+#                LIBUSB_CFLAGS=`pkg-config --cflags libusb-1.0` \
+#                LIBUSB_LIBS=`pkg-config --libs libusb-1.0`

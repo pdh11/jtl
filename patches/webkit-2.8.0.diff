@@ -20,3 +20,24 @@
  
  namespace JSC { namespace LLInt {
  
+--- webkitgtk-2.8.4/Source/WebCore/rendering/RenderElement.h~	2015-07-06 07:35:50.000000000 +0100
++++ webkitgtk-2.8.4/Source/WebCore/rendering/RenderElement.h	2015-07-25 13:52:10.840974823 +0100
+@@ -442,7 +442,7 @@ inline RenderStyle& RenderObject::firstL
+     return downcast<RenderElement>(*this).firstLineStyle();
+ }
+ 
+-inline RenderElement* ContainerNode::renderer() const
++extern inline RenderElement* ContainerNode::renderer() const
+ {
+     return downcast<RenderElement>(Node::renderer());
+ }
+--- webkitgtk-2.8.4/Source/WebCore/editing/InsertNodeBeforeCommand.cpp~	2015-07-06 07:35:50.000000000 +0100
++++ webkitgtk-2.8.4/Source/WebCore/editing/InsertNodeBeforeCommand.cpp	2015-07-25 16:23:07.705757040 +0100
+@@ -30,6 +30,7 @@
+ #include "Document.h"
+ #include "ExceptionCodePlaceholder.h"
+ #include "htmlediting.h"
++#include "RenderElement.h"
+ 
+ namespace WebCore {
+ 

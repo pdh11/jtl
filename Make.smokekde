@@ -5,4 +5,5 @@
 
 smokekde: smokeqt smokegen cmake kate kde-libs kde-runtime okular kde-pimlibs
 	$(MAKE) PROG=smokekde PREFIX=$(PREFIX)/kde _gnucmake \
-		JTL_CMAKE=-DDISABLE_Attica=TRUE
+		JTL_CMAKE=-DDISABLE_Attica=TRUE \
+                JTL_PATCH=smokekde-4.14.0.diff

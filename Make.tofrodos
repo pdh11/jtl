@@ -1,4 +1,12 @@
 ## Make.tofrodos
 
 tofrodos:
-	$(MAKE) PROG=tofrodos _gnu
+	@echo Making X-style tofrodos
+	rm -rf $(BUILD)/tofrodos
+	mkdir -p $(BUILD)/tofrodos
+	tar xjf $(ARCHIVE)/tofrodos-*bz2 -C $(BUILD)/tofrodos
+	( cd $(BUILD)/tofrodos/*/src \
+		&& $(MAKE) all \
+		&& $(REALLY) $(MAKE) MANDIR=/usr/share/man/man1 install )
+	du -hs $(BUILD)/tofrodos > $(MADE)/tofrodos
+	( rm -rf $(BUILD)/tofrodos ; onesync ) &

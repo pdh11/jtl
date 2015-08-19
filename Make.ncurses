@@ -16,6 +16,7 @@ ncurses:
 	rm -rf $(BUILD)/ncurses
 	mkdir -p $(BUILD)/ncurses/{build,install0}
 	tar xzf $(ARCHIVE)/ncurses-* -C $(BUILD)/ncurses
+	patch -d $(BUILD)/ncurses/ncurses* -p1 < patches/ncurses-5.9.diff
 	( cd $(BUILD)/ncurses/build \
 		&& CFLAGS="$(JTL_CFLAGS)" ../n*/configure --with-shared \
 			--without-normal --without-debug --without-termcap \

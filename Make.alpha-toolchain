@@ -4,8 +4,8 @@
 alpha-toolchain:
 	libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
 		$(MAKE) JTL_CROSS=alpha-linux JTL_CROSS2=alpha \
-                JTL_CROSSCFLAGS="-O2" \
+                JTL_CROSSCFLAGS="-O2 -mieee" \
 		JTL_CROSSGCCFLAGS="--disable-multilib" \
 		alpha-linux-do-toolchain \
-		JTL_CROSSCONFIGMAKE="biarch = 64"
+		JTL_CROSSCONFIGMAKE="biarch=64"
 	touch $(MADE)/alpha-toolchain

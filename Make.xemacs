@@ -9,8 +9,10 @@ xemacs: ncurses texinfo x openssl libtiff libjpeg libpng imake xorg-cf-files
 	for i in $(ARCHIVE)/xemacs-2*.tar.bz2 ; do \
 		tar xjf $$i -C $(BUILD)/xemacs || exit 1 ; \
 	done
+	patch -d $(BUILD)/xemacs/* -p1 < patches/xemacs-21.4.22.diff
 	( cd $(BUILD)/xemacs/* \
-		&& ./configure --prefix=$(PREFIX) --cflags="$(JTL_CFLAGS)" \
+		&& ./configure --prefix=$(PREFIX) \
+                        --cflags="$(JTL_CFLAGS) -fgnu89-inline" \
 			--without-gpm --without-database --with-database=no \
 			--with-msw=no --without-mule --without-png \
 			--mandir=$(PREFIX)/share/man \

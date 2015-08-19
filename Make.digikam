@@ -1,5 +1,7 @@
 ## Make.digikam
 
-digikam: kde-libs gphoto2 perl sqlite marble libkdcraw opencv libkexiv2 cmake
+digikam: kde-libs gphoto2 perl sqlite marble libkdcraw opencv libkexiv2 cmake \
+                libpgf
 	$(MAKE) PROG=digikam _gnucmake \
-                JTL_CMAKE=-DENABLE_LCMS2=on
+                JTL_CMAKE="-DENABLE_LCMS2=on -DDIGIKAMSC_COMPILE_LIBKFACE=ON" \
+                JTL_CXXFLAGS="$(JTL_CXXFLAGS) -fgnu89-inline"

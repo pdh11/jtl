@@ -17,7 +17,7 @@ gcc:
 	@echo Making gcc
 	rm -rf $(BUILD)/gcc
 	mkdir -p $(BUILD)/gcc/build $(BUILD)/gcc/build_p
-	tar xf $(ARCHIVE)/gcc-4*.tar.* -C $(BUILD)/gcc
+	tar xf $(ARCHIVE)/gcc-*.tar.* -C $(BUILD)/gcc
 	patch -d $(BUILD)/gcc/g* -p1 < patches/gcc-4.9.0.diff
 	export _POSIX2_VERSION=199209 ; ( cd $(BUILD)/gcc/build \
 		&& CFLAGS="$(JTL_CFLAGS)" LIBCFLAGS="$(JTL_CFLAGS)" \

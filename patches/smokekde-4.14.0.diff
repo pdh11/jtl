@@ -1,0 +1,7 @@
+--- smokekde-4.14.0/akonadi/akonadi_includes.h~	2013-06-10 15:27:49.000000000 +0100
++++ smokekde-4.14.0/akonadi/akonadi_includes.h	2015-08-19 19:28:05.141764357 +0100
+@@ -102,3 +102,4 @@
+ #include <akonadi/transactionsequence.h>
+ #include <akonadi/transportresourcebase.h>
+ #include <akonadi/unlinkjob.h>
++#include <akonadi/tagfetchscope.h>

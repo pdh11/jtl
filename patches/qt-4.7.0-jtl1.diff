@@ -44,3 +44,14 @@
  
          struct JSGlobalObjectData : public JSVariableObjectData {
              // We use an explicit destructor function pointer instead of a
+--- qt-everywhere-opensource-src-4.8.6/configure~	2014-04-10 19:37:08.000000000 +0100
++++ qt-everywhere-opensource-src-4.8.6/configure	2015-07-24 21:55:37.696239453 +0100
+@@ -7731,6 +7731,8 @@ case "$XPLATFORM" in
+     *-g++*)
+ 	# Check gcc's version
+ 	case "$(${QMAKE_CONF_COMPILER} -dumpversion)" in
++	    5*)
++		;;
+ 	    4*|3.4*)
+ 		;;
+             3.3*)

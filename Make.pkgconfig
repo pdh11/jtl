@@ -1,4 +1,4 @@
 ## Make.pkgconfig
 
 pkgconfig:
-	$(MAKE) PROG=pkgconfig _gnu
+	LN="ln -f" $(MAKE) PROG=pkg-config JTL_TOUCH=pkgconfig _gnu

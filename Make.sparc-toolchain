@@ -4,6 +4,7 @@
 sparc-toolchain:
 	libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes \
 		$(MAKE) JTL_CROSS=sparc-linux JTL_CROSS2=sparc \
+                JTL_SHARED_BOOST="instruction-set=v7 link=shared" \
 		JTL_CROSSCFLAGS="-m32 -O" \
 		JTL_CROSSGCCFLAGS="--disable-libsanitizer" \
 		sparc-linux-do-toolchain \

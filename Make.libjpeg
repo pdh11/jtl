@@ -5,7 +5,7 @@ libjpeg:
 	rm -rf $(BUILD)/libjpeg
 	mkdir -p $(BUILD)/libjpeg
 	tar xjf $(ARCHIVE)/jpegsrc*bz2 -C $(BUILD)/libjpeg
-	patch -d $(BUILD)/libjpeg/* -p1 < patches/jpegsrc.v9-jtl1.diff
+	patch -d $(BUILD)/libjpeg/* -p1 < patches/jpegsrc.v9a.diff
 	( cd $(BUILD)/libjpeg/* \
 		&& ./configure --enable-shared --disable-static \
 			--prefix=$(PREFIX) \

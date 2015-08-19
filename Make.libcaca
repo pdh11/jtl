@@ -1,4 +1,7 @@
 ## Make.libcaca
 
-libcaca: x doxygen
-	$(MAKE) PROG=libcaca SUBDIRS=src _gnu JTL_CONFIG="--disable-imlib2"
+libcaca: x doxygen python ruby
+	$(MAKE) PROG=libcaca _gnu \
+                JTL_TESTS_BOGUS=0.99beta19
+
+# JTL_CONFIG="--disable-imlib2"

@@ -8,7 +8,7 @@ gcj: gcc gtk+2 mpc autogen
 	@echo Making gcj
 	rm -rf $(BUILD)/gcj
 	mkdir -p $(BUILD)/gcj/build
-	tar xzf $(ARCHIVE)/gcc-4*.tar.gz -C $(BUILD)/gcj
+	tar xzf $(ARCHIVE)/gcc-*.tar.gz -C $(BUILD)/gcj
 	patch -d $(BUILD)/gcj/g* -p1 < patches/gcc-4.9.0.diff
 	cd $(BUILD)/gcj/g* && autogen Makefile.def
 	export _POSIX2_VERSION=199209 ; ( cd $(BUILD)/gcj/build \

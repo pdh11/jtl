@@ -1,0 +1,14 @@
+--- gnutls-3.4.0/doc/manpages/Makefile.in~	2015-04-08 07:08:30.000000000 +0100
++++ gnutls-3.4.0/doc/manpages/Makefile.in	2015-04-19 22:25:14.312193161 +0100
+@@ -1275,11 +1275,8 @@ APIMANS = gnutls_aead_cipher_decrypt.3 g
+ 	gnutls_certificate_get_peers_subkey_id.3 \
+ 	gnutls_certificate_get_trust_list.3 \
+ 	gnutls_certificate_get_verify_flags.3 \
+-	gnutls_certificate_get_verify_flags.3 \
+-	gnutls_certificate_get_x509_crt.3 \
+ 	gnutls_certificate_get_x509_crt.3 \
+ 	gnutls_certificate_get_x509_key.3 \
+-	gnutls_certificate_get_x509_key.3 \
+ 	gnutls_certificate_send_x509_rdn_sequence.3 \
+ 	gnutls_certificate_server_set_request.3 \
+ 	gnutls_certificate_set_dh_params.3 \

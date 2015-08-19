@@ -1,0 +1,11 @@
+--- libcryptui-3.12.2/configure~	2014-05-13 19:53:55.000000000 +0100
++++ libcryptui-3.12.2/configure	2015-04-20 19:56:59.734294665 +0100
+@@ -17379,7 +17379,7 @@ fi
+ 
+ 
+ if test	"$DO_CHECK" = "yes"; then
+-	accepted_versions="1.2 1.4 2.0"
++	accepted_versions="1.2 1.4 2.0 2.1"
+ 	for ac_prog in gpg gpg2
+ do
+   # Extract the first word of "$ac_prog", so it can be a program name with args.

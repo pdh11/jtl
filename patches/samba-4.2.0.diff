@@ -8,3 +8,25 @@
                     private_library=True)
  
  bld.SAMBA3_SUBSYSTEM('LOCKING',
+--- samba-4.2.1/source4/lib/tls/tls.c~	2014-10-01 10:16:21.000000000 +0100
++++ samba-4.2.1/source4/lib/tls/tls.c	2015-04-20 20:44:07.897287942 +0100
+@@ -598,7 +598,7 @@ struct socket_context *tls_init_client(s
+ 	gnutls_certificate_set_x509_trust_file(tls->xcred, ca_path, GNUTLS_X509_FMT_PEM);
+ 	TLSCHECK(gnutls_init(&tls->session, GNUTLS_CLIENT));
+ 	TLSCHECK(gnutls_set_default_priority(tls->session));
+-	gnutls_certificate_type_set_priority(tls->session, cert_type_priority);
++	//gnutls_certificate_type_set_priority(tls->session, cert_type_priority);
+ 	TLSCHECK(gnutls_credentials_set(tls->session, GNUTLS_CRD_CERTIFICATE, tls->xcred));
+ 
+ 	talloc_set_destructor(tls, tls_destructor);
+--- samba-4.2.1/source4/lib/tls/tls_tstream.c~	2014-10-01 10:16:21.000000000 +0100
++++ samba-4.2.1/source4/lib/tls/tls_tstream.c	2015-04-20 20:43:52.137051885 +0100
+@@ -1014,7 +1014,7 @@ struct tevent_req *_tstream_tls_connect_
+ 		return tevent_req_post(req, ev);
+ 	}
+ 
+-	gnutls_certificate_type_set_priority(tlss->tls_session, cert_type_priority);
++	//gnutls_certificate_type_set_priority(tlss->tls_session, cert_type_priority);
+ 
+ 	ret = gnutls_credentials_set(tlss->tls_session,
+ 				     GNUTLS_CRD_CERTIFICATE,

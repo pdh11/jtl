@@ -1,0 +1,20 @@
+--- libvisual-plugins-0.4.0/plugins/actor/corona/palette.cpp~	2005-12-20 18:49:13.000000000 +0000
++++ libvisual-plugins-0.4.0/plugins/actor/corona/palette.cpp	2015-07-24 22:22:42.503284947 +0100
+@@ -24,6 +24,7 @@
+  */
+ 
+ #include "palette.h"
++#undef inline
+ 
+ #include <cstdlib>
+ #include <cstring>
+--- libvisual-plugins-0.4.0/plugins/actor/corona/corona.cpp~	2006-02-05 18:47:26.000000000 +0000
++++ libvisual-plugins-0.4.0/plugins/actor/corona/corona.cpp	2015-07-24 22:22:22.983100046 +0100
+@@ -30,6 +30,7 @@
+ /////////////////////////////////////////////////////////////////////////////
+ 
+ #include <libvisual/libvisual.h>
++#undef inline
+ 
+ #include "corona.h"
+ #include <stdio.h>

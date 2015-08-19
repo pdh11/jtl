@@ -11,5 +11,6 @@ sparc64-toolchain:
 		JTL_CROSSGCCFLAGS="--disable-multilib --disable-libsanitizer" \
 		sparc64-linux-do-toolchain \
 		JTL_CROSSCONFIGMAKE="biarch = 64" \
+                JTL_SHARED_BOOST="instruction-set=v9 link=shared" \
 		JTL_CONFIGPATH=configs/sparc64_
 	touch $(MADE)/sparc64-toolchain

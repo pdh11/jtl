@@ -3,4 +3,4 @@
 gnutls: libgcrypt zlib guile nettle p11-kit gtk-doc
 	$(MAKE) PROG=gnutls _gnu \
 		JTL_CONFIG="$(JTL_CONFIG) --enable-gtk-doc --disable-guile" \
-		JTL_TESTS_BOGUS=2.12.1
+		JTL_TESTS_BOGUS=3.4.0

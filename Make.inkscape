@@ -5,9 +5,9 @@
 inkscape: glib intltool perl perl_xml_parser libpng gc libxslt zlib pango \
 		fontconfig freetype gtk+2 libxml2 libsigc++ gtkmm2 popt \
 		gnome-vfs perl_xml_parser python lcms swig \
-		openssl pyxml gsl libtool lzma poppler
+		openssl pyxml gsl libtool lzma poppler imagemagick
 	$(MAKE) PROG=inkscape _gnu \
 		JTL_CONFIG="$(JTL_CONFIG) --enable-lcms --enable-inkboard" \
 		LDFLAGS="-L/usr/X11/lib" \
-		CXXFLAGS="-DPOPPLER_NEW_COLOR_SPACE_API"  \
+		JTL_CXXFLAGS="$(JTL_CXXFLAGS) -fgnu89-inline"  \
                 JTL_TESTS_BOGUS=0.48.5

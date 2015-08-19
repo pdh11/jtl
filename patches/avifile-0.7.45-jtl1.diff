@@ -174,3 +174,49 @@
  	//printf("STREAMPACKET 0x%x  sz:%d  %lld   seq:%d part:%d  sc:%d\n", chhdr.kind, size, rsize, chhdr.seq, chhdr.partflag, chhdr.size_confirm);
  	switch (chhdr.kind)
  	{
+--- avifile-0.7-0.7.45/ffmpeg/libavcodec/motion_est_template.c~	2006-02-04 08:57:30.000000000 +0000
++++ avifile-0.7-0.7.45/ffmpeg/libavcodec/motion_est_template.c	2015-08-19 22:51:43.193786150 +0100
+@@ -231,7 +231,7 @@ static int no_sub_motion_search(MpegEncC
+     return dmin;
+ }
+ 
+-int inline ff_get_mb_score(MpegEncContext * s, int mx, int my, int src_index,
++inline int ff_get_mb_score(MpegEncContext * s, int mx, int my, int src_index,
+                                int ref_index, int size, int h, int add_rate)
+ {
+ //    const int check_luma= s->dsp.me_sub_cmp != s->dsp.mb_cmp;
+--- avifile-0.7-0.7.45/ffmpeg/libavcodec/mpegvideo.h~	2006-02-08 21:09:04.000000000 +0000
++++ avifile-0.7-0.7.45/ffmpeg/libavcodec/mpegvideo.h	2015-08-19 22:47:15.276612634 +0100
+@@ -818,10 +818,10 @@ void ff_fix_long_mvs(MpegEncContext * s,
+                      int16_t (*mv_table)[2], int f_code, int type, int truncate);
+ void ff_init_me(MpegEncContext *s);
+ int ff_pre_estimate_p_frame_motion(MpegEncContext * s, int mb_x, int mb_y);
+-inline int ff_epzs_motion_search(MpegEncContext * s, int *mx_ptr, int *my_ptr,
++int ff_epzs_motion_search(MpegEncContext * s, int *mx_ptr, int *my_ptr,
+                              int P[10][2], int src_index, int ref_index, int16_t (*last_mv)[2],
+                              int ref_mv_scale, int size, int h);
+-int inline ff_get_mb_score(MpegEncContext * s, int mx, int my, int src_index,
++int ff_get_mb_score(MpegEncContext * s, int mx, int my, int src_index,
+                                int ref_index, int size, int h, int add_rate);
+ 
+ /* mpeg12.c */
+--- avifile-0.7-0.7.45/ffmpeg/libavcodec/motion_est_template.c~	2015-08-19 22:55:28.523603397 +0100
++++ avifile-0.7-0.7.45/ffmpeg/libavcodec/motion_est_template.c	2015-08-19 22:58:08.194187184 +0100
+@@ -231,7 +231,7 @@ static int no_sub_motion_search(MpegEncC
+     return dmin;
+ }
+ 
+-inline int ff_get_mb_score(MpegEncContext * s, int mx, int my, int src_index,
++int ff_get_mb_score(MpegEncContext * s, int mx, int my, int src_index,
+                                int ref_index, int size, int h, int add_rate)
+ {
+ //    const int check_luma= s->dsp.me_sub_cmp != s->dsp.mb_cmp;
+@@ -962,7 +962,7 @@ static always_inline int epzs_motion_sea
+ }
+ 
+ //this function is dedicated to the braindamaged gcc
+-inline int ff_epzs_motion_search(MpegEncContext * s, int *mx_ptr, int *my_ptr,
++int ff_epzs_motion_search(MpegEncContext * s, int *mx_ptr, int *my_ptr,
+                              int P[10][2], int src_index, int ref_index, int16_t (*last_mv)[2],
+                              int ref_mv_scale, int size, int h)
+ {
