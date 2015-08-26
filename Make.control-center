@@ -2,7 +2,7 @@
 #
 # Package was renamed to gnome-control-center in version 2.20
 
-control-center: nautilus desktop-file-utils metacity libxklavier \
+control-center: nautilus desktop-file-utils libxklavier \
 		gstreamer gst-plugins-base dbus-glib gnome-panel libgnomekbd \
 		hal shared-mime-info gnome-settings-daemon gnome-vfs upower \
 		intltool gnome-desktop libpwquality \

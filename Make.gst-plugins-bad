@@ -2,7 +2,7 @@
 
 gst-plugins-bad: gstreamer faac faad2 alsa-lib jack jasper xvidcore x264 \
 		gst-plugins-base mjpegtools openal-soft opencv
-	$(MAKE) PROG=gst-plugins-bad _gnu \
+	LDFLAGS=-L/usr/X11/lib CPPFLAGS=-I/usr/X11/include $(MAKE) PROG=gst-plugins-bad _gnu \
 		JTL_PATCH=gst-plugins-bad-0.10.22-jtl1.diff \
-                JTL_CONFIG="$(JTL_CONFIG) --disable-cdaudio --with-x --with-egl-window-system=none" \
+                JTL_CONFIG="$(JTL_CONFIG) --disable-webp" \
 		JTL_TESTS_BOGUS=0.10.22

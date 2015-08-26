@@ -32,7 +32,7 @@ automoc-0.9.88.tar.bz2
 avahi-0.6.31.tar.bz2
 avifile-0.7.45.tar.bz2
 babl-0.1.10.tar.bz2
-baloo-4.14.0.tar.bz2
+baloo-4.14.3.tar.bz2
 bash-4.3.tar.gz
 bash-completion-2.0.tar.bz2
 bc-1.06.tar.bz2
@@ -164,7 +164,7 @@ fdclock-20050824.tar.bz2
 ffmpeg-2.7.2.tar.bz2
 fftw-3.3.2.tar.bz2
 file-5.22.tar.gz
-filelight-4.14.0.tar.bz2
+filelight-4.14.3.tar.bz2
 findutils-4.5.14.tar.gz
 fireflies-2.06.tar.bz2
 firefox-34.0.source.tar.bz2
@@ -241,7 +241,7 @@ gnome-keyring-3.14.0.tar.bz2
 gnome-media-3.4.0.tar.bz2
 gnome-menus-3.10.1.tar.bz2
 gnome-mime-data-2.18.0.tar.bz2
-gnome-online-accounts-3.14.1.tar.bz2
+gnome-online-accounts-3.14.4.tar.bz2
 gnome-panel-3.14.0.tar.bz2
 gnome-python-2.28.1.tar.bz2
 gnomeradio-1.6.tar.bz2
@@ -269,12 +269,12 @@ groff-1.22.2.tar.bz2
 gsettings-desktop-schemas-3.14.1.tar.bz2
 gsl-1.14.tar.bz2
 gssdp-0.14.10.tar.bz2
-gst-libav-1.4.5.tar.bz2
-gst-plugins-bad-1.4.5.tar.bz2
+gst-libav-1.5.2.tar.bz2
+gst-plugins-bad-1.5.2.tar.bz2
 gst-plugins-base-1.5.2.tar.bz2
 gst-plugins-good-1.5.2.tar.bz2
-gst-plugins-ugly-1.4.5.tar.bz2
-gst-python-1.4.0.tar.bz2
+gst-plugins-ugly-1.5.2.tar.bz2
+gst-python-1.5.2.tar.bz2
 gstreamer-1.5.2.tar.bz2
 gtk+2-2.24.20.tar.bz2
 gtk+-3.16.3.tar.bz2
@@ -293,7 +293,7 @@ gupnp-dlna-0.10.2.tar.bz2
 gupnp-igd-0.2.3.tar.bz2
 gutenprint-5.2.7.tar.bz2
 gvfs-1.22.1.tar.bz2
-gwenview-4.14.0.tar.bz2
+gwenview-4.14.3.tar.bz2
 gzip-1.6.tar.gz
 hal-0.5.14.tar.bz2
 harfbuzz-0.9.12.tar.bz2
@@ -341,7 +341,7 @@ kaffeine-0.8.6.tar.bz2
 kate-4.14.3.tar.bz2
 kbd-1.15.tar.bz2
 kbproto-1.0.7.tar.bz2
-kcharselect-4.14.0.tar.bz2
+kcharselect-4.14.3.tar.bz2
 kde-baseapps-4.14.3a.tar.bz2
 kde-base-artwork-4.14.3.tar.bz2
 kde-l10n-en_GB-4.14.3.tar.bz2
@@ -556,7 +556,7 @@ makedepend-1.0.1.tar.bz2
 Make.gcc
 man-1.6f.tar.bz2
 man-pages-4.00.tar.bz2
-marble-4.14.0.tar.bz2
+marble-4.14.3.tar.bz2
 marks.tar.gz
 matchbox-0.3.6.tar.bz2
 mcs-1.0.1.tar.bz2
@@ -597,7 +597,7 @@ nasm-2.11.06.tar.gz
 nautilus-3.14.0.tar.bz2
 ncurses-6.0.tar.gz
 neon-0.29.3.tar.bz2
-nepomuk-core-4.14.0.tar.bz2
+nepomuk-core-4.14.3.tar.bz2
 netcat-1.10.tar.bz2
 netkit-combo-0.17.tar.gz
 netpbm-10.35.87.tar.bz2
@@ -620,7 +620,7 @@ oclock-1.0.1.tar.bz2
 odcctools-9.2.tar.bz2
 ogle-0.9.2.tar.bz2
 ogle_gui-0.9.2.tar.bz2
-okular-4.14.0.tar.bz2
+okular-4.14.3.tar.bz2
 openal-soft-1.13.tar.bz2
 opencv-2.4.11.tar.bz2
 openjpeg-2.1.0.tar.bz2
@@ -631,7 +631,7 @@ openssl-1.0.2a.tar.bz2
 optipng-0.5.4.tar.bz2
 orbit-2.14.19.tar.bz2
 orbitcpp-1.3.9.tar.bz2
-oxygen-icons-4.14.0.tar.bz2
+oxygen-icons-4.14.3.tar.bz2
 p11-kit-0.23.1.tar.bz2
 p7zip-4.44_src_all.tar.bz2
 pango-1.36.8.tar.bz2
@@ -720,6 +720,7 @@ pyhamcrest-1.8.0.tar.bz2
 pyhttplib2-0.7.1.tar.bz2
 pyjwt-0.1.2.tar.bz2
 pykde-4.14.0.tar.bz2
+pykde4-4.14.3.tar.bz2
 pylint-0.25.1.tar.bz2
 py-mechanize-0.2.5.tar.bz2
 pymongo-1.11.tar.bz2
@@ -809,9 +810,9 @@ simplejson-2.5.2.tar.bz2
 sip-4.16.4.tar.bz2
 slocate-3.1.tar.bz2
 smartmontools-6.2.tar.bz2
-smokegen-4.14.0.tar.bz2
-smokekde-4.14.0.tar.bz2
-smokeqt-4.14.0.tar.bz2
+smokegen-4.14.3.tar.bz2
+smokekde-4.14.3.tar.bz2
+smokeqt-4.14.3.tar.bz2
 soprano-2.9.3.tar.bz2
 sox-12.17.1.tar.bz2
 speex-1.2rc1.tar.bz2
@@ -883,7 +884,7 @@ vnc-4_1_3-unixsrc.tar.bz2
 vncproto-20070902.tar.bz2
 vorbis-tools-1.4.0.tar.bz2
 w32api-3.14-src.tar.bz2
-webkitgtk-2.8.4.tar.bz2
+webkitgtk-2.4.9.tar.bz2
 wget-1.9.1.tar.bz2
 which-2.17.tar.bz2
 wine-1.2.2.tar.bz2

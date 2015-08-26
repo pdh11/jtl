@@ -1,5 +1,5 @@
 ## Make.nepomuk-core
 
-nepomuk-core: cmake strigi kde-libs
+nepomuk-core: cmake strigi kde-libs baloo
 	$(MAKE) PROG=nepomuk-core PREFIX=$(PREFIX)/kde _gnucmake \
                 JTL_CXXFLAGS="$(JTL_CXXFLAGS) -fgnu89-inline"

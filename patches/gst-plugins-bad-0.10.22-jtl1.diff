@@ -12,3 +12,95 @@
  #else
  #include <ratectl.hh>
  #endif
+--- gst-plugins-bad-1.5.2/configure~	2015-08-26 17:01:49.265968688 +0100
++++ gst-plugins-bad-1.5.2/configure	2015-08-26 17:02:56.565989853 +0100
+@@ -24283,7 +24283,7 @@ esac
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler needs -Werror to reject unknown flags" >&5
+ $as_echo_n "checking if compiler needs -Werror to reject unknown flags... " >&6; }
+ save_CFLAGS="$CFLAGS"
+-ax_pthread_extra_flags="-Werror"
++ax_pthread_extra_flags=""
+ CFLAGS="$CFLAGS $ax_pthread_extra_flags -Wunknown-warning-option -Wsizeof-array-argument"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+@@ -28267,11 +28267,11 @@ $as_echo "$flag_ok" >&6; }
+     if test "x$FATAL_WARNINGS" != "xno"
+   then
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking to see if compiler understands -Werror" >&5
+-$as_echo_n "checking to see if compiler understands -Werror... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking to see if compiler understands " >&5
++$as_echo_n "checking to see if compiler understands ... " >&6; }
+ 
+   save_CFLAGS="$CFLAGS"
+-  CFLAGS="$CFLAGS -Werror"
++  CFLAGS="$CFLAGS "
+ 
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+@@ -28293,7 +28293,7 @@ rm -f core conftest.err conftest.$ac_obj
+   CFLAGS="$save_CFLAGS"
+ 
+   if test "X$flag_ok" = Xyes ; then
+-    ERROR_CFLAGS="$ERROR_CFLAGS -Werror"
++    ERROR_CFLAGS="$ERROR_CFLAGS "
+     true
+   else
+ 
+@@ -28575,11 +28575,11 @@ $as_echo "$flag_ok" >&6; }
+ 
+ 
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking to see if c++ compiler understands -Werror" >&5
+-$as_echo_n "checking to see if c++ compiler understands -Werror... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking to see if c++ compiler understands " >&5
++$as_echo_n "checking to see if c++ compiler understands ... " >&6; }
+ 
+   save_CPPFLAGS="$CPPFLAGS"
+-  CPPFLAGS="$CPPFLAGS -Werror"
++  CPPFLAGS="$CPPFLAGS "
+ 
+   ac_ext=cpp
+ ac_cpp='$CXXCPP $CPPFLAGS'
+@@ -28608,7 +28608,7 @@ rm -f core conftest.err conftest.$ac_obj
+   CPPFLAGS="$save_CPPFLAGS"
+ 
+   if test "X$flag_ok" = Xyes ; then
+-    ERROR_CXXFLAGS="$ERROR_CXXFLAGS -Werror"
++    ERROR_CXXFLAGS="$ERROR_CXXFLAGS "
+     true
+   else
+ 
+@@ -29063,11 +29063,11 @@ $as_echo "$flag_ok" >&6; }
+ 
+ 
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking to see if Objective C compiler understands -Werror" >&5
+-$as_echo_n "checking to see if Objective C compiler understands -Werror... " >&6; }
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking to see if Objective C compiler understands " >&5
++$as_echo_n "checking to see if Objective C compiler understands ... " >&6; }
+ 
+   save_CPPFLAGS="$CPPFLAGS"
+-  CPPFLAGS="$CPPFLAGS -Werror"
++  CPPFLAGS="$CPPFLAGS "
+ 
+   ac_ext=m
+ ac_cpp='$OBJCPP $CPPFLAGS'
+@@ -29096,7 +29096,7 @@ rm -f core conftest.err conftest.$ac_obj
+   CPPFLAGS="$save_CPPFLAGS"
+ 
+   if test "X$flag_ok" = Xyes ; then
+-    ERROR_OBJCFLAGS="$ERROR_OBJCFLAGS -Werror"
++    ERROR_OBJCFLAGS="$ERROR_OBJCFLAGS "
+     true
+   else
+ 
+@@ -44792,7 +44792,7 @@ else
+        grep $am__obj sub/conftest.Po > /dev/null 2>&1 &&
+        ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
+       # icc doesn't choke on unknown options, it will just issue warnings
+-      # or remarks (even with -Werror).  So we grep stderr for any message
++      # or remarks (even with ).  So we grep stderr for any message
+       # that says an option was ignored or not supported.
+       # When given -MP, icc 7.0 and 7.1 complain thusly:
+       #   icc: Command line warning: ignoring option '-M'; no argument required

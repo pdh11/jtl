@@ -20,9 +20,8 @@ ncurses:
 	( cd $(BUILD)/ncurses/build \
 		&& CFLAGS="$(JTL_CFLAGS)" ../n*/configure --with-shared \
 			--without-normal --without-debug --without-termcap \
-			--prefix=$(BUILD)/ncurses/install0 --disable-cxx \
-			--disable-cxx-binding \
-		&& $(MAKE) -j1 \
+			--prefix=$(BUILD)/ncurses/install0 --enable-widec \
+		&& $(MAKE) \
 		&& $(MAKE) install \
 		&& $(MAKE) distclean \
 		&& CFLAGS="$(JTL_CFLAGS)" \
@@ -30,12 +29,29 @@ ncurses:
 			../n*/configure --with-shared --without-normal \
 			--without-debug --without-termcap --disable-database \
 			--with-fallbacks=linux,vt100,xterm,dumb,eterm,Eterm,screen --without-database \
-			--disable-cxx --disable-cxx-binding \
-			--prefix=$(PREFIX) \
+                        --enable-pc-files --enable-widec --with-pkg-config \
+			--prefix=$(PREFIX) --with-cxx-shared \
 			--with-install-prefix=$(BUILD)/ncurses/install1 \
+                        --with-pkg-config-libdir=$(PREFIX)/lib/pkgconfig \
 		&& PATH=$(BUILD)/ncurses/install0/bin:$(PATH) \
 			LD_LIBRARY_PATH=$(BUILD)/ncurses/install0/lib \
-			$(MAKE) -j1 \
+			$(MAKE) \
+		&& PATH=$(BUILD)/ncurses/install0/bin:$(PATH) \
+			LD_LIBRARY_PATH=$(BUILD)/ncurses/install0/lib \
+			$(MAKE) -j1 install.libs install.includes \
+		&& $(MAKE) distclean \
+		&& CFLAGS="$(JTL_CFLAGS)" \
+			PATH=$(BUILD)/ncurses/install0/bin:$(PATH) \
+			../n*/configure --with-shared --without-normal \
+			--without-debug --without-termcap --disable-database \
+			--with-fallbacks=linux,vt100,xterm,dumb,eterm,Eterm,screen --without-database \
+                        --with-pkg-config --enable-pc-files \
+			--prefix=$(PREFIX) --with-cxx-shared \
+			--with-install-prefix=$(BUILD)/ncurses/install1 \
+                        --with-pkg-config-libdir=$(PREFIX)/lib/pkgconfig \
+		&& PATH=$(BUILD)/ncurses/install0/bin:$(PATH) \
+			LD_LIBRARY_PATH=$(BUILD)/ncurses/install0/lib \
+			$(MAKE) \
 		&& PATH=$(BUILD)/ncurses/install0/bin:$(PATH) \
 			LD_LIBRARY_PATH=$(BUILD)/ncurses/install0/lib \
 			$(MAKE) -j1 install.libs install.includes \
