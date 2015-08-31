@@ -11,7 +11,7 @@ JTL_MOZILLA=34.0
 
 mozilla: libpng libmng libjpeg zlib gtk+ x openldap libidl atk \
 		pango zip unzip cairo libart gnome-vfs libgnomecanvas \
-		gconf sqlite gmime imagemagick librsvg \
+	        sqlite gmime imagemagick librsvg \
                 gnome-settings-daemon nss
 	@echo Compiling mozilla
 	$(REALLY) rm -rf $(BUILD)/mozilla
@@ -61,7 +61,7 @@ mozilla: mozilla-xulrunner
 mozilla-xulrunner: libpng libmng libjpeg zlib gtk+2 x openldap libidl \
 		atk \
 		pango zip unzip cairo libart gnome-vfs libgnomecanvas \
-		gconf sqlite gmime  imagemagick \
+                sqlite gmime imagemagick \
                 gnome-settings-daemon nss libevent
 	@echo Compiling xulrunner
 	$(REALLY) rm -rf $(BUILD)/mozillax

@@ -1,4 +1,4 @@
 ## Make.libcanberra
 
-libcanberra: gtk+ gstreamer gconf libvorbis alsa-lib libtool pulseaudio
+libcanberra: gtk+ gstreamer libvorbis alsa-lib libtool pulseaudio
 	$(MAKE) PROG=libcanberra _gnu

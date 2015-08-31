@@ -4,7 +4,7 @@
 #
 # 1.16.0 tests require python3
 
-gnome-vfs: gconf glib libxml2 dbus-glib krb5 neon samba openssl gnutls avahi \
+gnome-vfs: glib libxml2 dbus-glib krb5 neon samba openssl gnutls avahi \
 		hal gnome-mime-data libgcrypt libgphoto2 expat gtk+ \
                 gnome-keyring
 	$(MAKE) PROG=gvfs JTL_TOUCH=gnome-vfs _gnu \

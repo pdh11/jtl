@@ -3,7 +3,7 @@
 # Tests attempt external DTD fetch
 
 metacity: glib intltool perl_xml_parser gtk+ pkgconfig \
-		startup-notification gconf zenity gsettings-desktop-schemas
+		startup-notification zenity gsettings-desktop-schemas
 	$(MAKE) PROG=metacity _gnu \
 		JTL_CFLAGS="$(JTL_CFLAGS) -Wno-error" \
 		JTL_TESTS_BOGUS=bogus

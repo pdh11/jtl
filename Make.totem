@@ -1,7 +1,7 @@
 ## Make.totem
 
 totem: glib gtk+ libglade gnome-vfs gnome-desktop \
-		gnome-icon-theme iso-codes xine-lib gconf mozilla nautilus \
+		gnome-icon-theme iso-codes xine-lib mozilla nautilus \
 		intltool perl perl_xml_parser gst-plugins-good \
 		shared-mime-info totem-pl-parser dbus-glib python pygtk \
 		gst-plugins-bad gst-plugins-ugly gst-plugins-base gst-libav \

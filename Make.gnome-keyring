@@ -1,6 +1,7 @@
 ## Make.gnome-keyring
 
-gnome-keyring: pkgconfig glib gtk+ gconf libtasn1 gcr
+gnome-keyring: pkgconfig glib gtk+ libtasn1 gcr intltool perl_xml_parser \
+                libgcrypt libxslt
 	$(MAKE) PROG=gnome-keyring _gnu \
 		JTL_CONFIG="$(JTL_CONFIG) --without-root-certs" \
 		JTL_TESTS_BOGUS=3.0.2

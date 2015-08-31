@@ -1,7 +1,7 @@
 ## Make.galeon
 #
 
-galeon: mozilla gconf gtk+ glib orbit scrollkeeper \
+galeon: mozilla gtk+ glib orbit scrollkeeper \
 		gnome-vfs libglade control-center
 	@echo Making galeon
 	rm -rf $(BUILD)/galeon

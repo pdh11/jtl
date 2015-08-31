@@ -1,4 +1,4 @@
 ## Make.libproxy
 
-libproxy: mozilla x python gconf qt cmake
+libproxy: mozilla x python qt cmake
 	$(MAKE) PROG=libproxy _gnucmake JTL_CFLAGS="$(JTL_CFLAGS) -I/usr/include/mozilla/unstable"

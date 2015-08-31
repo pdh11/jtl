@@ -1,6 +1,6 @@
 ## Make.gnome-settings-daemon
 
-gnome-settings-daemon: glib intltool perl_xml_parser gconf esound \
+gnome-settings-daemon: glib intltool perl_xml_parser esound \
 		libgnomekbd gstreamer dbus-glib gtk+ gnome-desktop \
 		libglade alsa-lib libnotify libxklavier \
 		fontconfig pulseaudio gnome-media gnome-desktop colord upower \

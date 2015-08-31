@@ -1,7 +1,7 @@
 ## Make.gst-plugins-good
 
 gst-plugins-good: glib flac libcaca libpng taglib cairo gst-plugins-base \
-		libjpeg hal gconf libdv esound liboil gstreamer pulseaudio \
+		libjpeg hal esound liboil gstreamer pulseaudio \
 		libsoup gtk+ libdv speex zlib
 	$(MAKE) PROG=gst-plugins-good _gnu \
 		JTL_TESTS_BOGUS=0.10.16-souphttpsrc-fails

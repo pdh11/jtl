@@ -1,4 +1,4 @@
 ## Make.libslab
 
-libslab: glib intltool gtk+ gnome-desktop gnome-menus librsvg gconf
+libslab: glib intltool gtk+ gnome-desktop gnome-menus librsvg
 	$(MAKE) PROG=libslab _gnu

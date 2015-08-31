@@ -3,7 +3,7 @@
 # INTLTOOL_MERGE=`which intltool-merge`
 
 evolution-data-server: openldap pkgconfig gnome-vfs sqlite \
-		libxml2 gconf libsoup glib perl intltool mozilla \
+		libxml2 libsoup glib perl intltool mozilla \
 		libglade gnome-keyring libgweather libical krb5 zlib db3 \
 		libgdata gnome-online-accounts
 	$(MAKE) PROG=evolution-data-server _gnu \
