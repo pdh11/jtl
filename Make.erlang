@@ -1,0 +1,4 @@
+## Make.erlang
+
+erlang: openssl libxslt sqlite libiodbc
+	$(MAKE) PROG=erlang _gnu JTL_TESTS_BOGUS=16.03
