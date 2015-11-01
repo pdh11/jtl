@@ -1,0 +1,6 @@
+## Make.rustc
+
+rustc: curl python git
+	$(MAKE) PROG=rustc _gnu \
+                JTL_CONFIG=" --sysconfdir=$(JTL_SYSCONFDIR) --localstatedir=$(JTL_VARDIR) --mandir=$(PREFIX)/share/man --infodir=$(PREFIX)/share/info" \
+                JTL_PATCH=rustc-1.4.0.diff

@@ -1,0 +1,6 @@
+## Make.libssh2
+
+libssh2: openssl
+	$(MAKE) PROG=libssh2 _gnu \
+                JTL_TESTS_BOGUS=1.6.0
+

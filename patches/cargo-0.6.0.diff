@@ -1,0 +1,16 @@
+--- cargo-0.6.0/Makefile.in~	2015-10-22 22:59:36.000000000 +0100
++++ cargo-0.6.0/Makefile.in	2015-11-01 22:11:54.500111413 +0000
+@@ -181,12 +181,10 @@ prepare-image-$(1):
+ 	mkdir -p $$(IMGDIR_$(1))/bin $$(IMGDIR_$(1))/lib/cargo \
+ 		$$(IMGDIR_$(1))/share/man/man1 \
+ 		$$(IMGDIR_$(1))/share/doc/cargo \
+-		$$(IMGDIR_$(1))/share/zsh/site-functions \
+-		$$(IMGDIR_$(1))/etc/bash_completion.d
++		$$(IMGDIR_$(1))/share/zsh/site-functions
+ 	cp $$(TARGET_$(1))/cargo$$(X) $$(IMGDIR_$(1))/bin
+ 	cp src/etc/cargo.1 $$(IMGDIR_$(1))/share/man/man1
+ 	cp src/etc/_cargo $$(IMGDIR_$(1))/share/zsh/site-functions/_cargo
+-	cp src/etc/cargo.bashcomp.sh $$(IMGDIR_$(1))/etc/bash_completion.d/cargo
+ 	cp README.md LICENSE-MIT LICENSE-APACHE LICENSE-THIRD-PARTY \
+ 		$$(IMGDIR_$(1))/share/doc/cargo
+ 
