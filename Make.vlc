@@ -6,7 +6,7 @@ vlc: libdvdread libdvdcss libmad qt kde-libs bison ffmpeg libogg \
 		libmpeg3 mpeg2dec samba gnutls libopendaap avahi libupnp \
 		libxml2 sdl libpng x264 mozilla
 	$(MAKE) PROG=vlc _gnu \
-		JTL_CONFIG="--enable-shared --disable-static --sysconfdir=/etc --disable-debug --enable-release --enable-mad --disable-ncurses --disable-skins2 --enable-smb --enable-flac --enable-upnp --enable-mozilla --with-mozilla-pkg=mozilla-plugin --disable-lua --disable-oss --disable-avcodec" \
+		JTL_CONFIG="--enable-shared --disable-static --sysconfdir=/etc --disable-debug --enable-release --enable-mad --disable-ncurses --disable-skins2 --enable-smb --enable-flac --enable-upnp --enable-mozilla --with-mozilla-pkg=mozilla-plugin --disable-lua --disable-oss --disable-avcodec --disable-gnomevfs" \
 		LDFLAGS="-L/usr/X11/lib" \
                 JTL_PATCH=vlc-2.0-jtl1.diff \
                 JTL_TESTS_BOGUS=like-completely

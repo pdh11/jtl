@@ -7,7 +7,7 @@ samba: readline openldap krb5 popt valgrind cups avahi libtirpc talloc tdb
 	rm -rf $(BUILD)/samba
 	mkdir -p $(BUILD)/samba
 	tar xjf $(ARCHIVE)/samba-*bz2 -C $(BUILD)/samba
-	patch -d $(BUILD)/samba/* -p1 < patches/samba-4.2.0.diff
+	patch -d $(BUILD)/samba/* -p1 < patches/samba-4.3.2.diff
 	( cd $(BUILD)/samba/* \
 		&& CFLAGS="$(JTL_CFLAGS)" \
                         LIBS="-Wl,--as-needed -ltirpc -lc" \

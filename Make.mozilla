@@ -7,25 +7,25 @@
 #
 # Still needs GTK+2 as of 8.0
 
-JTL_MOZILLA=34.0
+JTL_MOZILLA=43.0
 
 mozilla: libpng libmng libjpeg zlib gtk+ x openldap libidl atk \
 		pango zip unzip cairo libart gnome-vfs libgnomecanvas \
 	        sqlite gmime imagemagick librsvg \
-                gnome-settings-daemon nss
+                gnome-settings-daemon nss gconf
 	@echo Compiling mozilla
 	$(REALLY) rm -rf $(BUILD)/mozilla
 	mkdir -p $(BUILD)/mozilla/build
 	tar xjf $(ARCHIVE)/firefox-*bz2 -C $(BUILD)/mozilla
-	tar xjf $(ARCHIVE)/iceweasel-*bz2 -C $(BUILD)/mozilla/m*
-	patch -d $(BUILD)/mozilla/m* -p1 -F5 -z.old < patches/mozilla-34.0.diff
+	tar xjf $(ARCHIVE)/iceweasel-*bz2 -C $(BUILD)/mozilla/f*
+	patch -d $(BUILD)/mozilla/f* -p1 -F5 -z.old < patches/mozilla-34.0.diff
 	#( cd $(BUILD)/mozilla/m*/debian/patches && cat `cat $(BUILD)/mozilla/m*/debian/patches/series` ) | patch -d $(BUILD)/mozilla/m* -p1 -F5
 	(cd $(BUILD)/mozilla/m*/debian/patches && cat `grep -vE \(756390\|Reset-Firefox\|yandex\) series` ) | patch -d $(BUILD)/mozilla/m* -p1 -F5 || true
 	#( cd $(BUILD)/mozilla/m*/security/coreconf \
 	#   && cp -n Linux2.6.mk Linux3.0.mk )
 	( cd $(BUILD)/mozilla/build \
-                && touch ../m*/configure \
-		&& WARNINGS_AS_ERRORS="" ../m*/configure \
+                && touch ../f*/configure \
+		&& WARNINGS_AS_ERRORS="" ../f*/configure \
 			--prefix=$(PREFIX) \
                         --with-system-nspr --with-system-nss \
 			--with-system-zlib --with-system-bz2 \
@@ -67,14 +67,14 @@ mozilla-xulrunner: libpng libmng libjpeg zlib gtk+2 x openldap libidl \
 	$(REALLY) rm -rf $(BUILD)/mozillax
 	mkdir -p $(BUILD)/mozillax/build
 	tar xjf $(ARCHIVE)/firefox-*bz2 -C $(BUILD)/mozillax
-	tar xjf $(ARCHIVE)/iceweasel-*bz2 -C $(BUILD)/mozillax/m*
-	patch -d $(BUILD)/mozillax/m* -p1 -F5 -z.old < patches/mozilla-34.0.diff
-	(cd $(BUILD)/mozillax/m*/debian/patches && cat `grep -vE \(756390\|Reset-Firefox\|yandex\) series` ) | patch -d $(BUILD)/mozillax/m* -p1 -F5 || true
+	tar xjf $(ARCHIVE)/iceweasel-*bz2 -C $(BUILD)/mozillax/f*
+	patch -d $(BUILD)/mozillax/f* -p1 -F5 -z.old < patches/mozilla-34.0.diff
+	(cd $(BUILD)/mozillax/f*/debian/patches && cat `grep -vE \(756390\|Reset-Firefox\|yandex\) series` ) | patch -d $(BUILD)/mozillax/f* -p1 -F5 || true
 	#( cd $(BUILD)/mozillax/m*/security/coreconf \
 	# #  && cp -n Linux2.6.mk Linux3.0.mk )
 	( cd $(BUILD)/mozillax/build \
-                && touch ../m*/configure \
-		&& WARNINGS_AS_ERRORS="" ../m*/configure \
+                && touch ../f*/configure \
+		&& WARNINGS_AS_ERRORS="" ../f*/configure \
 			--prefix=$(PREFIX) \
                         --with-system-nspr --with-system-nss \
 			--with-system-zlib --with-system-bz2 \

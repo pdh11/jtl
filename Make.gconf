@@ -1,7 +1,6 @@
 ## Make.gconf
 #
-# Also wants guile really
 
-gconf: libxml2 glib gtk+ perl_xml_parser openldap dbus-glib guile orbit
+gconf: libxml2 glib gtk+ perl_xml_parser openldap dbus-glib guile
 	$(MAKE) PROG=gconf _gnu \
-		JTL_CONFIG="$(JTL_CONFIG) --disable-defaults-service"
+		JTL_CONFIG="$(JTL_CONFIG) --disable-defaults-service --disable-orbit"

@@ -1,4 +1,5 @@
 ## Make.pykde
 
-pykde: qt sip python pkgconfig pyqt cmake
-	$(MAKE) PROG=pykde _gnucmake PREFIX=$(PREFIX)/kde
+pykde: qt sip python pkgconfig pyqt cmake akonadi
+	$(MAKE) PROG=pykde _gnucmake PREFIX=$(PREFIX)/kde \
+                JTL_PATCH=pykde-4.14.3.diff

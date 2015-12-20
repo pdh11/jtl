@@ -1,0 +1,10 @@
+--- samba-4.3.2/source3/wscript_build~	2015-07-21 10:47:49.000000000 +0100
++++ samba-4.3.2/source3/wscript_build	2015-12-19 18:22:23.354276520 +0000
+@@ -642,6 +642,7 @@ bld.SAMBA3_LIBRARY('smbd_base',
+                    ''' +
+                    bld.env['dmapi_lib'] +
+                    NOTIFY_DEPS,
++                   ldflags='-Wl,--as-needed -ltirpc',
+                    private_library=True)
+ 
+ bld.SAMBA3_SUBSYSTEM('LOCKING',

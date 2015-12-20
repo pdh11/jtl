@@ -1,4 +1,5 @@
 ## Make.json-glib
 
 json-glib: glib
-	$(MAKE) PROG=json-glib _gnu
+	$(MAKE) PROG=json-glib _gnu \
+                JTL_TESTS_BOGUS=1.0.4

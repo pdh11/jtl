@@ -1,12 +1,9 @@
 ## Make.xine-lib
 
-xine-lib: esound jack faad2 libcdio alsa-lib gnome-vfs gtk+ libmng libvorbis \
+xine-lib: esound jack faad2 libcdio alsa-lib gtk+ libmng libvorbis \
 		libtheora sdl x pkgconfig ffmpeg flac imagemagick \
 		vcdimager
 	FFMPEG_POSTPROC_CFLAGS="-I$(PREFIX)/include/libpostproc" \
 		FFMPEG_CFLAGS="-I$(PREFIX)/include/libavcodec" \
 		$(MAKE) PROG=xine-lib _gnu \
-		JTL_CONFIG="$(JTL_CONFIG) --with-libflac --disable-musepack"
-
-# \
-#                JTL_PATCH=xine-lib-1.2.1-jtl1.diff
+		JTL_CONFIG="$(JTL_CONFIG) --with-libflac --disable-musepack --disable-gnomevfs"
